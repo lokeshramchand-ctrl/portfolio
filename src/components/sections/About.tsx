@@ -63,27 +63,32 @@ export default function About() {
             ))}
           </div>
 
-          <p data-reveal className="font-mono text-sm text-amber-400 mt-16">
-            What I do /
+          <p data-reveal className="mt-16 font-mono text-sm text-amber-400">
+            Systems schedule /
           </p>
-          <div className="mt-6 grid gap-8 sm:grid-cols-2">
+          <div className="mt-6 border-t border-paper-500/10">
             {services.map((service) => (
               <div
                 key={service.number}
                 data-reveal
-                className="rounded-lg border border-paper-500/10 p-6"
+                className="group grid gap-3 border-b border-paper-500/10 py-8 md:grid-cols-[4rem_1fr_1fr] md:gap-8"
               >
-                <p className="font-mono text-xs text-paper-100">
+                <p className="font-mono text-3xl text-paper-500/15 transition-colors group-hover:text-amber-400">
                   {service.number}
                 </p>
-                <h3 className="font-title heading-5 mt-2 text-paper-500">
-                  {service.title}
-                </h3>
-                <p className="mt-3 text-sm text-paper-300">{service.body}</p>
-                <ul className="mt-4 space-y-1">
+                <div>
+                  <h3 className="font-title heading-5 text-paper-500">
+                    {service.title}
+                  </h3>
+                  <p className="mt-3 text-sm text-paper-300">{service.body}</p>
+                </div>
+                <ul className="flex flex-wrap content-start gap-x-2 gap-y-2 md:justify-end">
                   {service.headings.map((h) => (
-                    <li key={h} className="text-xs text-paper-100">
-                      · {h}
+                    <li
+                      key={h}
+                      className="h-fit rounded-full border border-paper-500/15 px-3 py-1 font-mono text-xs whitespace-nowrap text-paper-100"
+                    >
+                      {h}
                     </li>
                   ))}
                 </ul>

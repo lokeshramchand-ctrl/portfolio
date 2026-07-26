@@ -122,7 +122,7 @@ export default function Works() {
       <div className="padding-x padding-y">
         <p className="font-mono text-sm text-amber-400">Occupied floors /</p>
         <h2 className="font-title heading-2 mt-3 max-w-2xl text-paper-500">
-          Two projects, walked through like rooms — not summarized like cards.
+          Two floors, both load-bearing.
         </h2>
       </div>
       {projects.map((project, i) => (
