@@ -5,6 +5,19 @@ behind non-obvious ones.
 
 ## 2026-07-26
 
+- feat(blog): migrate blog list + post routes to Next.js (async `params` per Next 16),
+  reading `public/blogs/*.md` server-side and rendering with `marked`; add
+  `sitemap.ts`/`robots.ts`.
+- fix(a11y): correct heading hierarchy in the construction story (h3→h2), mark
+  decorative intro overlay `aria-hidden`.
+- perf(images): recompress `velar.webp`/`maplayer.webp` from 6000px source
+  (1.9–2.4MB) down to 1920px/quality-78 webp (28–108KB); fix `manifest.json`
+  placeholder trailing space and light theme colors (site is dark-first).
+- feat(story): construction narrative (Scenes 2–5) — pinned SVG elevation
+  (blueprint grid → foundation columns → steel frame → glass panels) scrubbed by one
+  GSAP timeline, paired with real tech-stack labels and authored narrative copy.
+- feat: project showcase (Velar, MapLayer as full-viewport "floors"), about/services,
+  testimonial (Danielle Lindamood only), and contact (Scene 7) sections.
 - docs: initial `docs/` suite and rewritten `CLAUDE.md` for the Next.js rebuild.
 - feat(hero): cinematic typed-line intro + hero headline reveal (Scene 1), with
   reduced-motion fallback.

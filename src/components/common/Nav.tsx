@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { navLinks } from '@/lib/data';
-import { cn } from '@/lib/utils';
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { navLinks } from "@/lib/data";
+import { cn } from "@/lib/utils";
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -11,15 +11,15 @@ export default function Nav() {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
     <header
       className={cn(
-        'fixed inset-x-0 top-0 z-70 transition-colors duration-500',
-        scrolled ? 'bg-void-950/80 backdrop-blur-md' : 'bg-transparent',
+        "fixed inset-x-0 top-0 z-70 transition-colors duration-500",
+        scrolled ? "bg-void-950/80 backdrop-blur-md" : "bg-transparent",
       )}
     >
       <div className="padding-x flex items-center justify-between py-5">

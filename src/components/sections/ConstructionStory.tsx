@@ -247,9 +247,9 @@ export default function ConstructionStory() {
                   <p className="font-mono text-xs tracking-widest text-blueprint-400 uppercase">
                     {stage.eyebrow}
                   </p>
-                  <h3 className="font-title heading-3 mt-3 text-paper-500">
+                  <h2 className="font-title heading-3 mt-3 text-paper-500">
                     {stage.heading}
-                  </h3>
+                  </h2>
                   <p className="mt-4 max-w-md text-paper-200">{stage.body}</p>
                   <ul className="mt-5 flex flex-wrap gap-2">
                     {stage.tags.map((tag) => (

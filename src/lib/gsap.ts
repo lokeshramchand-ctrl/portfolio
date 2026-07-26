@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { TextPlugin } from 'gsap/TextPlugin';
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { TextPlugin } from "gsap/TextPlugin";
 
 let registered = false;
 
 export function registerGsap() {
-  if (registered || typeof window === 'undefined') return;
+  if (registered || typeof window === "undefined") return;
   gsap.registerPlugin(ScrollTrigger, TextPlugin);
   registered = true;
 }
@@ -15,7 +15,7 @@ export function registerGsap() {
 registerGsap();
 
 export const prefersReducedMotion = () =>
-  typeof window !== 'undefined' &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  typeof window !== "undefined" &&
+  window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export { gsap, ScrollTrigger };

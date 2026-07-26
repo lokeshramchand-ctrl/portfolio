@@ -94,6 +94,7 @@ export default function Hero() {
     >
       <div
         ref={introRef}
+        aria-hidden="true"
         className="fixed inset-0 z-60 flex items-center justify-center bg-void-950"
       >
         <p className="font-mono text-lg text-paper-400 md:text-2xl">

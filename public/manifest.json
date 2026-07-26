@@ -1,5 +1,5 @@
 {
-  "name": "Lokesh Ram Chand ",
+  "name": "Lokesh Ram Chand",
   "short_name": "Lokesh",
   "icons": [
     {
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "background_color": "#000000",
   "display": "standalone"
 }

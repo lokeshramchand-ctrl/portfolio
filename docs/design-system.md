@@ -1,19 +1,19 @@
 # Design system
 
-Source of truth: `src/app/globals.css` (`@theme` block). This file explains the *why*
+Source of truth: `src/app/globals.css` (`@theme` block). This file explains the _why_
 behind the tokens; the tokens themselves should stay in CSS.
 
 ## Palette — "Site & Blueprint"
 
-| Token | Value | Use |
-| --- | --- | --- |
-| `void-950` | `#000000` | Page background |
-| `void-900`–`void-500` | greys | Elevated surfaces, borders, dividers |
-| `paper-500` | `#f5f5f0` | Primary heading text |
-| `paper-400`/`300` | off-white/grey | Body copy |
-| `paper-200`/`100`/`50` | greys | Secondary labels, disabled text — never body copy |
-| `amber-400`–`600` | warm amber | The one accent: CTAs, links, active states, the intro cursor |
-| `blueprint-400`–`600` | cold blue | Reserved for the blueprint/construction-document scenes only — never appears in the projects, about, or contact sections |
+| Token                  | Value          | Use                                                                                                                      |
+| ---------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `void-950`             | `#000000`      | Page background                                                                                                          |
+| `void-900`–`void-500`  | greys          | Elevated surfaces, borders, dividers                                                                                     |
+| `paper-500`            | `#f5f5f0`      | Primary heading text                                                                                                     |
+| `paper-400`/`300`      | off-white/grey | Body copy                                                                                                                |
+| `paper-200`/`100`/`50` | greys          | Secondary labels, disabled text — never body copy                                                                        |
+| `amber-400`–`600`      | warm amber     | The one accent: CTAs, links, active states, the intro cursor                                                             |
+| `blueprint-400`–`600`  | cold blue      | Reserved for the blueprint/construction-document scenes only — never appears in the projects, about, or contact sections |
 
 Rationale: a building site has two kinds of color — the warm hazard/rivet amber of
 finished structure and safety equipment, and the cold technical blue of the drawings that

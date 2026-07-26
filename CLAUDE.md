@@ -14,7 +14,7 @@ assuming an App Router API works the way you remember, check
 ## Project vision
 
 This is Lokesh Ram Chand B's developer portfolio, rebuilt as a single scroll-driven
-narrative: the visitor watches a building go up, and the building *is* the story of
+narrative: the visitor watches a building go up, and the building _is_ the story of
 becoming a software engineer. Darkness and a blinking cursor give way to blueprints,
 foundations, structural steel, glass and lighting, occupied floors (the projects), and
 finally a finished building overlooking the city (contact). Every section maps to a real

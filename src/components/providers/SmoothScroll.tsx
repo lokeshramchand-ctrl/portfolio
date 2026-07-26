@@ -1,10 +1,19 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import Lenis from 'lenis';
-import { gsap, ScrollTrigger, registerGsap, prefersReducedMotion } from '@/lib/gsap';
+import { useEffect } from "react";
+import Lenis from "lenis";
+import {
+  gsap,
+  ScrollTrigger,
+  registerGsap,
+  prefersReducedMotion,
+} from "@/lib/gsap";
 
-export default function SmoothScroll({ children }: { children: React.ReactNode }) {
+export default function SmoothScroll({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   useEffect(() => {
     registerGsap();
 
@@ -16,7 +25,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       easing: (t) => 1 - Math.pow(1 - t, 3),
     });
 
-    lenis.on('scroll', ScrollTrigger.update);
+    lenis.on("scroll", ScrollTrigger.update);
 
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);

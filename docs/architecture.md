@@ -36,7 +36,7 @@ public/
 
 `src/lib/data.ts` exports typed content (nav links, projects, services, bio,
 testimonial, contact info, blog post metadata). Section components import from it
-directly — there is no CMS, no fetch-on-mount for site content (blog post *bodies* are
+directly — there is no CMS, no fetch-on-mount for site content (blog post _bodies_ are
 the one exception, fetched at runtime from `public/blogs/*.md` since that's how the
 previous site did it and it keeps posts editable without a rebuild).
 
