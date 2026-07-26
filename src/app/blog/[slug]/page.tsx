@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { marked } from "marked";
-import { blogPosts } from "@/lib/data";
+import { blogPosts, siteConfig } from "@/lib/data";
 
 type Params = { slug: string };
 
@@ -27,6 +27,7 @@ export async function generateMetadata({
   return {
     title: post.title,
     description: post.excerpt,
+    alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
       title: post.title,
       description: post.excerpt,
@@ -55,8 +56,22 @@ export default async function BlogPostPage({
     notFound();
   }
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    author: { "@type": "Person", name: siteConfig.name, url: siteConfig.url },
+    url: `${siteConfig.url}/blog/${post.slug}`,
+  };
+
   return (
     <article className="padding-x padding-y">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <Link
         href="/blog"
         className="font-mono text-sm text-amber-400 hover:text-amber-500"

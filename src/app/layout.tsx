@@ -6,7 +6,8 @@ import SmoothScroll from "@/components/providers/SmoothScroll";
 import Cursor from "@/components/design/Cursor";
 import Nav from "@/components/common/Nav";
 import Footer from "@/components/design/Footer";
-import { siteConfig } from "@/lib/data";
+import ScrollProgress from "@/components/design/ScrollProgress";
+import { siteConfig, socialLinks } from "@/lib/data";
 
 const cabinet = localFont({
   src: "../assets/fonts/CabinetGrotesk-Variable.ttf",
@@ -33,6 +34,7 @@ export const metadata: Metadata = {
     template: `%s — ${siteConfig.name}`,
   },
   description: siteConfig.description,
+  alternates: { canonical: "/" },
   keywords: [
     "software engineer",
     "full-stack developer",
@@ -54,13 +56,11 @@ export const metadata: Metadata = {
     title: `${siteConfig.name} — Portfolio`,
     description:
       "Lokesh Ram Chand — Software Engineer building intelligent, scalable platforms with modern full-stack development and AI technologies.",
-    images: [{ url: "/images/og-image.webp", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${siteConfig.name} — Portfolio`,
     description: siteConfig.description,
-    images: ["/images/og-image.webp"],
   },
   icons: {
     icon: [
@@ -72,6 +72,34 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
 };
 
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${siteConfig.url}/#person`,
+      name: siteConfig.name,
+      url: siteConfig.url,
+      image: `${siteConfig.url}/images/profile.webp`,
+      jobTitle: "Software Engineer",
+      email: `mailto:${siteConfig.email}`,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: siteConfig.locationCountry,
+      },
+      sameAs: socialLinks.map((link) => link.url),
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteConfig.url}/#website`,
+      url: siteConfig.url,
+      name: `${siteConfig.shortName} — Portfolio`,
+      description: siteConfig.description,
+      publisher: { "@id": `${siteConfig.url}/#person` },
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -81,10 +109,23 @@ export default function RootLayout({
       className={`${cabinet.variable} ${switzer.variable} ${bricolage.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-void-950">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        <a
+          href="#main-content"
+          className="fixed top-2 left-2 z-[100] -translate-y-24 rounded-md bg-amber-500 px-4 py-2 text-sm font-medium text-void-950 transition-transform focus:translate-y-0"
+        >
+          Skip to content
+        </a>
         <SmoothScroll>
           <Cursor />
+          <ScrollProgress />
           <Nav />
-          <main className="flex-1">{children}</main>
+          <main id="main-content" className="flex-1">
+            {children}
+          </main>
           <Footer />
         </SmoothScroll>
       </body>

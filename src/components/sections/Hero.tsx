@@ -5,8 +5,10 @@ import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { heroCopy } from "@/lib/data";
 import Link from "next/link";
 import { siteConfig } from "@/lib/data";
+import { useMagnetic } from "@/lib/useMagnetic";
 
 export default function Hero() {
+  const magneticRef = useMagnetic<HTMLAnchorElement>();
   const introRef = useRef<HTMLDivElement>(null);
   const typedRef = useRef<HTMLSpanElement>(null);
   const cursorRef = useRef<HTMLSpanElement>(null);
@@ -139,8 +141,9 @@ export default function Hero() {
           className="mt-10 flex items-center gap-6"
         >
           <Link
+            ref={magneticRef}
             href="#contact"
-            className="rounded-full bg-amber-500 px-6 py-3 text-sm font-medium text-void-950 transition-transform hover:scale-105"
+            className="inline-block rounded-full bg-amber-500 px-6 py-3 text-sm font-medium text-void-950"
             data-cursor="hover"
           >
             Let&rsquo;s build something

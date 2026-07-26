@@ -131,9 +131,10 @@ Whenever a real design or engineering decision is made, update in the same commi
 - `docs/changelog.md` — a one-line entry.
 - This file, if the decision changes a rule above.
 
-`docs/roadmap.md`, `docs/architecture.md`, `docs/animations.md`, `docs/content.md`, and
-`docs/components.md` are updated as those areas of the project change, not on every
-commit.
+`docs/roadmap.md`, `docs/architecture.md`, `docs/animations.md`, `docs/content.md`,
+`docs/components.md`, `docs/performance.md`, and `docs/seo.md` are updated as those areas
+of the project change, not on every commit. A dated `docs/critique-YYYY-MM-DD.md` is
+added whenever a self-review pass is run (see "Rules for future Claude sessions" below).
 
 ## Rules for future Claude sessions
 
@@ -144,3 +145,8 @@ commit.
 - This is a from-scratch rebuild of a previous Vue 3 site (still intact on the
   `ui-changes` branch) — do not go looking for the old `src/` structure; it no longer
   exists on this branch.
+- Before a significant round of new feature work, consider a fresh two-pass critique
+  (creative-director read of the actual code, then a recruiter-journey walkthrough) —
+  see `docs/critique-2026-07-26.md` for the format. Ground every finding in the actual
+  markup/code, not vibes, and say plainly if something (visual feel, timing, Lighthouse
+  score) hasn't actually been verified rather than asserting it.

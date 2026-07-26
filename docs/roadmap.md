@@ -18,6 +18,10 @@ Milestones for the Next.js rebuild. Check off as completed; keep this in sync wi
       heading-hierarchy + `aria-hidden` pass on decorative elements, oversized project
       stills recompressed (6000px/1.9–2.4MB → 1920px/28–108KB), clean `tsc`/`eslint`/
       `next build`.
+- [x] **M7 — Self-critique + fixes.** Two-pass review (`docs/critique-2026-07-26.md`);
+      fixed all Critical/High findings: mobile nav, generic service cards, structured
+      data + canonical URLs, dynamic OG image, magnetic buttons, scroll progress,
+      skip-to-content link.
 
 ## Next up (not started)
 
@@ -26,7 +30,14 @@ Milestones for the Next.js rebuild. Check off as completed; keep this in sync wi
   in this session).
 - Lighthouse run once there's a way to serve the production build and audit it.
 - Consider whether the construction-story SVG reads as intended at a range of viewport
-  sizes — it's only been reasoned about from the code, not seen.
+  sizes, and whether it's too literal a building elevation (critique Critical #8) — it's
+  only been reasoned about from the code, not seen.
+- Source or generate static (non-variable) instances of CabinetGrotesk/Switzer so the
+  dynamic OG image can use brand fonts instead of satori's default sans (see
+  `docs/decisions.md`).
+- Typographic motion (character stagger, masked reveal) is currently limited to the
+  Hero's typed line — critique Medium #10 flags the rest of the site as under-delivering
+  on "premium interactions" relative to Scene 1.
 
 ## Deliberately out of scope (unless asked)
 

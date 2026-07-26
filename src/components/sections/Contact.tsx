@@ -3,8 +3,10 @@
 import { useEffect, useRef } from "react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { siteConfig } from "@/lib/data";
+import { useMagnetic } from "@/lib/useMagnetic";
 
 export default function Contact() {
+  const magneticRef = useMagnetic<HTMLAnchorElement>();
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -55,11 +57,12 @@ export default function Contact() {
         </h2>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-6">
           <a
+            ref={magneticRef}
             href={siteConfig.whatsapp}
             target="_blank"
             rel="noreferrer noopener"
             data-cursor="hover"
-            className="rounded-full bg-amber-500 px-8 py-4 text-sm font-medium text-void-950 transition-transform hover:scale-105"
+            className="inline-block rounded-full bg-amber-500 px-8 py-4 text-sm font-medium text-void-950"
           >
             Get in touch
           </a>

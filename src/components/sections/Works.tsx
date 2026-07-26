@@ -3,8 +3,10 @@
 import { useEffect, useRef } from "react";
 import { gsap, prefersReducedMotion } from "@/lib/gsap";
 import { projects, type Project } from "@/lib/data";
+import { useMagnetic } from "@/lib/useMagnetic";
 
 function Floor({ project, index }: { project: Project; index: number }) {
+  const magneticRef = useMagnetic<HTMLAnchorElement>(0.3);
   const sectionRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -97,6 +99,7 @@ function Floor({ project, index }: { project: Project; index: number }) {
           <div className="flex items-center gap-6 md:flex-col md:items-end md:text-right">
             <p className="font-mono text-sm text-paper-100">{project.year}</p>
             <a
+              ref={magneticRef}
               href={project.url}
               target="_blank"
               rel="noreferrer noopener"

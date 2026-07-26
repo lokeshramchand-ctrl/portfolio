@@ -5,6 +5,18 @@ behind non-obvious ones.
 
 ## 2026-07-26
 
+- docs: harsh two-pass self-critique (`docs/critique-2026-07-26.md`) against the brief's
+  own "avoid generic/AI-clichéd" bar; fixes below are its Critical/High findings.
+- fix(nav): add mobile hamburger + overlay menu — nav links were unreachable below `md`.
+- fix(about): replace generic bordered service cards with a "systems schedule" layout;
+  tighten Works subhead copy that was narrating its own device.
+- fix(seo,a11y): Person/WebSite/BlogPosting JSON-LD, explicit canonical URLs on every
+  route, skip-to-content link + `#main-content` landmark.
+- feat(og): dynamic on-brand 1200×630 social card via `next/og` (`opengraph-image.tsx`),
+  replacing the reused headshot; brand fonts don't survive the renderer yet (see
+  `docs/decisions.md`).
+- feat(interaction): magnetic-pull hook (`useMagnetic`) applied to primary CTAs; scroll
+  progress indicator (`ScrollProgress.tsx`), reduced-motion safe.
 - feat(blog): migrate blog list + post routes to Next.js (async `params` per Next 16),
   reading `public/blogs/*.md` server-side and rendering with `marked`; add
   `sitemap.ts`/`robots.ts`.

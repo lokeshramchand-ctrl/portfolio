@@ -36,6 +36,19 @@ for a portfolio that also needs to hit Lighthouse 90+. Revisit only if the 2D ap
 demonstrably can't deliver the intended sense of depth. **Rules out:** a Three.js
 dependency in the initial build.
 
+## 2026-07-26 — Dynamic OG image falls back to satori's default sans, not brand fonts
+
+Built `app/opengraph-image.tsx` with `next/og`'s `ImageResponse` to replace the reused
+headshot with a real, on-brand social card (dark background, blueprint grid, amber
+accent, name, tagline). Tried loading the self-hosted variable fonts
+(`CabinetGrotesk-Variable.ttf`, `Switzer-Variable.ttf`) into it via the `fonts` option —
+satori (the renderer behind `ImageResponse`) failed to parse them (`Cannot read
+properties of undefined (reading '261')`), which is a known class of issue with variable
+fonts in satori. Shipped without custom fonts (falls back to a default sans) rather than
+spend the session converting/subsetting static font instances for one image. **Rules
+out:** brand typography in the generated OG image until static (non-variable) font
+files are sourced or generated.
+
 ## 2026-07-26 — Blog stays file-based, one stub post left behind
 
 `public/blogs/enterprise-ai.md` existed in the old site as an unfinished stub
