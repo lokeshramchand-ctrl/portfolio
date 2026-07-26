@@ -1,0 +1,149 @@
+@import 'tailwindcss';
+
+/*
+  Palette: "Site & Blueprint"
+  - void: the unbuilt darkness the site opens in, and the surface everything is built on
+  - paper: blueprint/drafting-paper whites used for text
+  - amber: the one warm accent — steel-rivet / hazard amber, used sparingly for emphasis
+  - blueprint: cold technical blue, used only in the early construction-document scenes
+*/
+@theme {
+  --color-void-950: #000000;
+  --color-void-900: #0a0a0a;
+  --color-void-800: #121212;
+  --color-void-700: #1c1c1c;
+  --color-void-600: #2a2a2a;
+  --color-void-500: #3d3d3d;
+
+  --color-paper-50: #6b6b66;
+  --color-paper-100: #8c8c86;
+  --color-paper-200: #a8a8a2;
+  --color-paper-300: #c4c4bd;
+  --color-paper-400: #e0e0d8;
+  --color-paper-500: #f5f5f0;
+
+  --color-amber-400: #f2b544;
+  --color-amber-500: #e89a1c;
+  --color-amber-600: #c17c0e;
+
+  --color-blueprint-400: #6fa8d8;
+  --color-blueprint-500: #3f7fb3;
+  --color-blueprint-600: #2c5f8a;
+
+  --font-title: var(--font-cabinet);
+  --font-body: var(--font-switzer);
+  --font-fancy: var(--font-bricolage);
+
+  --heading-6: clamp(1rem, 0.928rem + 0.36vw, 1.25rem);
+  --heading-5: clamp(1.13rem, 1.004rem + 0.63vw, 1.57rem);
+  --heading-4: clamp(1.25rem, 1.0359rem + 1.0707vw, 1.9995rem);
+  --heading-3: clamp(1.5625rem, 1.2474rem + 1.5755vw, 2.6653rem);
+  --heading-2: clamp(1.9531rem, 1.496rem + 2.2854vw, 3.5529rem);
+  --heading-1: clamp(3rem, 2.0357rem + 4.8214vw, 9rem);
+  --heading-display: clamp(3.5rem, 1.203rem + 8.75vw, 9.5rem);
+  --heading-body: clamp(1rem, 0.6071rem + 1.0143vw, 2.25rem);
+
+  --breakpoint-2xs: 420px;
+  --breakpoint-xs: 512px;
+  --breakpoint-2xl: 1440px;
+  --breakpoint-3xl: 1920px;
+
+  --ease-blueprint: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@utility heading-display {
+  font-size: var(--heading-display);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+@utility heading-1 {
+  font-size: var(--heading-1);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+@utility heading-2 {
+  font-size: var(--heading-2);
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+}
+@utility heading-3 {
+  font-size: var(--heading-3);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+@utility heading-4 {
+  font-size: var(--heading-4);
+  line-height: 1.15;
+}
+@utility heading-5 {
+  font-size: var(--heading-5);
+  line-height: 1.2;
+}
+@utility heading-6 {
+  font-size: var(--heading-6);
+  line-height: 1.3;
+}
+@utility heading-body {
+  font-size: var(--heading-body);
+  line-height: 1.4;
+}
+
+@utility flex-center {
+  @apply flex items-center justify-center;
+}
+
+@utility padding-x {
+  @apply px-6 md:px-12 xl:px-20;
+}
+
+@utility padding-y {
+  @apply py-16 md:py-28 xl:py-36;
+}
+
+@utility common-padding {
+  @apply padding-x padding-y;
+}
+
+@utility blueprint-grid {
+  background-image:
+    linear-gradient(var(--color-blueprint-600) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-blueprint-600) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+html {
+  scroll-behavior: auto;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--color-void-950);
+  color: var(--color-paper-500);
+  font-family: var(--font-body), sans-serif;
+}
+
+html.cursor-none-custom,
+html.cursor-none-custom * {
+  cursor: none !important;
+}
+
+::selection {
+  background: var(--color-amber-500);
+  color: var(--color-void-950);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-amber-400);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

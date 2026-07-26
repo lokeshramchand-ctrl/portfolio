@@ -1,62 +1,146 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code (or any future engineer) working in this repository.
 
-## Overview
+## Framework note
 
-This is a personal portfolio site built with Vue 3, TypeScript, Vite, and Tailwind CSS 4. It's a heavily animated single-page-ish site (Home) plus a small file-based blog. GSAP + Lenis drive scroll and entrance animations throughout.
+This project runs **Next.js 16**, which has real breaking changes versus older training
+data — most relevantly: `params`/`searchParams` in pages are `Promise`s and must be
+`await`ed, `next lint` doesn't exist (this repo uses the ESLint CLI directly via
+`npm run lint`), and Turbopack is the default bundler for both `dev` and `build`. Before
+assuming an App Router API works the way you remember, check
+`node_modules/next/dist/docs/01-app/02-guides/upgrading/version-16.md`.
 
-## Commands
+## Project vision
 
-Package manager: this repo has both `bun.lock` and `package-lock.json`; either bun or npm works. Node version is pinned via `.node-version` (20).
+This is Lokesh Ram Chand B's developer portfolio, rebuilt as a single scroll-driven
+narrative: the visitor watches a building go up, and the building *is* the story of
+becoming a software engineer. Darkness and a blinking cursor give way to blueprints,
+foundations, structural steel, glass and lighting, occupied floors (the projects), and
+finally a finished building overlooking the city (contact). Every section maps to a real
+stage of construction **and** a real stage of engineering practice — the metaphor is not
+decorative, it is the information architecture.
 
-- `npm run dev` — start Vite dev server (bound to all hosts via `--host`, port 5173)
-- `npm run build` — type-check via `vue-tsc` then `vite build`
-- `npm run preview` — preview the production build
+The bar is a portfolio that reads as handcrafted, not templated: no generic SaaS-landing
+patterns, no glassmorphism-for-its-own-sake, no motion that doesn't communicate something.
 
-There is no test suite and no lint script configured in this repo. Formatting is via Prettier (`.prettierrc`: single quotes, 2-space, `prettier-plugin-tailwindcss` for class sorting) — run `npx prettier --write .` if needed.
+## Design philosophy
 
-## Architecture
+- **One accent, used sparingly.** The palette is void-black, blueprint-paper white/grey,
+  one warm accent (amber, `--color-amber-*`) and one cold accent (blueprint blue,
+  `--color-blueprint-*`) reserved for the early construction-document scenes. See
+  `docs/design-system.md`.
+- **Typography carries the hierarchy.** `font-title` (CabinetGrotesk, self-hosted) for
+  display/headings, `font-body` (Switzer, self-hosted) for reading copy, `font-fancy`
+  (Bricolage Grotesque, via `next/font/google`) reserved for small accent/annotation text
+  only — it should never be the primary voice of a section.
+- **No placeholder copy, ever.** Every sentence on the site is either factual (real
+  projects, real testimonial, real bio) or a deliberate authored line for the construction
+  narrative. See `docs/content.md` for the source of truth on facts.
 
-### Routing & pages
-`src/router/index.ts` defines three routes: `/` (`HomeView`), `/blog` (`BlogView`), `/blog/:slug` (`BlogPostView`). The router has custom `scrollBehavior`: hash links (`/#works`) smooth-scroll after a 100ms delay (to let content mount), back/forward restores scroll position, otherwise it snaps to top.
+## Architecture rules
 
-### Global scroll/animation setup
-`src/main.ts` creates a single `Lenis` smooth-scroll instance and a `raf` loop, both exported (`export { raf, lenis }`) so any component can import and control global scrolling (e.g. `lenis.stop()`/`lenis.start()` to lock scroll during menus/loading, `lenis.scrollTo(...)` for nav links).
+- Next.js App Router, TypeScript strict mode, Tailwind CSS 4 (`@theme` in
+  `src/app/globals.css`, no `tailwind.config.js`).
+- `src/lib/data.ts` is the single source of truth for content (nav, projects, services,
+  bio, testimonial, contact). Components read from it; they do not hardcode copy.
+- `src/lib/gsap.ts` centralizes GSAP plugin registration (`registerGsap()` runs once, at
+  module load, on the client) — components import `gsap`/`ScrollTrigger` from here, never
+  straight from the `gsap` package, so registration is never a race condition.
+- `src/components/providers/SmoothScroll.tsx` owns the single Lenis instance and drives
+  it from the GSAP ticker (`gsap.ticker.add`), so Lenis and ScrollTrigger stay in sync.
+  Don't create a second Lenis instance anywhere else.
+- Scene/section components live in `src/components/sections/`; shared chrome (nav,
+  footer, cursor) lives in `src/components/design/` and `src/components/common/`.
+- Route-level content (blog posts) is fetched from `public/blogs/*.md` at runtime and
+  rendered with `marked`, mirroring the previous site's approach — no CMS. Remember
+  `params` is async in the `[slug]` route (Next 16).
 
-`App.vue` is the root shell used for every route: it renders a fixed full-screen SVG noise overlay (two `feTurbulence` filters), `Cursor`, `Navbar`, `router-view`, and `Footer`. It toggles `body.stop-scrolling` on mount and kicks off the `raf` loop after a 2s delay (this delay is tied to the loading-screen animation timing in `src/animations/index.ts`).
+## Animation philosophy
 
-`HomeView.vue` duplicates this same noise/cursor/loading shell around the home page's own sections (`Hero`, `Services`, `Marquee`, `Works`, `aboutMe`, `People`, `Contact`) — when editing the fullscreen overlay or Samsung-browser handling, check both `App.vue` and `HomeView.vue`.
+- Every animation maps to a beat in the construction story — if you can't say what a
+  motion communicates in one sentence, cut it.
+- Entrance timelines: hidden state set with `gsap.set`, revealed either on a scroll
+  trigger (`ScrollTrigger`) or as part of a scene's own timeline.
+- Always provide a `prefers-reduced-motion` branch (`prefersReducedMotion()` from
+  `src/lib/gsap.ts`) that sets the final state immediately with no motion, instead of
+  skipping the section.
+- Never block scroll longer than a single intro beat. `document.body` gets
+  `overflow-hidden` only during the opening cinematic and is released as soon as it ends
+  or on unmount.
+- See `docs/animations.md` for the scene-by-scene motion spec.
 
-### Animation layer (`src/animations/index.ts`)
-A single flat module of GSAP helpers, all operating on CSS selector strings (not refs), registered with `ScrollTrigger` and `MotionPathPlugin`. Conventions to follow when adding new animations:
-- Functions are named `animate*` for composed sequences (e.g. `animateHeroNav`, `animateBlogListEnter`, `animateBlogPostEnter`) and lowercase verbs for primitives (`fadeIn`, `yToZero`, `xToZero`, `resetOpacity`).
-- Entrance animations for a page/section pair a `yReset`/`resetOpacity` (set initial state) with a `scrollTrigger`-driven or timeline-driven reveal.
-- Blog animations (`animateBlogListEnter`, `animateBlogPostEnter`) are triggered manually from the view's `onMounted` after `nextTick()` + `ScrollTrigger.refresh()`, since blog content is fetched/rendered after route entry — this pattern (wait for DOM, refresh ScrollTrigger, then animate) should be reused for any new route that renders async content.
-- `src/functions/index.ts` holds non-GSAP helpers used alongside animations: `textSplitterIntoChar` (wraps text in per-letter spans for stagger animations, expects matching CSS in `style.css`/Tailwind for `.letters`), `getAvailableForWorkDate`, and `gotoSection` (nav scroll dispatch, has a special case for `#testimonials-section` which actually scrolls to `#slider`).
+## Coding standards
 
-### Component organization (`src/components/`)
-- `common/` — reusable UI (`Button.vue`, `Nav.vue`), barreled via `common/index.ts`.
-- `design/` — visual/decorative pieces (`Cursor`, `Footer`, `LoadingScreen`, `Marquee`, `Slider`, `SamsungError`, `Circles`, icons), barreled via `design/index.ts`.
-- `sections/` — one component per home-page section (`Hero`, `Services`, `Works`, `aboutMe`, `People`, `Contact`), barreled via `sections/index.ts`.
-- Top-level `components/index.ts` barrels smaller shared pieces (`Link`, `MagneticEffect`, `MyEnName`, `BurgerMenuBtn`, `ServicesCard`).
+- TypeScript strict; no `any`. Components are typed function components, data flows
+  through props from `src/lib/data.ts`.
+- Client components are marked `'use client'` only where they need browser APIs
+  (animation, scroll, time) — sections that are pure markup stay server components.
+- Tailwind utility classes only; no ad-hoc inline styles except where a value must come
+  from JS (e.g. GSAP-driven transforms).
+- Run `npx prettier --write .` before committing if formatting drifts.
 
-New components should be added to the relevant subfolder's `index.ts` barrel and imported via `@/components/...` (the `@` alias maps to `src/`, configured in both `vite.config.ts` and `tsconfig.json`).
+## Accessibility rules
 
-`MagneticEffect.vue` pairs with `activateMagneto`/`resetMagneto` in `src/animations/index.ts` for the magnetic-hover button/link effect used around the site (e.g. contact button, social links).
+- Respect `prefers-reduced-motion` everywhere motion is added (see above).
+- Custom cursor (`Cursor.tsx`) only replaces the system cursor on fine-pointer,
+  non-reduced-motion devices; it never removes default focus or hover affordances.
+- Maintain visible `:focus-visible` styling (defined globally in `globals.css`).
+- Color contrast: body text stays on `paper-400`/`paper-500` against `void-*`
+  backgrounds; never drop to `paper-100`/`paper-200` for body copy, only for secondary
+  labels.
+- All interactive elements are real `<a>`/`<button>` elements — no click handlers on
+  `<div>`s.
 
-### Blog system
-The blog is intentionally simple and file-based, not a CMS:
-- `src/data.ts` exports `blogPosts`: an array of post metadata (title, slug, date, excerpt, tags). This is the single source of truth for what posts exist and their listing metadata.
-- Actual post content lives as Markdown files in `public/blogs/<slug>.md`, fetched at runtime (`fetch(`${import.meta.env.BASE_URL}blogs/${slug}.md`)`) and parsed client-side with `marked` in `BlogPostView.vue`.
-- **To add a new post**: add an entry to `blogPosts` in `src/data.ts` with a `slug`, then add a matching `public/blogs/<slug>.md` file. The two must stay in sync — there's no build-time validation that a post's markdown file exists.
-- `src/data.ts` also holds site-wide content/config: nav links (`navLinks`/`navbarLinks`), `socialLinks`, `resourceLinks`, hero copy, location strings, and Cal.com booking config (`dataCalNamespace`/`dataCalLink`/`dataCalConfig`).
+## Performance requirements
 
-### Styling
-Tailwind CSS 4 is configured via the `@tailwindcss/vite` plugin (no `tailwind.config.js` — theme lives in `src/style.css` under `@theme`). Key custom tokens defined there:
-- Color scale `flax-smoke-50..950` — despite the naming, this is currently a dark-mode-first palette (50 = pure black background, 900/950 = white text, 500/600 = amber accent). Use these tokens (`text-flax-smoke-900`, `bg-flax-smoke-50`, etc.) rather than raw Tailwind grays/ambers for anything visual.
-- Fluid heading sizes as custom properties (`--heading-1` through `--heading-display`, plus `--heading-body`), exposed as utility classes like `heading-3`, `heading-display`.
-- Two custom font families: `font-title` (CabinetGrotesk, loaded via `@font-face`) and `font-fancy` (Bricolage Grotesque, loaded via Google Fonts `@import`).
+- Target Lighthouse 90+ across the board.
+- Project preview videos (`public/videos/*.webm`) are muted, lazy, and paused off-screen.
+- Images go through `next/image` wherever practical; the two project stills
+  (`velar.webp`, `maplayer.webp`) are large source assets — resize/compress before
+  shipping if Lighthouse flags them.
+- Fonts are self-hosted (`next/font/local`) except Bricolage Grotesque, which Next
+  self-hosts automatically via `next/font/google` (no runtime Google Fonts request).
 
-### Deployment
-`.github/workflows/vue.yml` builds and deploys to GitHub Pages on every push using `xRealNeon/VuePagesAction`. `vite-plugin-sitemap` and `vite-plugin-robots` generate `sitemap.xml`/`robots.txt` at build time (hostname `https://lokeshrc.me/`); robots behavior differs between `.robots.development.txt` and `.robots.production.txt`.
+## Component guidelines
+
+- New sections go in `src/components/sections/`, imported directly (no barrel) since
+  each is used exactly once on the home page — don't add an index barrel until there's a
+  second consumer.
+- Reusable primitives (magnetic buttons, section headings) go in `src/components/common/`.
+- Every new component that renders copy must source that copy from `src/lib/data.ts`, not
+  inline strings, unless the copy is structural narration for the construction scenes (in
+  which case it lives inline in the scene component, since it's a one-off).
+
+## Git workflow
+
+- Conventional Commits (`feat(scope): ...`, `fix(scope): ...`, `docs(scope): ...`,
+  `refactor(scope): ...`).
+- Commit at the end of each milestone (see `docs/roadmap.md`), after `lint` and
+  `typecheck`/`build` pass.
+- This rebuild lives on the `nextjs-rebuild` branch; `main`/`ui-changes` hold the previous
+  Vue site untouched until the user decides to merge.
+- Never force-push, rebase-with-history-rewrite, or delete branches without explicit
+  instruction.
+
+## Documentation workflow
+
+Whenever a real design or engineering decision is made, update in the same commit:
+
+- `docs/decisions.md` — the decision and why.
+- `docs/changelog.md` — a one-line entry.
+- This file, if the decision changes a rule above.
+
+`docs/roadmap.md`, `docs/architecture.md`, `docs/animations.md`, `docs/content.md`, and
+`docs/components.md` are updated as those areas of the project change, not on every
+commit.
+
+## Rules for future Claude sessions
+
+- Read `docs/content.md` before writing any copy — it is the authoritative list of real
+  facts (projects, bio, testimonial, contact info). Do not invent projects, metrics, or
+  quotes.
+- Read `docs/decisions.md` before re-litigating a design choice that's already been made.
+- This is a from-scratch rebuild of a previous Vue 3 site (still intact on the
+  `ui-changes` branch) — do not go looking for the old `src/` structure; it no longer
+  exists on this branch.
