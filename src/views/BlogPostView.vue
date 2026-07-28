@@ -2,7 +2,7 @@
   <section class="padding-x min-h-svh pt-[15vh] pb-32">
     <div class="w-full max-w-3xl mx-auto z-10 relative">
       
-      <router-link to="/blog" class="post-back-btn inline-flex items-center gap-2 font-mono text-sm font-bold uppercase tracking-widest text-flax-smoke-500 hover:text-flax-smoke-900 transition-colors mb-12">
+      <router-link to="/blog" class="post-back-btn inline-flex items-center gap-2 font-mono text-sm font-bold uppercase tracking-widest text-flax-smoke-500 hover:text-flax-smoke-900 transition-colors duration-500 mb-12">
         <span>←</span> Back to Journal
       </router-link>
 
@@ -23,13 +23,7 @@
           </h1>
           
           <div class="flex flex-wrap gap-3">
-            <span 
-              v-for="tag in postMeta?.tags" 
-              :key="tag"
-              class="post-tag text-xs font-bold uppercase tracking-widest bg-flax-smoke-900 text-flax-smoke-50 px-4 py-2 rounded-full"
-            >
-              {{ tag }}
-            </span>
+            <Tag v-for="tag in postMeta?.tags" :key="tag" class="post-tag">{{ tag }}</Tag>
           </div>
         </header>
 
@@ -44,6 +38,7 @@
   import { ref, onMounted, computed, watch, nextTick } from 'vue';
   import { useRoute } from 'vue-router';
   import { marked } from 'marked';
+  import { Tag } from '@/components/common';
   import { blogPosts } from '@/data';
   import { animateBlogPostEnter } from '@/animations'; // Adjust path if needed
 

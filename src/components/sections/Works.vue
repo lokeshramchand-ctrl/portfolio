@@ -87,13 +87,7 @@
                   {{ work.name }}
                 </h3>
                 <div class="flex gap-1.5 select-none">
-                  <p
-                    class="border-flax-smoke-300 hover:bg-flax-smoke-300 hover:text-flax-smoke-900 rounded-full border px-4 py-2 transition-[background-color,color] duration-500 ease-in-out"
-                    v-for="tag in work.tags"
-                    :key="tag"
-                  >
-                    <span>{{ tag }}</span>
-                  </p>
+                  <Tag v-for="tag in work.tags" :key="tag">{{ tag }}</Tag>
                   <p
                     class="border-flax-smoke-300 bg-flax-smoke-300 text-flax-smoke-900 hover:text-flax-smoke-300 rounded-full border px-4 py-2 transition-[background-color,color] duration-500 ease-in-out hover:bg-transparent"
                   >
@@ -110,6 +104,7 @@
 </template>
 
 <script setup lang="ts">
+  import { Tag } from '../common';
   import { animateSplitText } from '@/animations';
   import { textSplitterIntoChar } from '@/functions';
   import { computed, onBeforeMount, onMounted, ref, useTemplateRef } from 'vue';

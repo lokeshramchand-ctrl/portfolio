@@ -7,7 +7,7 @@
 
   <div
     @click="toggleBtnClickAnimation"
-    class="fixed inset-0 z-9998 size-full bg-black opacity-50 select-none"
+    class="fixed inset-0 z-9998 size-full bg-flax-smoke-50 opacity-50 select-none"
     :class="{ hidden: !isNavbarOpen }"
   ></div>
 

@@ -4,7 +4,7 @@
     class="relative min-h-svh w-full overflow-y-clip p-[4vh] select-none"
   >
     <div
-      class="flex-center relative h-[92vh] w-full flex-col rounded-lg bg-black uppercase"
+      class="flex-center relative h-[92vh] w-full flex-col rounded-lg bg-flax-smoke-50 uppercase"
     >
       <video
         class="absolute bottom-0 left-0 size-full rounded-lg object-cover object-bottom brightness-50"

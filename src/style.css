@@ -211,10 +211,10 @@ layer(base);
   }
   .markdown-content h1,
   .markdown-content h2 {
-    @apply font-fancy text-flax-smoke-900 mt-16 mb-6 text-3xl font-bold tracking-tight uppercase md:text-4xl;
+    @apply font-fancy heading-3 text-flax-smoke-900 mt-16 mb-6 font-bold tracking-tight uppercase;
   }
   .markdown-content h3 {
-    @apply font-fancy text-flax-smoke-800 mt-10 mb-4 text-2xl font-bold;
+    @apply font-fancy heading-4 text-flax-smoke-800 mt-10 mb-4 font-bold;
   }
   .markdown-content p {
     @apply mb-6;
@@ -232,7 +232,7 @@ layer(base);
     @apply bg-flax-smoke-200 text-flax-smoke-900 rounded-md px-2 py-1 font-mono text-sm;
   }
   .markdown-content pre {
-    @apply text-flax-smoke-50 my-8 overflow-x-auto rounded-lg bg-[#0f172a] p-6;
+    @apply text-flax-smoke-50 my-8 overflow-x-auto rounded-lg bg-[#0B0B0A] p-6;
   }
   .markdown-content pre code {
     @apply text-flax-smoke-50 rounded-none bg-transparent p-0;

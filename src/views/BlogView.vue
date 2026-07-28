@@ -1,5 +1,5 @@
 <template>
-  <section class="padding-x min-h-svh pt-[20vh] pb-20">
+  <section class="padding-x min-h-svh pt-[15vh] pb-20">
     <div class="w-full max-w-5xl mx-auto mb-20 z-10 relative">
       <p class="blog-header-anim heading-6 font-mono font-bold tracking-[0.2em] text-flax-smoke-400 uppercase mb-4">
         [ Engineering Journal ]
@@ -19,13 +19,7 @@
         <div class="flex flex-col gap-4 md:w-1/3 mb-6 md:mb-0 pr-4">
           <p class="font-mono text-sm font-bold text-flax-smoke-500 uppercase">{{ post.date }}</p>
           <div class="flex flex-wrap gap-2">
-            <span 
-              v-for="tag in post.tags" 
-              :key="tag"
-              class="text-xs font-bold uppercase tracking-widest text-flax-smoke-600 border border-flax-smoke-300 rounded-full px-3 py-1"
-            >
-              {{ tag }}
-            </span>
+            <Tag v-for="tag in post.tags" :key="tag">{{ tag }}</Tag>
           </div>
         </div>
 
@@ -43,6 +37,7 @@
 </template>
 <script setup lang="ts">
   import { onMounted, nextTick } from 'vue';
+  import { Tag } from '@/components/common';
   import { blogPosts } from '@/data';
   
   // Make sure to import your new animation and Lenis/ScrollTrigger
