@@ -61,10 +61,16 @@
 </template>
 
 <script setup lang="ts">
-  import { onBeforeMount, ref } from 'vue';
+  import { onBeforeMount, onMounted, ref } from 'vue';
   import { Star } from '../design';
   import { Button } from '@/components/common';
   import { textSplitterIntoChar } from '@/functions';
+  import {
+    animateHeroEntrance,
+    animateHeroScrollPin,
+    navbarScale,
+  } from '@/animations';
+  import { appBooted } from '@/state';
 
   const whoAmI = ref(
     'I’m a software engineer passionate about building scalable applications, intelligent systems, and digital experiences that solve real-world problems. From full-stack development to AI-powered products, I enjoy transforming ambitious ideas into reliable, production-ready software.'
@@ -72,5 +78,17 @@
 
   onBeforeMount(() => {
     whoAmI.value = textSplitterIntoChar(whoAmI.value);
+  });
+
+  onMounted(() => {
+    animateHeroScrollPin();
+    navbarScale('#burger', '#hero');
+
+    // True first mount (app boot): the loading curtain reveals Hero
+    // once it finishes. Any later mount (returning to Home via SPA
+    // navigation) has no curtain to wait for, so reveal immediately.
+    if (appBooted.value) {
+      animateHeroEntrance(0, 0);
+    }
   });
 </script>

@@ -1,46 +1,4 @@
 <template>
-  <LoadingScreen v-cloak="true" />
-
-  <template v-if="isSamsungBrowser">
-    <SamsungError />
-  </template>
-
-  <div class="pointer-events-none fixed inset-0 z-50">
-    <svg
-      class="h-[150vh] w-full object-cover object-center"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <filter id="noise">
-        <feTurbulence
-          type="fractalNoise"
-          baseFrequency="0.65"
-          numOctaves="1"
-          stitchTiles="stitch"
-        />
-        <feBlend mode="screen" />
-      </filter>
-      <rect ref="noise" class="size-full" filter="url(#noise)" opacity="0.15" />
-
-      <filter id="noise">
-        <feTurbulence
-          type="fractalNoise"
-          base-frequency="0.8"
-          numOctaves="1"
-          stitchTiles="stitch"
-        />
-        <feBlend mode="screen" />
-      </filter>
-      <rect
-        ref="noise"
-        class="size-full"
-        filter="url(#noise)"
-        opacity="-0.88"
-      />
-    </svg>
-  </div>
-
-  <Cursor />
-
   <main class="relative min-h-full">
     <Hero />
     <div
@@ -55,7 +13,6 @@
     <People />
     <Contact />
   </main>
-
 </template>
 
 <script setup lang="ts">
@@ -67,43 +24,21 @@
     aboutMe,
     Contact,
   } from '@/components/sections';
-  import { onMounted, type Ref, ref, watch } from 'vue';
-  import {
-    LoadingScreen,
-    Marquee,
-    SamsungError,
-    Cursor,
-  } from '@/components/design';
-  import { useWindowSize } from '@vueuse/core';
+  import { Marquee } from '@/components/design';
+  import { nextTick, onMounted } from 'vue';
+  import ScrollTrigger from 'gsap/ScrollTrigger';
+  import { lenis } from '@/main';
+  import { pendingSection } from '@/state';
 
-  import { raf } from '@/main';
-  const { width, height } = useWindowSize();
-  const noise: Ref<HTMLElement | null> = ref(null);
+  onMounted(async () => {
+    if (!pendingSection.value) return;
 
-  const isSamsungBrowser = /samsung/i.test(navigator.userAgent);
+    const target = pendingSection.value;
+    pendingSection.value = null;
 
-
-  watch([width, height], () => {
-    if (noise.value) {
-      noise.value.style.height = `${height.value * 2}px`;
-      noise.value.style.width = `${width.value}px`;
-    }
-  });
-
-  onMounted(() => {
-    document.body.classList.add('stop-scrolling');
-    // TODO:
-    // window.scrollTo(0, 0);
-
-    setTimeout(() => {
-      requestAnimationFrame(raf);
-    }, 2000);
+    await nextTick();
+    ScrollTrigger.refresh();
+    lenis.start();
+    lenis.scrollTo(target, { duration: 3 });
   });
 </script>
-
-<style>
-  .stop-scrolling #app {
-    max-height: 100svh !important;
-    overflow: hidden !important;
-  }
-</style>

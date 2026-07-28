@@ -3,6 +3,7 @@ import MotionPathHelper from 'gsap/MotionPathPlugin';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { Ref } from 'vue';
 import { lenis } from '@/main';
+import { appBooted } from '@/state';
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(MotionPathHelper);
@@ -61,8 +62,14 @@ const animateSplitText = (
   });
 };
 const navbarScale = (selector: string, trigger: string) => {
+  // trigger (#hero) is destroyed and recreated on every Home mount, so
+  // this must be re-registered each time — kill any prior instance
+  // bound to an already-unmounted node first.
+  ScrollTrigger.getById('navbar-scale')?.kill();
+
   gsap.to(selector, {
     scrollTrigger: {
+      id: 'navbar-scale',
       trigger: trigger,
       start: 'bottom center',
       //toggleActions: start, leave, enterBack, leaveBack
@@ -254,6 +261,8 @@ const animateLoadingPath = (
     onStart: () => {
       setTimeout(() => {
         animateHeroNav();
+        animateHeroEntrance();
+        appBooted.value = true;
         samsungErrorModal(isSamsung);
         document.body.classList.remove('stop-scrolling');
         window.scrollTo(0, 0);
@@ -315,6 +324,8 @@ const animateLoadingText = (id: string) => {
 };
 
 // ! Hero
+// Chrome that lives outside Hero.vue (Navbar, legacy selectors) and
+// therefore only ever needs revealing once, at true app boot.
 const animateHeroNav = () => {
   gsap.to('header', {
     y: 0,
@@ -328,13 +339,6 @@ const animateHeroNav = () => {
     duration: 1.5,
     ease: 'power4.inOut',
     stagger: 0.01,
-  });
-
-  gsap.to('#star', {
-    x: 1,
-    delay: 0.2,
-    duration: 1.5,
-    ease: 'power4.inOut',
   });
 
   gsap.to('.overlay', {
@@ -353,20 +357,43 @@ const animateHeroNav = () => {
     duration: 1.5,
     ease: 'power4.inOut',
   });
+};
 
-  gsap.to(['#down-arrow', '#contact-btn', '#available-for-work'], {
-    x: 0,
-    y: 0,
-    delay: 0.4,
+// Hero's own reveal (star, contact button, down arrow, intro copy).
+// Called once from the boot sequence with the choreographed delays
+// below, and again — instantly (delay 0) — from Hero.vue's own
+// onMounted whenever it remounts after SPA navigation, since a fresh
+// mount starts from the hidden CSS state with no loading curtain to
+// sync against.
+const animateHeroEntrance = (starDelay: number = 0.2, restDelay: number = 0.4) => {
+  gsap.to('#star', {
+    x: 1,
+    delay: starDelay,
     duration: 1.5,
     ease: 'power4.inOut',
   });
 
-  animateSplitText('#whoAmI .letters', '#whoAmI .letters', 1.5, 0.005, 0.4);
+  gsap.to(['#down-arrow', '#contact-btn', '#available-for-work'], {
+    x: 0,
+    y: 0,
+    delay: restDelay,
+    duration: 1.5,
+    ease: 'power4.inOut',
+  });
 
-  // Hero scroll animation
+  animateSplitText('#whoAmI .letters', '#whoAmI .letters', 1.5, 0.005, restDelay);
+};
+
+// Hero's scroll-linked pin/scale effect. ScrollTrigger binds to the
+// live DOM node, so this must be re-registered on every Hero mount —
+// killing any previous instance keeps repeated Home visits from
+// piling up stale triggers bound to already-unmounted nodes.
+const animateHeroScrollPin = () => {
+  ScrollTrigger.getById('hero-pin')?.kill();
+
   gsap.to('#hero', {
     scrollTrigger: {
+      id: 'hero-pin',
       trigger: '#hero',
       start: 'top top',
       scrub: 1,
@@ -459,6 +486,8 @@ export {
   animateLoadingText,
   animateLoadingTextContainer,
   animateHeroNav,
+  animateHeroEntrance,
+  animateHeroScrollPin,
   animateSplitText,
   animateAboutMeSectionLeave,
   animateBlogListEnter,

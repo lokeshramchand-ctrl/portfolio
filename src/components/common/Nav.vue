@@ -32,7 +32,7 @@
   >
     <a
       :href="l.url"
-      @click="(e) => gotoSection(e, l.url)"
+      @click="(e) => handleSectionClick(e, l.url)"
       class="group my-2 flex h-full w-fit translate-y-full cursor-pointer items-center justify-start leading-none will-change-auto"
     >
       <span class="bg-flax-smoke-50 h-4 w-4 scale-0 rounded-full opacity-0 transition-all duration-300 ease-in-out group-hover:scale-100 group-hover:opacity-100"></span>
@@ -117,26 +117,18 @@
   </header>
 </template>
 <script setup lang="ts">
-  import { onMounted, ref, watch } from 'vue';
-  import { useRouter, useRoute } from 'vue-router'; // <-- Add this
+  import { ref, watch } from 'vue';
 
   import { Link, BurgerMenuBtn, MagneticEffect } from '..';
   import { Circles } from '../design';
   import { Button } from '../common';
 
-  import {
-    animateNavbarEnter,
-    animateNavbarLeave,
-    navbarScale,
-  } from '@/animations';
+  import { animateNavbarEnter, animateNavbarLeave } from '@/animations';
   import { navbarLinks, navLinks, socialLinks } from '@/data';
-  import { lenis } from '@/main';
+  import { useSectionNav } from '@/functions';
 
   const isNavbarOpen = ref(false);
-  
-  // <-- Initialize router and route
-  const router = useRouter();
-  const route = useRoute(); 
+  const { goToSection } = useSectionNav();
 
   const toggleBtnClickAnimation = () => {
     isNavbarOpen.value = !isNavbarOpen.value;
@@ -154,31 +146,10 @@
     }
   };
 
-  // <-- Update this function
-  const gotoSection = (e: Event, url: string) => {
-    e.preventDefault(); // Prevent standard browser anchor jump
-    lenis.start();
-
-    // Check if the URL is an anchor link (e.g., #works, #about)
-    if (url.startsWith('#')) {
-      if (route.path !== '/') {
-        // If we are on the Blog page, route back to Home with the hash
-        router.push({ path: '/', hash: url });
-      } else {
-        // If we are already on the Home page, just let Lenis scroll smoothly
-        lenis.scrollTo(url, { duration: 3 });
-      }
-    } else {
-      // If it's a completely different page route (like '/blog')
-      router.push(url);
-    }
-
+  const handleSectionClick = (e: Event, url: string) => {
+    goToSection(e, url);
     toggleBtnClickAnimation();
   };
-
-  onMounted(() => {
-    navbarScale('#burger', '#hero');
-  });
 
   const emit = defineEmits(['isLocked']);
   watch(isNavbarOpen, (newVal) => {
