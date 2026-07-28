@@ -39,11 +39,27 @@
   import { onMounted, nextTick } from 'vue';
   import { Tag } from '@/components/common';
   import { blogPosts } from '@/data';
-  
+
   // Make sure to import your new animation and Lenis/ScrollTrigger
-  import { animateBlogListEnter } from '@/animations'; 
+  import { animateBlogListEnter } from '@/animations';
   import ScrollTrigger from 'gsap/ScrollTrigger';
   import { lenis, raf } from '@/main';
+  import { useSeo } from '@/seo/useSeo';
+  import { breadcrumbSchema, collectionPageSchema } from '@/seo/schema';
+
+  useSeo({
+    title: 'Blog | Lokesh Ram Chand',
+    description:
+      'Engineering notes on self-hosting, infrastructure, and building scalable full-stack systems, written by Lokesh Ram Chand B.',
+    path: '/blog',
+    jsonLd: [
+      collectionPageSchema(),
+      breadcrumbSchema([
+        { name: 'Home', path: '/' },
+        { name: 'Blog', path: '/blog' },
+      ]),
+    ],
+  });
 
   onMounted(async () => {
     // 1. REMOVE the lock class that might be left over from HomeView

@@ -3,6 +3,17 @@ import vue from '@vitejs/plugin-vue';
 import sitemap from 'vite-plugin-sitemap';
 import { robots } from 'vite-plugin-robots';
 import tailwindcss from '@tailwindcss/vite';
+import { blogPosts } from './src/data';
+
+const blogRoutes = blogPosts.map((post) => `/blog/${post.slug}`);
+
+const blogLastmod = Object.fromEntries(
+  blogPosts.map((post) => [`/blog/${post.slug}`, new Date(post.date)]),
+);
+
+const blogPriority = Object.fromEntries(
+  blogPosts.map((post) => [`/blog/${post.slug}`, 0.6]),
+);
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -18,9 +29,15 @@ export default defineConfig({
     robots(),
     sitemap({
       hostname: 'https://lokeshrc.me/',
-      basePath: '/',
-      changefreq: 'hourly', // default: 'daily'
-      priority: 1,
+      // '/' is auto-discovered from the built index.html; only routes with
+      // no corresponding static HTML file need to be listed explicitly.
+      dynamicRoutes: ['/blog', ...blogRoutes],
+      changefreq: { '/': 'weekly', '/blog': 'weekly', ...Object.fromEntries(blogRoutes.map((r) => [r, 'monthly'])) },
+      priority: { '/': 1.0, '/blog': 0.8, ...blogPriority },
+      lastmod: blogLastmod,
+      // vite-plugin-robots already owns robots.txt generation from .robots.*.txt;
+      // avoid this plugin overwriting it with its own generic default.
+      generateRobotsTxt: false,
     }),
   ],
   resolve: {

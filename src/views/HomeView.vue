@@ -29,6 +29,19 @@
   import ScrollTrigger from 'gsap/ScrollTrigger';
   import { lenis } from '@/main';
   import { pendingSection } from '@/state';
+  import { useSeo } from '@/seo/useSeo';
+  import { profilePageSchema, websiteSchema } from '@/seo/schema';
+  import { DEFAULT_DESCRIPTION, DEFAULT_TITLE } from '@/seo/constants';
+
+  // The richer Person schema lives as static JSON-LD in index.html (#person)
+  // so it's visible to non-JS-executing crawlers too; profilePageSchema()
+  // references it by @id instead of duplicating it here.
+  useSeo({
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    path: '/',
+    jsonLd: [websiteSchema(), profilePageSchema()],
+  });
 
   onMounted(async () => {
     if (!pendingSection.value) return;

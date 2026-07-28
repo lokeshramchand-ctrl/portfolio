@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { HomeView , BlogPostView , BlogView } from '@/views';
+import { HomeView , BlogPostView , BlogView, NotFoundView } from '@/views';
 
 const routes = [
   {
@@ -18,12 +18,17 @@ const routes = [
     component: BlogPostView,
     props: true,
   },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFoundView,
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(to, _from, savedPosition) {
     // 1. If there is a hash (e.g., /#works), wait 100ms for DOM to render, then scroll
     if (to.hash) {
       return new Promise((resolve) => {

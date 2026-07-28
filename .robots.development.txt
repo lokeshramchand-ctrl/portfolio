@@ -1,6 +1,4 @@
 User-agent: *
-Disallow: /private/
-Allow: /
+Disallow: /
 
-# Specify the location of your sitemap if you have one
-Sitemap: https://lokeshrc.me/portfolio/sitemap.xml
+# Development builds should never be indexed.

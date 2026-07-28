@@ -54,12 +54,12 @@
           :key="i"
           class="work-card @container"
         >
-          <a class="group" target="_blank" :href="work.url">
+          <a class="group" target="_blank" rel="noopener noreferrer" :href="work.url">
             <div
               class="flex-center relative aspect-square overflow-clip rounded-lg"
             >
               <img
-                alt="work-background"
+                :alt="`${work.name} — ${work.category} project preview`"
                 loading="lazy"
                 class="absolute size-full object-cover select-none"
                 :src="work.imageBg"

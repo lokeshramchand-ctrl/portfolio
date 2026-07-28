@@ -41,11 +41,16 @@ export function websiteSchema() {
   };
 }
 
+/**
+ * References the richer Person schema already inlined as static JSON-LD in
+ * index.html (id `#person`) rather than duplicating it, since that static
+ * block is also the one non-JS-executing crawlers see.
+ */
 export function profilePageSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'ProfilePage',
-    mainEntity: personSchema(),
+    mainEntity: { '@id': `${SITE_URL}/#person` },
     url: SITE_URL,
   };
 }

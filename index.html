@@ -1,6 +1,9 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://app.cal.com" />
     <link
       rel="preload"
       href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap"
@@ -15,6 +18,8 @@
     </noscript>
 
     <meta name="color-scheme" content="light" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
 
     <!-- Language Support -->
     <meta http-equiv="content-language" content="en" />
@@ -32,18 +37,17 @@
     />
     <meta name="robots" content="index, follow" />
     <meta name="author" content="Lokesh Ram Chand B" />
-    <!-- Update this image path once you have your actual profile image in the public/assets folder -->
     <meta
       itemprop="image"
-      content="https://lokeshrc.me/assets/profile.webp" 
+      content="https://lokeshrc.me/og-image.webp"
     />
     <link rel="canonical" href="https://lokeshrc.me/" />
 
     <!-- Open Graph Meta Tags  -->
     <meta property="og:image:type" content="image/webp" />
-    <meta property="og:image:width" content="1100" />
-    <meta property="og:image:height" content="1000" />
-    <meta property="og:image" content="./og-pic.webp" />
+    <meta property="og:image:width" content="1841" />
+    <meta property="og:image:height" content="2340" />
+    <meta property="og:image" content="https://lokeshrc.me/og-image.webp" />
     <meta
       property="og:title"
       content="Lokesh Ram Chand"
@@ -71,13 +75,13 @@
       content="Lokesh Ram Chand - Software Engineer building intelligent, scalable platforms with modern full-stack development and AI technologies."
     />
     <meta name="twitter:image:type" content="image/webp" />
-    <meta name="twitter:image:width" content="2400" />
-    <meta name="twitter:image:height" content="1260" />
+    <meta name="twitter:image:width" content="1841" />
+    <meta name="twitter:image:height" content="2340" />
     <meta
       name="twitter:image:alt"
       content="Lokesh Ram Chand - Software Engineer Portfolio"
     />
-    <meta name="twitter:image" content="./og-pic.webp" />
+    <meta name="twitter:image" content="https://lokeshrc.me/og-image.webp" />
     <meta name="twitter:url" content="https://lokeshrc.me/" />
 
     <!-- Canonical Tag -->
@@ -96,8 +100,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <!-- Favicon and Apple Touch Icons -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-96x96.png" type="image/png" sizes="96x96" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/site.webmanifest" />
 
     <title>Lokesh Ram Chand | Software Engineer</title>
   </head>
@@ -157,6 +166,7 @@
       {
         "@context": "https://schema.org",
         "@type": "Person",
+        "@id": "https://lokeshrc.me/#person",
         "name": "Lokesh Ram Chand B",
         "givenName": "Lokesh",
         "familyName": "Ram Chand",
@@ -168,7 +178,7 @@
         ],
         "jobTitle": "Software Engineer",
         "description": "Software Engineer building intelligent, scalable platforms with modern full-stack development and AI technologies.",
-        "image": "https://lokeshrc.me/assets/profile.webp",
+        "image": "https://lokeshrc.me/og-image.webp",
         "url": "https://lokeshrc.me/",
         "sameAs": [
           "https://github.com/lokeshramchand-ctrl",

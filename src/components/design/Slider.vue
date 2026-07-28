@@ -46,6 +46,7 @@
           :class="{ hidden: index !== i }"
           class="relative z-10 size-full rounded-lg object-cover object-center mix-blend-screen brightness-90 grayscale lg:h-[85svh]"
           :src="person.profile"
+          loading="lazy"
           alt=""
         />
         
@@ -71,6 +72,7 @@
                 <img
                   class="aspect-square size-full rounded-md object-cover object-center mix-blend-screen brightness-90 grayscale"
                   :src="p.profile"
+                  loading="lazy"
                   alt=""
                 />
 
@@ -98,7 +100,7 @@
 </template>
 
 <script setup lang="ts">
-  import { esmail, danielle } from '@/assets/images';
+  import { danielle } from '@/assets/images';
   import { Button } from '../common';
   import { computed, onMounted, ref } from 'vue';
   import { useWindowSize } from '@vueuse/core';

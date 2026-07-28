@@ -1,0 +1,58 @@
+# Example server block for lokeshrc.me — self-hosted static SPA.
+#
+# Matches the sites-available/sites-enabled + shared-snippets pattern
+# described in the "nginx-config" blog post: drop this in
+# /etc/nginx/sites-available/lokeshrc.me.conf, symlink it into
+# sites-enabled, and adjust `root` to wherever `npm run build`'s `dist/`
+# output is deployed on the host. This is a starting point to merge into
+# the real config, not something applied automatically.
+
+server {
+    listen 443 ssl http2;
+    server_name lokeshrc.me www.lokeshrc.me;
+
+    root /var/www/lokeshrc.me/dist;
+    index index.html;
+
+    ssl_certificate     /etc/letsencrypt/live/lokeshrc.me/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/lokeshrc.me/privkey.pem;
+
+    # --- Security headers ---
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()" always;
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+
+    # Content-Security-Policy scoped to this site's actual external dependencies:
+    # Google Fonts (stylesheet + font files), the Cal.com booking embed
+    # (script + iframe + XHR), and the inline Cal.com init script / JSON-LD
+    # blocks in index.html (which is why 'unsafe-inline' is needed for
+    # script-src here — moving those to external files would let this
+    # tighten to hashes/nonces instead).
+    add_header Content-Security-Policy "default-src 'self'; base-uri 'self'; script-src 'self' 'unsafe-inline' https://app.cal.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://app.cal.com https://cal.com; frame-src https://cal.com https://app.cal.com; object-src 'none'; frame-ancestors 'self';" always;
+
+    # --- Static asset caching ---
+    location ~* \.(?:js|css|woff2?|ttf|otf|png|jpe?g|webp|svg|ico)$ {
+        expires 30d;
+        add_header Cache-Control "public, immutable";
+        try_files $uri =404;
+    }
+
+    # sitemap.xml / robots.txt are generated at build time into dist/ —
+    # served as plain files, no special handling needed beyond try_files below.
+
+    # --- SPA fallback ---
+    # Every unmatched path serves index.html so vue-router (history mode)
+    # can take over client-side, including the app's own /:pathMatch(.*)*
+    # 404 route (which sets noindex — see src/views/NotFoundView.vue).
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+
+server {
+    listen 80;
+    server_name lokeshrc.me www.lokeshrc.me;
+    return 301 https://$host$request_uri;
+}
