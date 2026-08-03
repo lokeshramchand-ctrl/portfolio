@@ -1,114 +1,76 @@
 <template>
-  <div
-    id="slider"
-    class="column-gap relative mt-[10%] grid w-full grid-cols-12 gap-2 max-md:min-h-svh lg:h-[85svh]"
-  >
-    <!-- For larger devices, show one person at a time with index -->
-    <template v-if="!isSmallScreen">
-      <div
-        class="columns-gap relative col-span-full flex flex-col max-lg:h-fit lg:col-span-6 lg:h-full"
-      >
-        <div>
-          <p
-            id="quote-text"
-            class="heading-3 mb-14 min-h-36 max-w-[30ch] font-semibold md:min-h-fit md:max-w-full md:leading-none lg:min-h-36 lg:max-w-[30ch] lg:leading-normal"
-            v-html="computedQuote"
-          ></p>
-          <div id="quote-author" class="heading-6 mb-6 font-semibold">
-            <p>{{ people[index].author }}</p>
-            <p class="text-flax-smoke-400">{{ people[index].position }}</p>
-          </div>
-        </div>
-
-        <div class="relative flex h-full items-end justify-between">
-
-          <div  
-            class="lg:absolute lg:inset-0 lg:-bottom-10 lg:w-full lg:will-change-scroll"
+  <div id="slider" class="relative mt-12 w-full lg:mt-[10%]">
+    <div
+      class="border-flax-smoke-300 grid grid-cols-12 items-center border-t pt-6"
+    >
+      <div class="col-span-6 overflow-hidden lg:col-span-3">
+        <span
+          id="current-index"
+          class="heading-6 text-flax-smoke-500/85 inline-block text-nowrap uppercase"
+        >
+          ( {{ pad(index + 1) }}<span v-if="people.length > 1">
+            / {{ pad(people.length) }}</span
           >
-            <!-- FIX 1: Hides Prev/Next if there is only 1 testimonial -->
-            <div
-              v-if="people.length > 1"
-              class="sticky top-[90%] flex place-content-end gap-3 lg:will-change-scroll"
-            >
-              <Button label="Prev" @click="clickPrev" />
-              <Button label="Next" @click="clickNext" />
-            </div>
-          </div>
-        </div>
+          )
+        </span>
       </div>
+
       <div
-        class="columns-gap relative order-first col-span-full flex h-[60vh] w-full items-start justify-center overflow-clip max-sm:order-last lg:order-last lg:col-span-6 lg:h-full"
+        v-if="people.length > 1"
+        role="group"
+        aria-label="Testimonial navigation"
+        class="col-span-6 flex items-center justify-end gap-6 lg:col-span-9"
       >
-        <!-- FIX 2: Dynamic loop prevents 'undefined' crashes when images are missing -->
-        <img
-          v-for="(person, i) in people"
-          :key="i"
-          :class="{ hidden: index !== i }"
-          class="relative z-10 size-full rounded-lg object-cover object-center mix-blend-screen brightness-90 grayscale lg:h-[85svh]"
-          :src="person.profile"
-          loading="lazy"
-          alt=""
-        />
-        
+        <button
+          type="button"
+          class="text-flax-smoke-400 hover:text-flax-smoke-900 text-sm uppercase tracking-wide transition-colors"
+          @click="clickPrev"
+        >
+          Prev
+        </button>
+        <button
+          type="button"
+          class="text-flax-smoke-400 hover:text-flax-smoke-900 text-sm uppercase tracking-wide transition-colors"
+          @click="clickNext"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-10 grid grid-cols-12 lg:mt-14">
+      <div
+        class="relative col-span-full overflow-hidden lg:col-span-9 lg:col-start-4"
+      >
+        <blockquote
+          id="quote-text"
+          class="heading-3 max-w-[34ch] leading-snug font-semibold"
+          v-html="computedQuote"
+        ></blockquote>
+
         <div
-          id="quote-overlay"
-          class="bg-flax-smoke-500 absolute inset-0 z-50 rounded-lg"
-        ></div>
+          id="quote-author"
+          class="mt-10 flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4"
+        >
+          <cite class="font-title heading-5 text-flax-smoke-900 text-nowrap font-bold not-italic uppercase">
+            {{ people[index].author }}
+          </cite>
+          <span class="text-flax-smoke-400 text-nowrap">{{ people[index].position }}</span>
+        </div>
+
+        <div id="quote-overlay" class="bg-flax-smoke-500 absolute inset-0"></div>
       </div>
-    </template>
-
-    <!-- For smaller devices, show all people at once -->
-    <template v-else>
-      <div class="col-span-full">
-        <template v-for="(p, i) in people" :key="i">
-          <div class="mt-10 grid w-full grid-cols-5 items-start sm:grid-cols-4">
-            <div
-              class="columns-gap heading-2 relative col-span-1 flex h-full flex-col leading-none font-bold"
-            >
-              {{ (i + 1).toString().padStart(2, '0') }}
-            </div>
-            <div class="col-span-3">
-              <div class="columns-gap flex w-full flex-col gap-y-4">
-                <img
-                  class="aspect-square size-full rounded-md object-cover object-center mix-blend-screen brightness-90 grayscale"
-                  :src="p.profile"
-                  loading="lazy"
-                  alt=""
-                />
-
-                <p
-                  class="heading-4 mt-4 max-w-[25ch] leading-none font-semibold"
-                >
-                  " {{ p.quote }} "
-                </p>
-
-                <div class="heading-6 mt-4 font-semibold">
-                  <p class="">{{ p.author }}</p>
-                  <p class="text-flax-smoke-400">
-                    {{ p.position }}
-                  </p>
-                </div>
-
-
-              </div>
-            </div>
-          </div>
-        </template>
-      </div>
-    </template>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { danielle } from '@/assets/images';
-  import { Button } from '../common';
   import { computed, onMounted, ref } from 'vue';
-  import { useWindowSize } from '@vueuse/core';
   import { textSplitterIntoChar } from '@/functions';
   import gsap from 'gsap';
 
-  const { width } = useWindowSize();
-  const isSmallScreen = computed(() => width.value < 640);
+  const pad = (n: number) => n.toString().padStart(2, '0');
+
   const computedQuote = computed(() => {
     return textSplitterIntoChar(`" ${people[index.value].quote} "`);
   });
@@ -131,7 +93,7 @@
   ) => {
     const translateX = direction === 'left' ? '-50%' : '0%';
     const opacity = direction === 'left' ? 0 : 1;
-    gsap.to(['#quote-author', '#quote-tags'], {
+    gsap.to('#quote-author', {
       translateX,
       opacity,
       duration: 0.5,
@@ -218,28 +180,23 @@
   };
 
   onMounted(() => {
-    if (!isSmallScreen.value) {
-      gsap.set(['#quote-text .letters', '#current-index'], {
-        translateY: 0,
-      });
-      gsap.set('#quote-overlay', {
-        translateY: '100%',
-      });
-    }
+    gsap.set(['#quote-text .letters', '#current-index'], {
+      translateY: 0,
+    });
+    gsap.set('#quote-overlay', {
+      translateY: '100%',
+    });
   });
 
   // data
   const index = ref(0);
-  
-  // FIX 3: Removed the empty `{}` object that was causing rendering errors
+
   const people = [
     {
       quote:
         'Lokesh was competent, open to direction, and gave expert advice throughout the redesign process. His positive attitude and humility make him a true joy to collaborate with. ',
       author: 'Danielle Lindamood',
       position: 'Director at Wellington Water Watchers',
-      tags: ['Leadership', 'Collaboration'],
-      profile: danielle,
-    }
+    },
   ];
 </script>
