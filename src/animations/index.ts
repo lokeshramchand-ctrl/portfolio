@@ -477,6 +477,7 @@ const animateBlogPostEnter = () => {
 export {
   displayNone,
   xToZero,
+  fadeIn,
   navbarScale,
   activateMagneto,
   resetMagneto,
