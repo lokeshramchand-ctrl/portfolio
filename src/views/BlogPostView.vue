@@ -55,9 +55,22 @@
   const error = ref<string | null>(null);
   const parsedMarkdown = ref('');
   const readingTime = ref('');
+  const postingJsonLd = ref<Record<string, unknown> | null>(null);
 
   const postMeta = computed(() => {
     return blogPosts.find(post => post.slug === slug);
+  });
+
+  // Registered synchronously here (unhead needs Vue's component context, which
+  // is only available during setup — not after an `await` inside onMounted).
+  // The onMounted handler below just writes to postingJsonLd once the word
+  // count is known, and this reactively re-renders the script tag.
+  useHead({
+    script: computed(() =>
+      postingJsonLd.value
+        ? [{ type: 'application/ld+json', innerHTML: JSON.stringify(postingJsonLd.value) }]
+        : [],
+    ),
   });
 
   if (postMeta.value) {
@@ -117,16 +130,7 @@
       readingTime.value = readingTimeText;
 
       if (postMeta.value) {
-        useHead({
-          script: [
-            {
-              type: 'application/ld+json',
-              innerHTML: JSON.stringify(
-                blogPostingSchema(postMeta.value, { wordCount }),
-              ),
-            },
-          ],
-        });
+        postingJsonLd.value = blogPostingSchema(postMeta.value, { wordCount });
       }
     } catch (err) {
       error.value = "Failed to load content. Please check the file path.";

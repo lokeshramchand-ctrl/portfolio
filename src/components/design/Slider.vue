@@ -1,5 +1,5 @@
 <template>
-  <div id="slider" class="relative mt-12 w-full lg:mt-[10%]">
+  <div id="slider" class="relative mt-12 w-full lg:mt-16">
       <div class="col-span-6 overflow-hidden lg:col-span-3">
         <span
           id="current-index"
@@ -80,20 +80,12 @@
 
         <div
           id="quote-author"
-          class="relative mt-10 flex items-center gap-4 opacity-0"
+          class="relative mt-10 flex items-baseline gap-2 text-sm opacity-0"
         >
-          <span
-            aria-hidden="true"
-            class="font-title bg-flax-smoke-500 text-flax-smoke-50 flex size-11 shrink-0 items-center justify-center rounded-full text-sm font-bold uppercase"
-          >
-            {{ initials }}
-          </span>
-          <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-4">
-            <cite class="font-title heading-5 text-flax-smoke-900 text-nowrap font-bold not-italic uppercase">
-              {{ people[index].author }}
-            </cite>
-            <span class="text-flax-smoke-400 text-nowrap">{{ people[index].position }}</span>
-          </div>
+          <cite class="text-flax-smoke-900 font-medium not-italic">
+            {{ people[index].author }}
+          </cite>
+          <span class="text-flax-smoke-400">— {{ people[index].position }}</span>
         </div>
 
         <div id="quote-overlay" class="bg-flax-smoke-500 absolute inset-0"></div>
@@ -112,15 +104,6 @@
 
   const computedQuote = computed(() => {
     return textSplitterIntoChar(people[index.value].quote);
-  });
-
-  const initials = computed(() => {
-    return people[index.value].author
-      .split(' ')
-      .map((word) => word[0])
-      .join('')
-      .slice(0, 2)
-      .toUpperCase();
   });
 
   const canClick = ref(true);
