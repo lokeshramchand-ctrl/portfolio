@@ -218,9 +218,8 @@
       translateY: '100%',
     });
 
-    fadeIn('#testimonial-toolbar');
     fadeIn('#quote-mark', 0.08, 1.2);
-    animateSplitText('#quote-text .letters', '#quote-author', 0.9, 0.006, 0);
+    animateSplitText('#quote-text .letters', '#quote-author', 0.7, 0, 0);
   });
 
   // data
