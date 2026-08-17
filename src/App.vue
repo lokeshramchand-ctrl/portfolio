@@ -41,7 +41,9 @@
   <Cursor />
   <Navbar @isLocked="LockeScroll" />
 
-  <router-view />
+  <div id="route-view">
+    <router-view />
+  </div>
 
   <Footer />
 </template>
