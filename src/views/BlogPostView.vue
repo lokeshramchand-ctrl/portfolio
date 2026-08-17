@@ -21,26 +21,30 @@
         </div>
 
         <article v-else ref="articleRef" class="will-change-transform">
-          <header class="mb-16 pb-12 border-b-2 border-flax-smoke-200">
-            <p class="post-meta font-mono text-sm font-bold text-flax-smoke-500 uppercase mb-6">
-              {{ postMeta?.date }}<span v-if="readingTime"> · {{ readingTime }}</span>
+          <header class="mb-16 pb-10 border-b-4 border-flax-smoke-900 text-center">
+            <p class="post-meta font-mono text-xs font-bold tracking-[0.2em] text-flax-smoke-500 uppercase mb-5">
+              {{ postMeta?.tags[0] ?? 'Dispatch' }}
             </p>
 
-            <h1 class="post-title heading-2 font-fancy font-bold leading-[0.9] tracking-tighter uppercase text-balance mb-8 text-flax-smoke-900">
+            <h1 class="post-title font-title! font-bold leading-[0.9] tracking-tight uppercase text-balance mb-6 text-flax-smoke-900 text-[clamp(2rem,5vw,4rem)]">
               {{ postMeta?.title }}
             </h1>
 
-            <div class="flex flex-wrap gap-3">
+            <div class="flex flex-wrap items-center justify-center gap-3 mb-6">
               <Tag v-for="tag in postMeta?.tags" :key="tag" class="post-tag">{{ tag }}</Tag>
             </div>
+
+            <p class="post-meta font-mono text-xs font-bold text-flax-smoke-400 uppercase tracking-[0.1em] border-t border-flax-smoke-100 pt-5">
+              By Lokesh Ram Chand &middot; {{ postMeta?.date }}<span v-if="readingTime"> &middot; {{ readingTime }}</span>
+            </p>
           </header>
 
-          <div class="markdown-content" v-html="parsedMarkdown"></div>
+          <div class="markdown-content markdown-content--dropcap" v-html="parsedMarkdown"></div>
         </article>
 
         <section v-if="!isLoading && !error && related.length > 0" class="mt-24 pt-16 border-t-2 border-flax-smoke-200">
           <p class="font-mono text-xs font-bold text-flax-smoke-400 uppercase tracking-[0.2em] mb-8">
-            Related Posts
+            More Dispatches
           </p>
           <div class="flex flex-col gap-8">
             <router-link

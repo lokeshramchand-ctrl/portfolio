@@ -237,4 +237,7 @@ layer(base);
   .markdown-content pre code {
     @apply text-flax-smoke-50 rounded-none bg-transparent p-0;
   }
+  .markdown-content--dropcap > p:first-of-type::first-letter {
+    @apply font-title! text-flax-smoke-900 float-left mr-3 mt-1 text-7xl leading-[0.8] font-bold not-italic;
+  }
 }
