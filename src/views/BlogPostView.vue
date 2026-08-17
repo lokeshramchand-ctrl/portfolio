@@ -1,4 +1,10 @@
 <template>
+  <div
+    v-if="!isLoading && !error"
+    class="fixed top-0 left-0 z-40 h-[3px] bg-flax-smoke-600 pointer-events-none origin-left transition-transform duration-150 ease-out"
+    :style="{ width: '100%', transform: `scaleX(${readingProgress})` }"
+  ></div>
+
   <section class="padding-x min-h-svh pt-[15vh] pb-32">
     <div class="w-full max-w-5xl mx-auto z-10 relative lg:grid lg:grid-cols-[1fr_220px] lg:gap-16 lg:items-start">
       <div class="w-full max-w-3xl">
@@ -14,7 +20,7 @@
           {{ error }}
         </div>
 
-        <article v-else class="will-change-transform">
+        <article v-else ref="articleRef" class="will-change-transform">
           <header class="mb-16 pb-12 border-b-2 border-flax-smoke-200">
             <p class="post-meta font-mono text-sm font-bold text-flax-smoke-500 uppercase mb-6">
               {{ postMeta?.date }}<span v-if="readingTime"> · {{ readingTime }}</span>
@@ -63,6 +69,7 @@
   import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
   import { useRoute } from 'vue-router';
   import { useHead } from '@unhead/vue';
+  import ScrollTrigger from 'gsap/ScrollTrigger';
   import { lenis } from '@/main';
   import { Tag } from '@/components/common';
   import { blogPosts } from '@/generated/blogIndex';
@@ -82,7 +89,10 @@
   const postingJsonLd = ref<Record<string, unknown> | null>(null);
   const tocItems = ref<TocItem[]>([]);
   const activeTocId = ref('');
+  const articleRef = ref<HTMLElement | null>(null);
+  const readingProgress = ref(0);
   let tocObserver: IntersectionObserver | null = null;
+  const READING_PROGRESS_ID = 'blog-reading-progress';
 
   const postMeta = computed(() => {
     return blogPosts.find(post => post.slug === slug);
@@ -132,6 +142,21 @@
     lenis.scrollTo(`#${id}`, { offset: -96, duration: 1.5 });
   }
 
+  function setupReadingProgress() {
+    ScrollTrigger.getById(READING_PROGRESS_ID)?.kill();
+    if (!articleRef.value) return;
+
+    ScrollTrigger.create({
+      id: READING_PROGRESS_ID,
+      trigger: articleRef.value,
+      start: 'top top',
+      end: 'bottom bottom',
+      onUpdate: (self) => {
+        readingProgress.value = self.progress;
+      },
+    });
+  }
+
   function setupTocObserver() {
     tocObserver?.disconnect();
 
@@ -158,6 +183,7 @@
 
   onUnmounted(() => {
     tocObserver?.disconnect();
+    ScrollTrigger.getById(READING_PROGRESS_ID)?.kill();
   });
 
   // Watch for loading to finish, then animate once DOM updates
@@ -166,6 +192,7 @@
       await nextTick();
       animateBlogPostEnter();
       setupTocObserver();
+      setupReadingProgress();
     }
   });
 
