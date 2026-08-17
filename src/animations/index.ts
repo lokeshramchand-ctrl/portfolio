@@ -4,6 +4,7 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import { Ref } from 'vue';
 import { lenis } from '@/main';
 import { appBooted } from '@/state';
+import { scaleDuration, scaleStagger } from './motionMode';
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(MotionPathHelper);
@@ -85,18 +86,18 @@ const navbarScale = (selector: string, trigger: string) => {
 const yToZero = (id: string) => {
   gsap.to(id, {
     y: 0,
-    duration: 0.4,
+    duration: scaleDuration(0.4),
     ease: 'power1.inOut',
-    stagger: 0.1,
+    stagger: scaleStagger(0.1),
   });
 };
 
 const xToZero = (id: string) => {
   gsap.to(id, {
     x: 0,
-    duration: 0.4,
+    duration: scaleDuration(0.4),
     ease: 'power1.inOut',
-    stagger: 0.1,
+    stagger: scaleStagger(0.1),
     scrollTrigger: {
       trigger: id,
       toggleActions: 'play none none reverse',
@@ -113,13 +114,13 @@ const yReset = (id: string) => {
 const fadeIn = (id: string, opacity: number = 1, duration: number = 0.5) => {
   gsap.to(id, {
     opacity: opacity,
-    duration: duration,
+    duration: scaleDuration(duration),
     ease: 'power4.inOut',
     scrollTrigger: {
       trigger: id,
       toggleActions: 'play none none reverse',
     },
-    stagger: 0.1,
+    stagger: scaleStagger(0.1),
   });
 };
 
