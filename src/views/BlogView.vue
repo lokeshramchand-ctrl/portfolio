@@ -9,9 +9,20 @@
       </h1>
     </div>
 
+    <div class="w-full max-w-5xl mx-auto mb-12 z-10 relative">
+      <input
+        v-model="searchQuery"
+        type="text"
+        placeholder="Search posts by title, tag, or excerpt..."
+        aria-label="Search blog posts"
+        class="w-full bg-transparent border-b-2 border-flax-smoke-200 focus:border-flax-smoke-900 outline-none py-3 font-mono text-sm text-flax-smoke-900 placeholder:text-flax-smoke-400 transition-colors duration-500"
+      />
+    </div>
+
     <div class="blog-list-container w-full max-w-5xl mx-auto flex flex-col border-t-2 border-flax-smoke-200 z-10 relative">
       <router-link
         v-for="post in blogPosts"
+        v-show="matchedSlugs.has(post.slug)"
         :key="post.slug"
         :to="`/blog/${post.slug}`"
         class="blog-item-anim group flex flex-col md:flex-row justify-between items-start md:items-center py-10 border-b-2 border-flax-smoke-100 hover:border-flax-smoke-900 transition-colors duration-500"
@@ -32,11 +43,18 @@
           </p>
         </div>
       </router-link>
+
+      <p
+        v-if="matchedSlugs.size === 0"
+        class="font-mono text-sm text-flax-smoke-400 py-10 uppercase tracking-widest"
+      >
+        No posts match "{{ searchQuery }}".
+      </p>
     </div>
   </section>
 </template>
 <script setup lang="ts">
-  import { onMounted, nextTick } from 'vue';
+  import { onMounted, nextTick, ref, computed } from 'vue';
   import { Tag } from '@/components/common';
   import { blogPosts } from '@/generated/blogIndex';
 
@@ -46,6 +64,22 @@
   import { lenis, raf } from '@/main';
   import { useSeo } from '@/seo/useSeo';
   import { breadcrumbSchema, collectionPageSchema } from '@/seo/schema';
+
+  const searchQuery = ref('');
+
+  const matchedSlugs = computed(() => {
+    const query = searchQuery.value.trim().toLowerCase();
+    if (!query) return new Set(blogPosts.map((post) => post.slug));
+
+    return new Set(
+      blogPosts
+        .filter((post) => {
+          const haystack = [post.title, post.excerpt, ...post.tags].join(' ').toLowerCase();
+          return haystack.includes(query);
+        })
+        .map((post) => post.slug),
+    );
+  });
 
   useSeo({
     title: 'Blog | Lokesh Ram Chand',
