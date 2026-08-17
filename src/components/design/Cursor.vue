@@ -22,8 +22,15 @@
 <script setup lang="ts">
   import gsap from 'gsap';
   import { onMounted } from 'vue';
+  import { isCoarsePointer } from '@/animations/deviceCapabilities';
 
   onMounted(() => {
+    // A touch device has no mouse to track — the cursor div is also
+    // hidden below `md` via CSS, but that's a viewport-width check, not
+    // a pointer-type one, so a touch device above that width would
+    // otherwise still pay for a live mousemove listener doing nothing.
+    if (isCoarsePointer.value) return;
+
     const cursor = document.getElementById('cursor') as HTMLDivElement;
     const inner = document.getElementById('inner') as HTMLDivElement;
 
