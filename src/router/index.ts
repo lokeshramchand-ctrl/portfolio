@@ -1,32 +1,31 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { HomeView , BlogPostView , BlogView, IntroView, NotFoundView } from '@/views';
 
 const routes = [
   {
     path: '/',
     name: 'Home',
-    component: HomeView,
+    component: () => import('@/views/HomeView.vue'),
   },
   {
     path: '/intro',
     name: 'Intro',
-    component: IntroView,
+    component: () => import('@/views/IntroView.vue'),
   },
   {
     path: '/blog',
     name: 'Blog',
-    component: BlogView,
+    component: () => import('@/views/BlogView.vue'),
   },
   {
     path: '/blog/:slug',
     name: 'BlogPost',
-    component: BlogPostView,
+    component: () => import('@/views/BlogPostView.vue'),
     props: true,
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    component: NotFoundView,
+    component: () => import('@/views/NotFoundView.vue'),
   },
 ];
 
