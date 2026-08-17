@@ -5,6 +5,7 @@ import { Ref } from 'vue';
 import { lenis } from '@/main';
 import { appBooted } from '@/state';
 import { scaleDuration, scaleStagger } from './motionMode';
+import { runWithBudget } from './budget';
 
 gsap.registerPlugin(ScrollTrigger);
 gsap.registerPlugin(MotionPathHelper);
@@ -405,19 +406,23 @@ const animateHeroScrollPin = () => {
   });
 };
 
-// A little bit about me animation
+// A little bit about me animation — purely decorative parallax dip, so
+// it's budget-gated: skipped under reduced motion, on low-power devices,
+// or if too many other decorative animations are already in flight.
 const animateAboutMeSectionLeave = (id: string) => {
-  gsap.to(id, {
-    yPercent: -10,
-    scale: 0.95,
-    ease: 'power1',
-    scrollTrigger: {
-      trigger: id,
-      start: '75% bottom',
-      // end: 'bottom top',
-      scrub: 1,
-    },
-  });
+  runWithBudget('decorative', () =>
+    gsap.to(id, {
+      yPercent: -10,
+      scale: 0.95,
+      ease: 'power1',
+      scrollTrigger: {
+        trigger: id,
+        start: '75% bottom',
+        // end: 'bottom top',
+        scrub: 1,
+      },
+    }),
+  );
 };
 const animateBlogListEnter = () => {
   // 1. Force GSAP and Lenis to recognize the top of the page
