@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import { HomeView , BlogPostView , BlogView, IntroView, NotFoundView } from '@/views';
-import { installRouteTransitions } from '@/animations/routeTransitions';
 
 const routes = [
   {
@@ -57,6 +56,5 @@ const router = createRouter({
   }
 });
 
-installRouteTransitions(router);
 
 export default router;

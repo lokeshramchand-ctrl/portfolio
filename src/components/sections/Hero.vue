@@ -70,10 +70,7 @@
     animateHeroScrollPin,
     navbarScale,
   } from '@/animations';
-  import { useAnimationScope } from '@/animations/lifecycle';
   import { appBooted } from '@/state';
-
-  const { run } = useAnimationScope('hero');
 
   const whoAmI = ref(
     'I’m a software engineer passionate about building scalable applications, intelligent systems, and digital experiences that solve real-world problems. From full-stack development to AI-powered products, I enjoy transforming ambitious ideas into reliable, production-ready software.'
@@ -84,13 +81,8 @@
   });
 
   onMounted(() => {
-    // Scoped to 'hero' so both ScrollTriggers are killed together the
-    // moment this component unmounts, on top of the manual
-    // ScrollTrigger.getById(...).kill() guard each still carries.
-    run(() => {
-      animateHeroScrollPin();
-      navbarScale('#burger', '#hero');
-    });
+    animateHeroScrollPin();
+    navbarScale('#burger', '#hero');
 
     // True first mount (app boot): the loading curtain reveals Hero
     // once it finishes. Any later mount (returning to Home via SPA
