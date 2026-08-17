@@ -13,10 +13,10 @@
 
       <div class="blog-header-anim text-center border-b-4 border-flax-smoke-900 pb-8 mb-8">
         <h1 class="font-title! font-bold uppercase tracking-tighter leading-[0.85] text-flax-smoke-900 text-[clamp(2.5rem,8vw,6.5rem)]">
-          Lokesh Ram Chand
+          The Build Log
         </h1>
         <p class="font-mono text-sm font-bold tracking-[0.3em] text-flax-smoke-500 uppercase mt-3">
-          The Engineering Journal
+          Notes on Self-Hosting &amp; Infrastructure
         </p>
       </div>
 

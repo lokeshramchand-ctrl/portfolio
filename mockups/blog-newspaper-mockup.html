@@ -1,0 +1,355 @@
+<!--
+  Standalone visual mockup — NOT wired into the app, NOT imported by any
+  component, NOT part of the build. Open directly in a browser to preview.
+  Delete this single file whenever you're done with it; nothing else
+  references it.
+
+  Colors/fonts approximate the real theme (src/style.css `flax-smoke-*`
+  tokens, Bricolage Grotesque). The real site also uses a second display
+  font (CabinetGrotesk, "font-title") for big headlines — not loaded here,
+  substituted with Bricolage Grotesque Extrabold so this file has zero
+  external font-file dependencies beyond the one Google Fonts import.
+
+  All post content, names, and photos below are placeholders.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mockup — Blog Newspaper Redesign</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap');
+
+  :root {
+    --bg: #000000;
+    --surface: #0a0a0a;
+    --border-soft: #171717;
+    --border-hard: #262626;
+    --muted: #a3a3a3;
+    --accent: #f59e0b;
+    --accent-deep: #d97706;
+    --text: #ffffff;
+    --body-text: #d4d4d4;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    padding: 6vw 4vw 10vw;
+  }
+
+  .mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .wrap { max-width: 1152px; margin: 0 auto; }
+
+  .mockup-banner {
+    max-width: 1152px;
+    margin: 0 auto 3rem;
+    padding: 0.9rem 1.2rem;
+    border: 1px dashed var(--accent-deep);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  /* --- Masthead utility row --- */
+  .utility-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border-soft);
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  /* --- Masthead --- */
+  .masthead {
+    text-align: center;
+    border-bottom: 4px solid var(--text);
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+  }
+  .masthead h1 {
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    line-height: 0.85;
+    margin: 0;
+    font-size: clamp(2.5rem, 8vw, 6.5rem);
+  }
+  .masthead .tagline {
+    margin-top: 0.75rem;
+    color: var(--accent);
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .sub-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 4rem;
+  }
+  .sub-row p {
+    max-width: 32rem;
+    color: var(--muted);
+    font-size: 1.1rem;
+    margin: 0;
+  }
+  .search {
+    width: 18rem;
+    max-width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--border-hard);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.85rem;
+    padding: 0.5rem 0;
+  }
+
+  /* --- Featured story --- */
+  .featured {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+    padding-bottom: 4rem;
+    margin-bottom: 4rem;
+    border-bottom: 4px solid var(--text);
+  }
+  .featured img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border: 1px solid var(--border-soft);
+    filter: grayscale(1) contrast(1.2);
+  }
+  .eyebrow {
+    color: var(--accent);
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .featured h2 {
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    margin: 0 0 1.25rem;
+    font-size: clamp(1.8rem, 4vw, 3.2rem);
+  }
+  .featured .excerpt {
+    color: var(--body-text);
+    font-size: 1.1rem;
+    line-height: 1.5;
+    margin: 0 0 1.5rem;
+  }
+  .meta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+  .meta-row .date { font-size: 0.7rem; font-weight: 700; color: var(--muted); }
+  .tag {
+    border: 1px solid var(--border-hard);
+    border-radius: 999px;
+    padding: 0.4rem 0.9rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* --- Section label --- */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .section-label .rule { flex: 1; height: 1px; background: var(--border-soft); }
+
+  /* --- Story grid --- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+  .card { display: flex; flex-direction: column; }
+  .card h3 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin: 0 0 0.75rem;
+  }
+  .card p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0 0 1.25rem;
+  }
+  .card .date {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-soft);
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  /* --- Article page mockup --- */
+  .article-section { margin-top: 6rem; }
+  .article-header {
+    text-align: center;
+    border-bottom: 4px solid var(--text);
+    padding-bottom: 2.5rem;
+    margin-bottom: 3rem;
+  }
+  .article-header h1 {
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    margin: 0.5rem 0 1.5rem;
+    font-size: clamp(2rem, 5vw, 4rem);
+  }
+  .byline {
+    border-top: 1px solid var(--border-soft);
+    padding-top: 1.25rem;
+    margin-top: 1.5rem;
+    color: var(--muted);
+    font-size: 0.7rem;
+    font-weight: 700;
+  }
+  .article-body {
+    max-width: 42rem;
+    margin: 0 auto;
+    color: var(--body-text);
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+  .article-body p:first-of-type::first-letter {
+    font-weight: 800;
+    float: left;
+    margin-right: 0.75rem;
+    margin-top: 0.25rem;
+    font-size: 4.5rem;
+    line-height: 0.8;
+    color: var(--text);
+  }
+
+  @media (max-width: 900px) {
+    .featured { grid-template-columns: 1fr; }
+    .grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="mockup-banner">MOCKUP FILE — for visual reference only. Delete freely, nothing else depends on it.</div>
+
+  <div class="wrap">
+
+    <!-- Masthead -->
+    <div class="utility-row">
+      <span>Monday, August 17, 2026</span>
+      <span>Issue No. 05</span>
+    </div>
+
+    <div class="masthead">
+      <h1>The Build Log</h1>
+      <p class="tagline mono">Notes on Self-Hosting &amp; Infrastructure</p>
+    </div>
+
+    <div class="sub-row">
+      <p>Notes on self-hosting, infrastructure, and building things that stay up.</p>
+      <input class="search mono" placeholder="Search dispatches..." disabled />
+    </div>
+
+    <!-- Featured story -->
+    <div class="featured">
+      <img src="https://picsum.photos/seed/buildlog-rack/1200/800" alt="" />
+      <div>
+        <p class="eyebrow mono">Featured &middot; Homelab</p>
+        <h2>Racking a Second Node Without Doubling the Power Bill</h2>
+        <p class="excerpt">What it actually took to add a second mini-PC to the cluster — power budgeting, cable management, and the one BIOS setting that undid a week of debugging.</p>
+        <div class="meta-row">
+          <span class="date mono">August 10, 2026</span>
+          <span class="tag">Homelab</span>
+          <span class="tag">Hardware</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Story grid -->
+    <div class="section-label">
+      <span class="mono">More Dispatches</span>
+      <span class="rule"></span>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <p class="eyebrow mono">Kubernetes</p>
+        <h3>Why I Moved Off Docker Compose for Good</h3>
+        <p>A small cluster, a lot of YAML, and the moment rolling restarts stopped being a manual chore.</p>
+        <p class="date mono">July 28, 2026</p>
+      </div>
+      <div class="card">
+        <p class="eyebrow mono">Networking</p>
+        <h3>VLANs for People Who Just Want Their Wi-Fi to Work</h3>
+        <p>Segmenting a home network without turning every device into a support ticket.</p>
+        <p class="date mono">July 15, 2026</p>
+      </div>
+      <div class="card">
+        <p class="eyebrow mono">Automation</p>
+        <h3>A Backup Script I Finally Trust</h3>
+        <p>Three failed restores taught me more about backups than any tutorial did.</p>
+        <p class="date mono">July 2, 2026</p>
+      </div>
+    </div>
+
+    <!-- Article page mockup -->
+    <div class="article-section">
+      <div class="section-label">
+        <span class="mono">Article Page</span>
+        <span class="rule"></span>
+      </div>
+
+      <div class="article-header">
+        <p class="eyebrow mono">Homelab</p>
+        <h1>Racking a Second Node Without Doubling the Power Bill</h1>
+        <div class="meta-row" style="justify-content: center; margin-bottom: 0;">
+          <span class="tag">Homelab</span>
+          <span class="tag">Hardware</span>
+        </div>
+        <p class="byline mono">By Lokesh Ram Chand &middot; August 10, 2026 &middot; 4 min read</p>
+      </div>
+
+      <div class="article-body">
+        <p>This is placeholder body copy standing in for the real markdown-rendered post content, just to show the drop-cap treatment and reading measure at the same width used in the actual article page.</p>
+        <p>Subsequent paragraphs stay plain — only the very first letter of the first paragraph gets the oversized treatment, matching the `.markdown-content--dropcap` rule in the real stylesheet.</p>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
