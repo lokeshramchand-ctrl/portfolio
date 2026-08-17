@@ -54,7 +54,15 @@ export function useSeo(options: SeoOptions) {
   });
 
   useHead({
-    link: [{ rel: 'canonical', href: url }],
+    link: [
+      { rel: 'canonical', href: url },
+      {
+        rel: 'alternate',
+        type: 'application/rss+xml',
+        title: `${SITE_NAME} — Blog`,
+        href: absoluteUrl('/rss.xml'),
+      },
+    ],
     script: (options.jsonLd ?? [])
       .filter((schema): schema is Record<string, unknown> => Boolean(schema))
       .map((schema) => ({

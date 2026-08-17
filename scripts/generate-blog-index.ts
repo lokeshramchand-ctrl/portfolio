@@ -2,18 +2,21 @@
  * Reads every public/blogs/*.md file, validates its frontmatter, and emits
  * src/generated/blogIndex.ts — the generated single source of truth for
  * blog post listing metadata (replaces the old hand-maintained blogPosts
- * array in src/data.ts). Run via `npm run generate:blog`, and automatically
- * via the predev/prebuild npm hooks.
+ * array in src/data.ts) — plus public/rss.xml, an RSS 2.0 feed built from
+ * the same validated posts. Run via `npm run generate:blog`, and
+ * automatically via the predev/prebuild npm hooks.
  */
 import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
 import { z } from 'zod';
+import { SITE_NAME, DEFAULT_DESCRIPTION, absoluteUrl } from '@/seo/constants';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BLOGS_DIR = path.join(ROOT, 'public', 'blogs');
 const OUTPUT_FILE = path.join(ROOT, 'src', 'generated', 'blogIndex.ts');
+const RSS_FILE = path.join(ROOT, 'public', 'rss.xml');
 
 const frontmatterSchema = z.object({
   title: z.string().min(1, 'title is required'),
@@ -27,6 +30,53 @@ const frontmatterSchema = z.object({
   tags: z.array(z.string()).default([]),
   image: z.string().optional(),
 });
+
+function escapeXml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+function buildRss(posts: { slug: string; title: string; date: string; excerpt: string; tags: string[] }[]): string {
+  const items = posts
+    .map((post) => {
+      const link = absoluteUrl(`/blog/${post.slug}`);
+      const categories = post.tags
+        .map((tag) => `      <category>${escapeXml(tag)}</category>`)
+        .join('\n');
+
+      return [
+        '    <item>',
+        `      <title>${escapeXml(post.title)}</title>`,
+        `      <link>${link}</link>`,
+        `      <guid isPermaLink="true">${link}</guid>`,
+        `      <pubDate>${new Date(post.date).toUTCString()}</pubDate>`,
+        `      <description>${escapeXml(post.excerpt)}</description>`,
+        categories,
+        '    </item>',
+      ]
+        .filter(Boolean)
+        .join('\n');
+    })
+    .join('\n');
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${escapeXml(SITE_NAME)} — Blog</title>
+    <link>${absoluteUrl('/blog')}</link>
+    <atom:link href="${absoluteUrl('/rss.xml')}" rel="self" type="application/rss+xml" />
+    <description>${escapeXml(DEFAULT_DESCRIPTION)}</description>
+    <language>en-us</language>
+    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+${items}
+  </channel>
+</rss>
+`;
+}
 
 async function main() {
   const files = (await readdir(BLOGS_DIR)).filter((f) => f.endsWith('.md'));
@@ -59,8 +109,10 @@ async function main() {
 
   await mkdir(path.dirname(OUTPUT_FILE), { recursive: true });
   await writeFile(OUTPUT_FILE, banner + body);
+  await writeFile(RSS_FILE, buildRss(posts));
 
   console.log(`Generated ${path.relative(ROOT, OUTPUT_FILE)} with ${posts.length} post(s).`);
+  console.log(`Generated ${path.relative(ROOT, RSS_FILE)}.`);
 }
 
 main().catch((err) => {
