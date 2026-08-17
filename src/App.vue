@@ -1,5 +1,5 @@
 <template>
-  <LoadingScreen v-cloak="true" />
+  <LoadingScreen v-if="showLoadingCurtain" v-cloak="true" />
 
   <template v-if="isSamsungBrowser">
     <SamsungError />
@@ -61,6 +61,15 @@
   const { width, height } = useWindowSize();
   const noise: Ref<HTMLElement | null> = ref(null);
 
+  // /intro is a bare bio page meant to be seen instantly, with none of
+  // the once-per-load boot curtain the rest of the site plays — it
+  // self-manages the scroll-lock/raf handoff below instead (see its
+  // own onMounted), mirroring how BlogView/NotFoundView already do.
+  // Read straight from the URL rather than vue-router's reactive route:
+  // this component mounts before the router's initial (async) navigation
+  // resolves, so `useRoute().path` would still read the default '/' here.
+  const showLoadingCurtain = ref(window.location.pathname !== '/intro');
+
   const isSamsungBrowser = /samsung/i.test(navigator.userAgent);
 
   const LockeScroll = (isLocked: boolean) => {
@@ -79,6 +88,8 @@
   });
 
   onMounted(() => {
+    if (!showLoadingCurtain.value) return;
+
     document.body.classList.add('stop-scrolling');
     setTimeout(() => {
       requestAnimationFrame(raf);

@@ -444,6 +444,22 @@ const animateBlogListEnter = () => {
 
 
 
+const animateIntroEnter = () => {
+  window.scrollTo(0, 0);
+
+  const tl = gsap.timeline({
+    onComplete: () => {
+      ScrollTrigger.refresh();
+    },
+  });
+
+  tl.fromTo(
+    '.intro-anim',
+    { y: 30, opacity: 0 },
+    { y: 0, opacity: 1, duration: 0.9, stagger: 0.12, ease: 'power4.out' },
+  );
+};
+
 const animateBlogPostEnter = () => {
   const tl = gsap.timeline();
 
@@ -493,5 +509,5 @@ export {
   animateAboutMeSectionLeave,
   animateBlogListEnter,
   animateBlogPostEnter,
-  
+  animateIntroEnter,
 };
