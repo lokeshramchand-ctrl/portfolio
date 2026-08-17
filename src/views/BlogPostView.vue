@@ -94,7 +94,8 @@
   import { blogPosts } from '@/generated/blogIndex';
   import { animateBlogPostEnter } from '@/animations'; // Adjust path if needed
   import { useSeo } from '@/seo/useSeo';
-  import { blogPostingSchema, breadcrumbSchema, toIsoDate } from '@/seo/schema';
+  import { blogPostingSchema, breadcrumbSchema, toIsoDate, type BlogPostMeta } from '@/seo/schema';
+  import { absoluteUrl } from '@/seo/constants';
   import { readingTimeFromMarkdown } from '@/seo/readingTime';
   import { parseMarkdownWithToc, stripFrontmatter, type TocItem } from '@/blog/toc';
   import { relatedPosts } from '@/blog/related';
@@ -114,7 +115,7 @@
   let tocObserver: IntersectionObserver | null = null;
   const READING_PROGRESS_ID = 'blog-reading-progress';
 
-  const postMeta = computed(() => {
+  const postMeta = computed<BlogPostMeta | undefined>(() => {
     return blogPosts.find(post => post.slug === slug);
   });
 
@@ -140,6 +141,7 @@
       title: `${postMeta.value.title} | Lokesh Ram Chand`,
       description: postMeta.value.excerpt,
       path: `/blog/${slug}`,
+      image: postMeta.value.image ? absoluteUrl(postMeta.value.image) : undefined,
       type: 'article',
       article: {
         publishedTime: toIsoDate(postMeta.value.date),

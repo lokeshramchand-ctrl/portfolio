@@ -117,7 +117,7 @@ export function blogPostingSchema(
     mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
     keywords: post.tags?.join(', '),
     wordCount: extra.wordCount,
-    image: DEFAULT_OG_IMAGE,
+    image: post.image ? absoluteUrl(post.image) : DEFAULT_OG_IMAGE,
     inLanguage: 'en',
     author: {
       '@type': 'Person',
