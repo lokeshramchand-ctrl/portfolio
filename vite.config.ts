@@ -22,6 +22,13 @@ export default defineConfig({
     sourcemap: true,
     // terserOptions:
     chunkSizeWarningLimit: 1600,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          gsap: ['gsap', 'gsap/ScrollTrigger', 'gsap/MotionPathPlugin'],
+        },
+      },
+    },
   },
   plugins: [
     tailwindcss(),
