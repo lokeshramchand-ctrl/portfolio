@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue';
 
-export type DeviceTier = 'low' | 'mid' | 'high';
+type DeviceTier = 'low' | 'mid' | 'high';
 
 const coarsePointerQuery =
   typeof window !== 'undefined' && 'matchMedia' in window
@@ -16,8 +16,6 @@ const isCoarsePointer = ref(coarsePointerQuery?.matches ?? false);
 coarsePointerQuery?.addEventListener('change', (event) => {
   isCoarsePointer.value = event.matches;
 });
-
-const isTouch = typeof navigator !== 'undefined' && navigator.maxTouchPoints > 0;
 
 const cores =
   typeof navigator !== 'undefined' && 'hardwareConcurrency' in navigator
@@ -41,4 +39,4 @@ const deviceTier = computed<DeviceTier>(() => {
 
 const isLowPowerDevice = computed(() => deviceTier.value === 'low');
 
-export { isCoarsePointer, isTouch, cores, saveData, deviceTier, isLowPowerDevice };
+export { isCoarsePointer, isLowPowerDevice };

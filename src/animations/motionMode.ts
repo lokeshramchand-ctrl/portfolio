@@ -13,8 +13,6 @@ reduceMotionQuery?.addEventListener('change', (event) => {
   motionMode.value = event.matches ? 'reduced' : 'full';
 });
 
-const shouldAnimate = (): boolean => motionMode.value === 'full';
-
 // Scales a tween's duration down to near-instant under reduced motion
 // instead of skipping it outright — several animations in this codebase
 // chain follow-up state changes off onComplete/onStart callbacks, so the
@@ -25,4 +23,4 @@ const scaleDuration = (duration: number): number =>
 const scaleStagger = (stagger: number): number =>
   motionMode.value === 'reduced' ? 0 : stagger;
 
-export { motionMode, shouldAnimate, scaleDuration, scaleStagger };
+export { motionMode, scaleDuration, scaleStagger };

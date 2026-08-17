@@ -36,16 +36,8 @@ const createScope = (name: string): AnimationScope => {
   return scope;
 };
 
-const getScope = (name: string): AnimationScope | undefined => scopes.get(name);
-
 const killScope = (name: string): void => {
   scopes.get(name)?.kill();
 };
 
-const killAllScopes = (): void => {
-  [...scopes.keys()].forEach(killScope);
-};
-
-const activeScopeNames = (): string[] => [...scopes.keys()];
-
-export { createScope, getScope, killScope, killAllScopes, activeScopeNames };
+export { createScope, killScope };

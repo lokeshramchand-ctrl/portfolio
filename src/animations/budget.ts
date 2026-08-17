@@ -59,4 +59,4 @@ const runWithBudget = (
   }
 };
 
-export { canRunAnimation, runWithBudget };
+export { runWithBudget };
