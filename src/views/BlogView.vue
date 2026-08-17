@@ -38,7 +38,7 @@
 <script setup lang="ts">
   import { onMounted, nextTick } from 'vue';
   import { Tag } from '@/components/common';
-  import { blogPosts } from '@/data';
+  import { blogPosts } from '@/generated/blogIndex';
 
   // Make sure to import your new animation and Lenis/ScrollTrigger
   import { animateBlogListEnter } from '@/animations';

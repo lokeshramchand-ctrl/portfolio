@@ -21,7 +21,7 @@ interface SeoOptions {
   article?: {
     publishedTime?: string;
     modifiedTime?: string;
-    tags?: string[];
+    tags?: readonly string[];
   };
 }
 

@@ -1,20 +1,3 @@
-
-export const blogPosts = [
-  {
-    title: "Owning the Stack: Building My Personal Cloud",
-    slug: "self-hosting-journey", // This means the file must be public/blogs/self-hosting-journey.md
-    date: "July 24, 2026",
-    excerpt: "A journey into self-hosting and the lessons learned while building a personal cloud infrastructure.",
-    tags: ["Architecture", "Self-Hosting", "Cloud"],
-  },
-  {
-    title: "Building an Nginx Configuration I Could Actually Maintain",
-    slug: "nginx-config",
-    date: "June 12, 2026",
-    excerpt: "A practical guide to creating and maintaining Nginx configurations that are both efficient and easy to manage.",
-    tags: ["DevOps", "Infrastructure", "Engineering"],
-  }
-];
 // Nav type
 export type navLinkType = {
   label: string;

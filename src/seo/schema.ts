@@ -1,4 +1,4 @@
-import { blogPosts } from '@/data';
+import { blogPosts } from '@/generated/blogIndex';
 import {
   AUTHOR_NAME,
   DEFAULT_DESCRIPTION,

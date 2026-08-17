@@ -42,7 +42,7 @@
   import { useHead } from '@unhead/vue';
   import { marked } from 'marked';
   import { Tag } from '@/components/common';
-  import { blogPosts } from '@/data';
+  import { blogPosts } from '@/generated/blogIndex';
   import { animateBlogPostEnter } from '@/animations'; // Adjust path if needed
   import { useSeo } from '@/seo/useSeo';
   import { blogPostingSchema, breadcrumbSchema, toIsoDate } from '@/seo/schema';

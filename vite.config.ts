@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import sitemap from 'vite-plugin-sitemap';
 import { robots } from 'vite-plugin-robots';
 import tailwindcss from '@tailwindcss/vite';
-import { blogPosts } from './src/data';
+import { blogPosts } from './src/generated/blogIndex';
 
 const blogRoutes = blogPosts.map((post) => `/blog/${post.slug}`);
 

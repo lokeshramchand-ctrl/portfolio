@@ -4,7 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "generate:blog": "tsx scripts/generate-blog-index.ts",
+    "predev": "npm run generate:blog",
     "dev": "vite --host",
+    "prebuild": "npm run generate:blog",
     "build": "vue-tsc && vite build",
     "preview": "vite preview"
   },
@@ -23,13 +26,16 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.3",
+    "gray-matter": "^4.0.3",
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
+    "tsx": "^4.23.12",
     "typescript": "^5.8.2",
     "vite": "^6.2.2",
     "vite-plugin-robots": "^1.0.5",
     "vite-plugin-sitemap": "^0.7.1",
-    "vue-tsc": "^2.2.8"
+    "vue-tsc": "^2.2.8",
+    "zod": "^4.4.3"
   },
   "node": "20"
 }

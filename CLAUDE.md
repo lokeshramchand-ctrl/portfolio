@@ -49,11 +49,13 @@ New components should be added to the relevant subfolder's `index.ts` barrel and
 `MagneticEffect.vue` pairs with `activateMagneto`/`resetMagneto` in `src/animations/index.ts` for the magnetic-hover button/link effect used around the site (e.g. contact button, social links).
 
 ### Blog system
-The blog is intentionally simple and file-based, not a CMS:
-- `src/data.ts` exports `blogPosts`: an array of post metadata (title, slug, date, excerpt, tags). This is the single source of truth for what posts exist and their listing metadata.
-- Actual post content lives as Markdown files in `public/blogs/<slug>.md`, fetched at runtime (`fetch(`${import.meta.env.BASE_URL}blogs/${slug}.md`)`) and parsed client-side with `marked` in `BlogPostView.vue`.
-- **To add a new post**: add an entry to `blogPosts` in `src/data.ts` with a `slug`, then add a matching `public/blogs/<slug>.md` file. The two must stay in sync — there's no build-time validation that a post's markdown file exists.
-- `src/data.ts` also holds site-wide content/config: nav links (`navLinks`/`navbarLinks`), `socialLinks`, `resourceLinks`, hero copy, location strings, and Cal.com booking config (`dataCalNamespace`/`dataCalLink`/`dataCalConfig`).
+The blog is file-based, not a CMS, but frontmatter — not `src/data.ts` — is the source of truth for post metadata:
+- Each post is a Markdown file at `public/blogs/<slug>.md` with a YAML frontmatter block (`title`, `date`, `excerpt`, `tags`, optional `image`). The filename (minus `.md`) is the slug.
+- `scripts/generate-blog-index.ts` (run via `npm run generate:blog`, and automatically via the `predev`/`prebuild` npm hooks) reads every file in `public/blogs/`, validates its frontmatter against a Zod schema, and emits `src/generated/blogIndex.ts` — a generated, checked-in `blogPosts` array. Invalid frontmatter fails the script (and therefore `predev`/`prebuild`) loudly.
+- `BlogView.vue`, `BlogPostView.vue`, `vite.config.ts` (sitemap routes), and `src/seo/schema.ts` all import `blogPosts` from `@/generated/blogIndex` — never hand-edit that file.
+- Post body content is still fetched at runtime (`fetch(`${import.meta.env.BASE_URL}blogs/${slug}.md`)`) and parsed client-side with `marked` in `BlogPostView.vue`; only the frontmatter is extracted at generation time.
+- **To add a new post**: create `public/blogs/<slug>.md` with a frontmatter block, then run `npm run generate:blog` (or just start `dev`/`build`, which do it automatically). Commit the regenerated `src/generated/blogIndex.ts` alongside it.
+- `src/data.ts` no longer holds blog post metadata. It still holds other site-wide content/config: nav links (`navLinks`/`navbarLinks`), `socialLinks`, `resourceLinks`, hero copy, location strings, and Cal.com booking config (`dataCalNamespace`/`dataCalLink`/`dataCalConfig`).
 
 ### Styling
 Tailwind CSS 4 is configured via the `@tailwindcss/vite` plugin (no `tailwind.config.js` — theme lives in `src/style.css` under `@theme`). Key custom tokens defined there:
