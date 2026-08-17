@@ -10,7 +10,20 @@ import {
   absoluteUrl,
 } from './constants';
 
-export type BlogPostMeta = (typeof blogPosts)[number];
+/**
+ * Deliberately not `(typeof blogPosts)[number]` — blogPosts is `as const`,
+ * so that would infer each post's `tags` as its own literal tuple type,
+ * making tags incomparable across different posts (e.g. in relatedPosts()).
+ * This is the intentionally-widened shape every post actually satisfies.
+ */
+export interface BlogPostMeta {
+  slug: string;
+  title: string;
+  date: string;
+  excerpt: string;
+  tags: readonly string[];
+  image?: string;
+}
 
 /** blogPosts stores human dates like "July 24, 2026"; JSON-LD needs ISO 8601. */
 export function toIsoDate(humanDate: string): string | undefined {

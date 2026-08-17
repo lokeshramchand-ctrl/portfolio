@@ -71,7 +71,7 @@ function buildRss(posts: { slug: string; title: string; date: string; excerpt: s
     <atom:link href="${absoluteUrl('/rss.xml')}" rel="self" type="application/rss+xml" />
     <description>${escapeXml(DEFAULT_DESCRIPTION)}</description>
     <language>en-us</language>
-    <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
+    <lastBuildDate>${new Date(posts[0]?.date ?? 0).toUTCString()}</lastBuildDate>
 ${items}
   </channel>
 </rss>

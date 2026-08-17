@@ -37,6 +37,25 @@
 
           <div class="markdown-content" v-html="parsedMarkdown"></div>
         </article>
+
+        <section v-if="!isLoading && !error && related.length > 0" class="mt-24 pt-16 border-t-2 border-flax-smoke-200">
+          <p class="font-mono text-xs font-bold text-flax-smoke-400 uppercase tracking-[0.2em] mb-8">
+            Related Posts
+          </p>
+          <div class="flex flex-col gap-8">
+            <router-link
+              v-for="post in related"
+              :key="post.slug"
+              :to="`/blog/${post.slug}`"
+              class="group block"
+            >
+              <p class="font-mono text-sm font-bold text-flax-smoke-500 uppercase mb-2">{{ post.date }}</p>
+              <h3 class="heading-5 font-fancy font-bold group-hover:translate-x-2 transition-transform duration-500 text-flax-smoke-900">
+                {{ post.title }}
+              </h3>
+            </router-link>
+          </div>
+        </section>
       </div>
 
       <aside v-if="tocItems.length > 0" class="hidden lg:block sticky top-32">
@@ -78,6 +97,7 @@
   import { blogPostingSchema, breadcrumbSchema, toIsoDate } from '@/seo/schema';
   import { readingTimeFromMarkdown } from '@/seo/readingTime';
   import { parseMarkdownWithToc, stripFrontmatter, type TocItem } from '@/blog/toc';
+  import { relatedPosts } from '@/blog/related';
 
   const route = useRoute();
   const slug = route.params.slug as string;
@@ -96,6 +116,11 @@
 
   const postMeta = computed(() => {
     return blogPosts.find(post => post.slug === slug);
+  });
+
+  const related = computed(() => {
+    if (!postMeta.value) return [];
+    return relatedPosts(postMeta.value, blogPosts);
   });
 
   // Registered synchronously here (unhead needs Vue's component context, which
