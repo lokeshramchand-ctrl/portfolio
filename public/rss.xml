@@ -8,6 +8,21 @@
     <language>en-us</language>
     <lastBuildDate>Thu, 20 Aug 2026 00:00:00 GMT</lastBuildDate>
     <item>
+      <title>Building a Grounded RAG Pipeline for Financial Data with Milvus and Ollama</title>
+      <link>https://lokeshrc.me/blog/grounded-rag-pipeline-milvus-ollama-velar</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/grounded-rag-pipeline-milvus-ollama-velar</guid>
+      <pubDate>Thu, 20 Aug 2026 00:00:00 GMT</pubDate>
+      <description>An architectural deep dive into how Velar builds a privacy-first, grounded RAG pipeline using Milvus, Ollama, and FastAPI without relying on external LLM APIs.</description>
+      <category>Machine Learning</category>
+      <category>FastAPI</category>
+      <category>MongoDB</category>
+      <category>Milvus</category>
+      <category>Ollama</category>
+      <category>RAG</category>
+      <category>System Architecture</category>
+      <category>Privacy</category>
+    </item>
+    <item>
       <title>Why I Didn&apos;t Just Use ChatGPT for Transaction Parsing</title>
       <link>https://lokeshrc.me/blog/why-i-didnt-just-use-chatgpt-for-transaction-parsing</link>
       <guid isPermaLink="true">https://lokeshrc.me/blog/why-i-didnt-just-use-chatgpt-for-transaction-parsing</guid>
@@ -30,6 +45,19 @@
       <category>Cloud</category>
     </item>
     <item>
+      <title>Hardening a 15-Phase AI API for Pre-Production</title>
+      <link>https://lokeshrc.me/blog/hardening-fastapi-ai-api-preproduction</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/hardening-fastapi-ai-api-preproduction</guid>
+      <pubDate>Sun, 12 Jul 2026 00:00:00 GMT</pubDate>
+      <description>An architectural deep dive and pre-production audit of Velar, detailing how to secure a FastAPI service against concurrency races, missing indexes, root containers, and dependency CVEs.</description>
+      <category>Machine Learning</category>
+      <category>FastAPI</category>
+      <category>MongoDB</category>
+      <category>Docker</category>
+      <category>Security</category>
+      <category>Production Readiness</category>
+    </item>
+    <item>
       <title>Designing a Memory State Machine for ML Predictions</title>
       <link>https://lokeshrc.me/blog/designing-trust-state-machine</link>
       <guid isPermaLink="true">https://lokeshrc.me/blog/designing-trust-state-machine</guid>
@@ -40,19 +68,6 @@
       <category>MongoDB</category>
       <category>System Architecture</category>
       <category>Engineering</category>
-    </item>
-    <item>
-      <title>Hardening a 15-Phase AI API for Pre-Production</title>
-      <link>https://lokeshrc.me/blog/hardening-fastapi-ai-api-preproduction</link>
-      <guid isPermaLink="true">https://lokeshrc.me/blog/hardening-fastapi-ai-api-preproduction</guid>
-      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
-      <description>An architectural deep dive and pre-production audit of Velar, detailing how to secure a FastAPI service against concurrency races, missing indexes, root containers, and dependency CVEs.</description>
-      <category>Machine Learning</category>
-      <category>FastAPI</category>
-      <category>MongoDB</category>
-      <category>Docker</category>
-      <category>Security</category>
-      <category>Production Readiness</category>
     </item>
     <item>
       <title>Building an Nginx Configuration I Could Actually Maintain</title>

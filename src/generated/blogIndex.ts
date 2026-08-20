@@ -3,6 +3,22 @@
 
 export const blogPosts = [
   {
+    "slug": "grounded-rag-pipeline-milvus-ollama-velar",
+    "title": "Building a Grounded RAG Pipeline for Financial Data with Milvus and Ollama",
+    "date": "August 20, 2026",
+    "excerpt": "An architectural deep dive into how Velar builds a privacy-first, grounded RAG pipeline using Milvus, Ollama, and FastAPI without relying on external LLM APIs.",
+    "tags": [
+      "Machine Learning",
+      "FastAPI",
+      "MongoDB",
+      "Milvus",
+      "Ollama",
+      "RAG",
+      "System Architecture",
+      "Privacy"
+    ]
+  },
+  {
     "slug": "why-i-didnt-just-use-chatgpt-for-transaction-parsing",
     "title": "Why I Didn't Just Use ChatGPT for Transaction Parsing",
     "date": "August 20, 2026",
@@ -27,6 +43,20 @@ export const blogPosts = [
     ]
   },
   {
+    "slug": "hardening-fastapi-ai-api-preproduction",
+    "title": "Hardening a 15-Phase AI API for Pre-Production",
+    "date": "July 12, 2026",
+    "excerpt": "An architectural deep dive and pre-production audit of Velar, detailing how to secure a FastAPI service against concurrency races, missing indexes, root containers, and dependency CVEs.",
+    "tags": [
+      "Machine Learning",
+      "FastAPI",
+      "MongoDB",
+      "Docker",
+      "Security",
+      "Production Readiness"
+    ]
+  },
+  {
     "slug": "designing-trust-state-machine",
     "title": "Designing a Memory State Machine for ML Predictions",
     "date": "June 12, 2026",
@@ -37,20 +67,6 @@ export const blogPosts = [
       "MongoDB",
       "System Architecture",
       "Engineering"
-    ]
-  },
-  {
-    "slug": "hardening-fastapi-ai-api-preproduction",
-    "title": "Hardening a 15-Phase AI API for Pre-Production",
-    "date": "2026-06-12",
-    "excerpt": "An architectural deep dive and pre-production audit of Velar, detailing how to secure a FastAPI service against concurrency races, missing indexes, root containers, and dependency CVEs.",
-    "tags": [
-      "Machine Learning",
-      "FastAPI",
-      "MongoDB",
-      "Docker",
-      "Security",
-      "Production Readiness"
     ]
   },
   {
