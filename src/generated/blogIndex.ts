@@ -32,7 +32,7 @@ export const blogPosts = [
     ]
   },
   {
-    "slug": "self-hosting-journey",
+    "slug": "personal-cloud-self-hosting",
     "title": "Owning the Stack: Building My Personal Cloud",
     "date": "July 24, 2026",
     "excerpt": "A journey into self-hosting and the lessons learned while building a personal cloud infrastructure.",
@@ -70,7 +70,7 @@ export const blogPosts = [
     ]
   },
   {
-    "slug": "nginx-config",
+    "slug": "nginx-configuration-maintainable",
     "title": "Building an Nginx Configuration I Could Actually Maintain",
     "date": "June 12, 2026",
     "excerpt": "A practical guide to creating and maintaining Nginx configurations that are both efficient and easy to manage.",

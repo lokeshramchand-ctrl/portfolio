@@ -36,8 +36,8 @@
     </item>
     <item>
       <title>Owning the Stack: Building My Personal Cloud</title>
-      <link>https://lokeshrc.me/blog/self-hosting-journey</link>
-      <guid isPermaLink="true">https://lokeshrc.me/blog/self-hosting-journey</guid>
+      <link>https://lokeshrc.me/blog/personal-cloud-self-hosting</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/personal-cloud-self-hosting</guid>
       <pubDate>Fri, 24 Jul 2026 00:00:00 GMT</pubDate>
       <description>A journey into self-hosting and the lessons learned while building a personal cloud infrastructure.</description>
       <category>Architecture</category>
@@ -71,8 +71,8 @@
     </item>
     <item>
       <title>Building an Nginx Configuration I Could Actually Maintain</title>
-      <link>https://lokeshrc.me/blog/nginx-config</link>
-      <guid isPermaLink="true">https://lokeshrc.me/blog/nginx-config</guid>
+      <link>https://lokeshrc.me/blog/nginx-configuration-maintainable</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/nginx-configuration-maintainable</guid>
       <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
       <description>A practical guide to creating and maintaining Nginx configurations that are both efficient and easy to manage.</description>
       <category>DevOps</category>
