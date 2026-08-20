@@ -81,12 +81,15 @@
 <script setup lang="ts">
   import { earthLottie } from '@/assets/videos';
   import { Button } from '../common';
-  import { Vue3Lottie } from 'vue3-lottie';
   import Link from '../Link.vue';
   import { contact } from '@/assets/videos';
-  import { onBeforeMount, onMounted, ref } from 'vue';
+  import { defineAsyncComponent, onBeforeMount, onMounted, ref } from 'vue';
   import { getAvailableForWorkDate, textSplitterIntoChar } from '@/functions';
   import { animateSplitText } from '@/animations';
+
+  const Vue3Lottie = defineAsyncComponent(() =>
+    import('vue3-lottie').then((m) => m.Vue3Lottie),
+  );
   // import { dataCalConfig, dataCalLink, dataCalNamespace } from '@/data';
 
   const makeItHappen = ref("Let's engineer it");

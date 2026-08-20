@@ -90,7 +90,6 @@
   import { onMounted, ref } from 'vue';
   import { lenis } from '@/main';
   import MagneticEffect from '../MagneticEffect.vue';
-  import moment from 'moment-timezone';
 
   // Combine footer sections dynamically
   const footerSections = [
@@ -102,16 +101,26 @@
   const myLocalTime = ref('');
   const userLocalTime = ref('');
 
-  onMounted(() => {
-    myLocalTime.value = moment.tz('Asia/Kolkata').format('h:mm:ss a');
-    setInterval(() => {
-      myLocalTime.value = moment.tz('Asia/Kolkata').format('h:mm:ss a');
-    }, 1000);
+  const formatTime = (timeZone: string) =>
+    new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      hour: 'numeric',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true,
+    })
+      .format(new Date())
+      .toLowerCase();
 
+  onMounted(() => {
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    userLocalTime.value = moment.tz(userTimeZone).format('h:mm:ss a');
-    setInterval(() => {
-      userLocalTime.value = moment.tz(userTimeZone).format('h:mm:ss a');
-    }, 1000);
+
+    const updateClocks = () => {
+      myLocalTime.value = formatTime('Asia/Kolkata');
+      userLocalTime.value = formatTime(userTimeZone);
+    };
+
+    updateClocks();
+    setInterval(updateClocks, 1000);
   });
 </script>
