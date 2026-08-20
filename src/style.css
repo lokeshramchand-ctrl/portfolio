@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap')
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap')
 layer(base);
 
 @layer utilities {
@@ -43,6 +43,7 @@ layer(base);
 
   /* Custom base styles */
   --font-fancy: 'Bricolage Grotesque';
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
   --heading-6: clamp(1rem, 0.928rem + 0.36vw, 1.25rem);
   --heading-5: clamp(1.13rem, 1.004rem + 0.63vw, 1.57rem);
   --heading-4: clamp(1.25rem, 1.0359rem + 1.0707vw, 1.9995rem);
@@ -56,6 +57,10 @@ layer(base);
 
 @utility font-fancy {
   font-family: var(--font-fancy) !important;
+}
+
+@utility font-mono {
+  font-family: var(--font-mono) !important;
 }
 
 @utility light-theme {
@@ -232,10 +237,10 @@ layer(base);
     @apply bg-flax-smoke-200 text-flax-smoke-900 rounded-md px-2 py-1 font-mono text-sm;
   }
   .markdown-content pre {
-    @apply text-flax-smoke-50 my-8 overflow-x-auto rounded-lg bg-[#0B0B0A] p-6;
+    @apply text-flax-smoke-900 my-8 overflow-x-auto rounded-lg bg-[#0B0B0A] p-6 font-mono;
   }
   .markdown-content pre code {
-    @apply text-flax-smoke-50 rounded-none bg-transparent p-0;
+    @apply text-flax-smoke-900 rounded-none bg-transparent p-0;
   }
   .markdown-content--dropcap > p:first-of-type::first-letter {
     @apply font-title! text-flax-smoke-900 float-left mr-3 mt-1 text-7xl leading-[0.8] font-bold not-italic;
