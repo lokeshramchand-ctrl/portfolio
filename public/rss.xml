@@ -27,5 +27,17 @@
       <category>Infrastructure</category>
       <category>Engineering</category>
     </item>
+    <item>
+      <title>Designing a Memory State Machine for ML Predictions</title>
+      <link>https://lokeshrc.me/blog/velar_trust_state_machine</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/velar_trust_state_machine</guid>
+      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
+      <description>An architectural deep dive into how Velar tracks merchant trust explicitly using a frequency-based state machine, built with FastAPI and MongoDB.</description>
+      <category>Machine Learning</category>
+      <category>FastAPI</category>
+      <category>MongoDB</category>
+      <category>System Architecture</category>
+      <category>Engineering</category>
+    </item>
   </channel>
 </rss>

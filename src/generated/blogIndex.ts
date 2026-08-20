@@ -23,5 +23,18 @@ export const blogPosts = [
       "Infrastructure",
       "Engineering"
     ]
+  },
+  {
+    "slug": "designing-trust-state-machine",
+    "title": "Designing a Memory State Machine for ML Predictions",
+    "date": "June 12, 2026",
+    "excerpt": "An architectural deep dive into how Velar tracks merchant trust explicitly using a frequency-based state machine, built with FastAPI and MongoDB.",
+    "tags": [
+      "Machine Learning",
+      "FastAPI",
+      "MongoDB",
+      "System Architecture",
+      "Engineering"
+    ]
   }
 ] as const;
