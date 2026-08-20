@@ -6,9 +6,7 @@ tags: ["Machine Learning", "FastAPI", "MongoDB", "Docker", "Security", "Producti
 excerpt: "An architectural deep dive and pre-production audit of Velar, detailing how to secure a FastAPI service against concurrency races, missing indexes, root containers, and dependency CVEs."
 ---
 
-# Hardening a 15-Phase AI API for Pre-Production
 
-**Engineering · Production Readiness**
 
 Getting a FastAPI service to return the right category for a transaction is the interesting part. Getting it to survive a 2MB request body, a dead Mongo connection, a root-user container, and a dependency with a CVE from last quarter is the part that decides whether it ever sees real traffic. This is the audit that closed that gap, and it found more than one bug it also had to un-find.
 

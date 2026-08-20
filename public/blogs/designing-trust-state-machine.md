@@ -6,9 +6,6 @@ tags: ["Machine Learning", "FastAPI", "MongoDB", "System Architecture", "Enginee
 ---
 
 
-# Engineering · Trust & State
-## Designing a Memory State Machine for ML Predictions
-
 The first time Velar sees "SWIGGY BANGALORE" and the fortieth time are not the same event, but most systems treat them identically once the merchant is resolved. This one doesn't. Every merchant carries an explicit trust state, and it has to be earned one encounter at a time.
 
 **System**: Velar — trust state machine  

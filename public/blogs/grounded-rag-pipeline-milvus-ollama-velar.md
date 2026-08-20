@@ -5,7 +5,6 @@ excerpt: "An architectural deep dive into how Velar builds a privacy-first, grou
 tags: ["Machine Learning", "FastAPI", "MongoDB", "Milvus", "Ollama", "RAG", "System Architecture", "Privacy"]
 ---
 
-**Engineering · Privacy & Retrieval**
 
 A bank statement isn't a support ticket. You can't paste six months of someone's transaction history into a public API just to get a nicer explanation of why a charge got categorized the way it did. So the embedding model and the generation model in Velar both run on infrastructure I control, and the retrieval step is built to hand the LLM real records instead of asking it to remember something it was never shown.
 
