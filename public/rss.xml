@@ -42,6 +42,19 @@
       <category>Engineering</category>
     </item>
     <item>
+      <title>Hardening a 15-Phase AI API for Pre-Production</title>
+      <link>https://lokeshrc.me/blog/hardening-fastapi-ai-api-preproduction</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/hardening-fastapi-ai-api-preproduction</guid>
+      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
+      <description>An architectural deep dive and pre-production audit of Velar, detailing how to secure a FastAPI service against concurrency races, missing indexes, root containers, and dependency CVEs.</description>
+      <category>Machine Learning</category>
+      <category>FastAPI</category>
+      <category>MongoDB</category>
+      <category>Docker</category>
+      <category>Security</category>
+      <category>Production Readiness</category>
+    </item>
+    <item>
       <title>Building an Nginx Configuration I Could Actually Maintain</title>
       <link>https://lokeshrc.me/blog/nginx-config</link>
       <guid isPermaLink="true">https://lokeshrc.me/blog/nginx-config</guid>

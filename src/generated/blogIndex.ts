@@ -40,6 +40,20 @@ export const blogPosts = [
     ]
   },
   {
+    "slug": "hardening-fastapi-ai-api-preproduction",
+    "title": "Hardening a 15-Phase AI API for Pre-Production",
+    "date": "2026-06-12",
+    "excerpt": "An architectural deep dive and pre-production audit of Velar, detailing how to secure a FastAPI service against concurrency races, missing indexes, root containers, and dependency CVEs.",
+    "tags": [
+      "Machine Learning",
+      "FastAPI",
+      "MongoDB",
+      "Docker",
+      "Security",
+      "Production Readiness"
+    ]
+  },
+  {
     "slug": "nginx-config",
     "title": "Building an Nginx Configuration I Could Actually Maintain",
     "date": "June 12, 2026",
