@@ -3,6 +3,19 @@
 
 export const blogPosts = [
   {
+    "slug": "why-i-didnt-just-use-chatgpt-for-transaction-parsing",
+    "title": "Why I Didn't Just Use ChatGPT for Transaction Parsing",
+    "date": "August 20, 2026",
+    "excerpt": "Every fintech demo this year routes bank SMS text through a chat completion and calls it categorization. Here's the pipeline I built instead: three cheap, boring, deterministic layers before an LLM ever gets a vote.",
+    "tags": [
+      "Machine Learning",
+      "FastAPI",
+      "MongoDB",
+      "System Architecture",
+      "LLM"
+    ]
+  },
+  {
     "slug": "self-hosting-journey",
     "title": "Owning the Stack: Building My Personal Cloud",
     "date": "July 24, 2026",
@@ -11,17 +24,6 @@ export const blogPosts = [
       "Architecture",
       "Self-Hosting",
       "Cloud"
-    ]
-  },
-  {
-    "slug": "nginx-config",
-    "title": "Building an Nginx Configuration I Could Actually Maintain",
-    "date": "June 12, 2026",
-    "excerpt": "A practical guide to creating and maintaining Nginx configurations that are both efficient and easy to manage.",
-    "tags": [
-      "DevOps",
-      "Infrastructure",
-      "Engineering"
     ]
   },
   {
@@ -34,6 +36,17 @@ export const blogPosts = [
       "FastAPI",
       "MongoDB",
       "System Architecture",
+      "Engineering"
+    ]
+  },
+  {
+    "slug": "nginx-config",
+    "title": "Building an Nginx Configuration I Could Actually Maintain",
+    "date": "June 12, 2026",
+    "excerpt": "A practical guide to creating and maintaining Nginx configurations that are both efficient and easy to manage.",
+    "tags": [
+      "DevOps",
+      "Infrastructure",
       "Engineering"
     ]
   }

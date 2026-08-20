@@ -6,7 +6,19 @@
     <atom:link href="https://lokeshrc.me/rss.xml" rel="self" type="application/rss+xml" />
     <description>A dedicated software engineer building intelligent, scalable platforms. I combine modern full-stack development with machine learning technologies to architect comprehensive, production-ready solutions.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 24 Jul 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 20 Aug 2026 00:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Why I Didn&apos;t Just Use ChatGPT for Transaction Parsing</title>
+      <link>https://lokeshrc.me/blog/why-i-didnt-just-use-chatgpt-for-transaction-parsing</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/why-i-didnt-just-use-chatgpt-for-transaction-parsing</guid>
+      <pubDate>Thu, 20 Aug 2026 00:00:00 GMT</pubDate>
+      <description>Every fintech demo this year routes bank SMS text through a chat completion and calls it categorization. Here&apos;s the pipeline I built instead: three cheap, boring, deterministic layers before an LLM ever gets a vote.</description>
+      <category>Machine Learning</category>
+      <category>FastAPI</category>
+      <category>MongoDB</category>
+      <category>System Architecture</category>
+      <category>LLM</category>
+    </item>
     <item>
       <title>Owning the Stack: Building My Personal Cloud</title>
       <link>https://lokeshrc.me/blog/self-hosting-journey</link>
@@ -18,6 +30,18 @@
       <category>Cloud</category>
     </item>
     <item>
+      <title>Designing a Memory State Machine for ML Predictions</title>
+      <link>https://lokeshrc.me/blog/designing-trust-state-machine</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/designing-trust-state-machine</guid>
+      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
+      <description>An architectural deep dive into how Velar tracks merchant trust explicitly using a frequency-based state machine, built with FastAPI and MongoDB.</description>
+      <category>Machine Learning</category>
+      <category>FastAPI</category>
+      <category>MongoDB</category>
+      <category>System Architecture</category>
+      <category>Engineering</category>
+    </item>
+    <item>
       <title>Building an Nginx Configuration I Could Actually Maintain</title>
       <link>https://lokeshrc.me/blog/nginx-config</link>
       <guid isPermaLink="true">https://lokeshrc.me/blog/nginx-config</guid>
@@ -25,18 +49,6 @@
       <description>A practical guide to creating and maintaining Nginx configurations that are both efficient and easy to manage.</description>
       <category>DevOps</category>
       <category>Infrastructure</category>
-      <category>Engineering</category>
-    </item>
-    <item>
-      <title>Designing a Memory State Machine for ML Predictions</title>
-      <link>https://lokeshrc.me/blog/velar_trust_state_machine</link>
-      <guid isPermaLink="true">https://lokeshrc.me/blog/velar_trust_state_machine</guid>
-      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
-      <description>An architectural deep dive into how Velar tracks merchant trust explicitly using a frequency-based state machine, built with FastAPI and MongoDB.</description>
-      <category>Machine Learning</category>
-      <category>FastAPI</category>
-      <category>MongoDB</category>
-      <category>System Architecture</category>
       <category>Engineering</category>
     </item>
   </channel>
