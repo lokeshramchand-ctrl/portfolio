@@ -1,6 +1,6 @@
 ---
 title: "Owning the Stack: Building My Personal Cloud"
-date: "July 24, 2026"
+date: "July 20, 2026"
 excerpt: "A journey into self-hosting and the lessons learned while building a personal cloud infrastructure."
 tags: ["Architecture", "Self-Hosting", "Cloud"]
 ---
