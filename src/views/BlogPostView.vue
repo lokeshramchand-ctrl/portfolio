@@ -71,7 +71,7 @@
             v-for="item in tocItems"
             :key="item.id"
             :href="`#${item.id}`"
-            class="text-sm leading-snug -ml-px border-l-2 transition-colors duration-300"
+            class="font-mono text-sm leading-snug -ml-px border-l-2 transition-colors duration-300"
             :class="[
               item.depth === 3 ? 'pl-8' : 'pl-4',
               activeTocId === item.id

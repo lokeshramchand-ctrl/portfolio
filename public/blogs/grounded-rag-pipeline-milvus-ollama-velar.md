@@ -1,11 +1,10 @@
 ---
 title: "Building a Grounded RAG Pipeline for Financial Data with Milvus and Ollama"
-date: "August 20, 2026"
+date: "August 7, 2026"
 excerpt: "An architectural deep dive into how Velar builds a privacy-first, grounded RAG pipeline using Milvus, Ollama, and FastAPI without relying on external LLM APIs."
 tags: ["Machine Learning", "FastAPI", "MongoDB", "Milvus", "Ollama", "RAG", "System Architecture", "Privacy"]
 ---
 
-**Engineering · Privacy & Retrieval**
 
 A bank statement isn't a support ticket. You can't paste six months of someone's transaction history into a public API just to get a nicer explanation of why a charge got categorized the way it did. So the embedding model and the generation model in Velar both run on infrastructure I control, and the retrieval step is built to hand the LLM real records instead of asking it to remember something it was never shown.
 
@@ -118,4 +117,3 @@ The thing I underestimated going in was how much of "grounding" is actually just
 Given more time, the first thing I'd fix is the cached-host problem — a background health-recheck instead of a resolve-once-and-trust-forever cache, since a silently dead Ollama host is a worse failure than a slow one. Second, I'd wire `embeddings/sync` into the tail end of the behavior pipeline instead of leaving it as a step a human has to remember. A pipeline that errors when you forget a step is annoying. A pipeline that just quietly returns nothing is the kind of bug that survives in production for months before anyone notices the explanations have gone empty.
 
 ***
-*Velar · grounded explanation layer | Part 2 of a series on the architecture*

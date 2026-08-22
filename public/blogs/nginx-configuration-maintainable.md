@@ -1,10 +1,9 @@
 ---
 title: "Building an Nginx Configuration I Could Actually Maintain"
-date: "June 12, 2026"
+date: "Aug 1, 2026"
 excerpt: "A practical guide to creating and maintaining Nginx configurations that are both efficient and easy to manage."
 tags: ["DevOps", "Infrastructure", "Engineering"]
 ---
-# From Nginx Chaos to Actually Manageable Configuration
 
 When I first set up my reverse proxy, I treated Nginx like a black box. You know, one of those things that "just works" if you don't look inside too carefully. Spoiler: that approach doesn't scale.
 

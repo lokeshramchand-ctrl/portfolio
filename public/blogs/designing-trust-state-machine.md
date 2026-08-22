@@ -1,13 +1,10 @@
 ---
 title: "Designing a Memory State Machine for ML Predictions"
-date: "June 12, 2026"
+date: "Augus, 2026"
 excerpt: "An architectural deep dive into how Velar tracks merchant trust explicitly using a frequency-based state machine, built with FastAPI and MongoDB."
 tags: ["Machine Learning", "FastAPI", "MongoDB", "System Architecture", "Engineering"]
 ---
 
-
-# Engineering · Trust & State
-## Designing a Memory State Machine for ML Predictions
 
 The first time Velar sees "SWIGGY BANGALORE" and the fortieth time are not the same event, but most systems treat them identically once the merchant is resolved. This one doesn't. Every merchant carries an explicit trust state, and it has to be earned one encounter at a time.
 

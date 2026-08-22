@@ -4,7 +4,6 @@ date: "July 24, 2026"
 excerpt: "A journey into self-hosting and the lessons learned while building a personal cloud infrastructure."
 tags: ["Architecture", "Self-Hosting", "Cloud"]
 ---
-# Owning My Infrastructure: A Personal Cloud Story
 
 When people ask why I decided to build my own cloud, the honest answer is: I got tired of being a passenger.
 

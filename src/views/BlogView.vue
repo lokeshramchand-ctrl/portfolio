@@ -2,36 +2,16 @@
   <section class="padding-x min-h-svh pt-[15vh] pb-20">
     <!-- Masthead -->
     <div class="w-full max-w-6xl mx-auto z-10 relative">
-      <div class="blog-header-anim flex items-center justify-between gap-4 border-b border-flax-smoke-200 pb-3 mb-6">
-        <p class="font-mono text-xs font-bold tracking-[0.2em] text-flax-smoke-400 uppercase">
-          {{ dateline }}
-        </p>
-        <p class="font-mono text-xs font-bold tracking-[0.2em] text-flax-smoke-400 uppercase">
-          Issue No. {{ blogPosts.length.toString().padStart(2, '0') }}
-        </p>
-      </div>
+
 
       <div class="blog-header-anim text-center border-b-4 border-flax-smoke-900 pb-8 mb-8">
         <h1 class="font-title! font-bold uppercase tracking-tighter leading-[0.85] text-flax-smoke-900 text-[clamp(2.5rem,8vw,6.5rem)]">
           The Build Log
         </h1>
-        <p class="font-mono text-sm font-bold tracking-[0.3em] text-flax-smoke-500 uppercase mt-3">
-          Notes on Self-Hosting &amp; Infrastructure
-        </p>
+
       </div>
 
-      <div class="blog-header-anim flex flex-wrap items-center justify-between gap-4 mb-16">
-        <p class="heading-6 text-flax-smoke-500 font-medium text-balance max-w-lg">
-          Notes on self-hosting, infrastructure, and building things that stay up.
-        </p>
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="Search dispatches..."
-          aria-label="Search blog posts"
-          class="w-full sm:w-72 bg-transparent border-b-2 border-flax-smoke-200 focus:border-flax-smoke-900 outline-none py-2 font-mono text-sm text-flax-smoke-900 placeholder:text-flax-smoke-400 transition-colors duration-500"
-        />
-      </div>
+
     </div>
 
     <!-- Featured story -->
