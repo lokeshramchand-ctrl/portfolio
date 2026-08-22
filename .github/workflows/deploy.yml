@@ -31,4 +31,13 @@ jobs:
           
           # Copy the new build files 
           # (Vue usually outputs to 'dist', React usually outputs to 'build')
-          cp -r dist/* /var/www/portfolio/dist/
+          cp -r dist/* /var/www/portfolio/dist/ 
+
+      - name: Send ntfy notification
+        if: always()
+        run: |
+          curl \
+            -H "Title: Homelab Portfolio Deployment" \
+            -H "Tags: rocket, github" \
+            -d "The deployment workflow finished with status: ${{ job.status }}" \
+            https://ntfy.splsystems.in/lokeshrc
