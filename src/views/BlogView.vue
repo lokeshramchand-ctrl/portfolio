@@ -110,10 +110,6 @@
   const featured = computed<BlogPostMeta>(() => blogPosts[0]);
   const rest = computed<BlogPostMeta[]>(() => blogPosts.slice(1));
 
-  const dateline = computed(() =>
-    new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
-  );
-
   const matchedSlugs = computed<Set<string>>(() => {
     const query = searchQuery.value.trim().toLowerCase();
     if (!query) return new Set(blogPosts.map((post) => post.slug));
