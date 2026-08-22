@@ -37,7 +37,7 @@ jobs:
         if: always()
         run: |
           curl \
-            -H "Title: Homelab Portfolio Deployment" \
-            -H "Tags: rocket, github" \
-            -d "The deployment workflow finished with status: ${{ job.status }}" \
+            -H "Title: Lokeshrc Deployment" \
+            -H "Tags: github" \
+            -d "Deployment Status: ${{ job.status }}" \
             https://ntfy.splsystems.in/lokeshrc
