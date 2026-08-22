@@ -1,6 +1,6 @@
 ---
 title: "Hardening a 15-Phase AI API for Pre-Production"
-date: "July 12, 2026"
+date: "Aug 22, 2026"
 category: "Engineering"
 tags: ["Machine Learning", "FastAPI", "MongoDB", "Docker", "Security", "Production Readiness"]
 excerpt: "An architectural deep dive and pre-production audit of Velar, detailing how to secure a FastAPI service against concurrency races, missing indexes, root containers, and dependency CVEs."
@@ -104,5 +104,3 @@ Going in, I expected the value of this audit to be the list: indexes added, head
 If I did this again, I'd stand up the CI pipeline before starting the fixes instead of after. It ended up added as one of the last items in this pass, which meant every verification step up to that point was a manual re-run of the test suite and a manual Docker build, done by hand, by me, after each change. That worked, but it worked because I happened to remember to do it every time. A pipeline doesn't need to remember anything. It just runs.
 
 ---
-*Velar · pre-production audit*  
-*Part 4 of a series on the architecture*

@@ -1,6 +1,6 @@
 ---
 title: "Why I Didn't Just Use ChatGPT for Transaction Parsing"
-date: "August 20, 2026"
+date: "August 8, 2026"
 excerpt: "Every fintech demo this year routes bank SMS text through a chat completion and calls it categorization. Here's the pipeline I built instead: three cheap, boring, deterministic layers before an LLM ever gets a vote."
 tags: ["Machine Learning", "FastAPI", "MongoDB", "System Architecture", "LLM"]
 ---
@@ -117,6 +117,3 @@ The lesson I keep relearning building this thing: reliability here was mostly a 
 
 Given a do-over, I'd build the confidence wall before the rule engine, not after. It's the cheapest piece in the whole system and the one every other layer ultimately has to answer to, and building it last meant bolting a threshold contract onto code that was never written to expose one cleanly. I'd also stop letting `calibrate_probability()` get away with being a pass-through for this long — right now it just clamps a number to `[0, 1]` and calls it a day. An uncalibrated confidence score is a plain number wearing a probability's clothes, and a wall is only as honest as the thing it's checking against.
 
----
-*Velar · transaction intelligence*  
-*Part 1 of a series on the architecture*
