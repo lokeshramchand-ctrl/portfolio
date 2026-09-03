@@ -141,14 +141,14 @@
     ),
   });
 
-  function applySeo() {
+  useSeo(computed(() => {
     if (postMeta.value) {
-      useSeo({
+      return {
         title: `${postMeta.value.title} | Lokesh Ram Chand`,
         description: postMeta.value.excerpt,
         path: `/blog/${slug.value}`,
         image: postMeta.value.image ? absoluteUrl(postMeta.value.image) : undefined,
-        type: 'article',
+        type: 'article' as const,
         article: {
           publishedTime: toIsoDate(postMeta.value.date),
           modifiedTime: toIsoDate(postMeta.value.date),
@@ -161,18 +161,16 @@
             { name: postMeta.value.title, path: `/blog/${slug.value}` },
           ]),
         ],
-      });
-    } else {
-      useSeo({
-        title: 'Post Not Found | Lokesh Ram Chand',
-        description: 'The blog post you are looking for could not be found.',
-        path: `/blog/${slug.value}`,
-        noindex: true,
-      });
+      };
     }
-  }
 
-  applySeo();
+    return {
+      title: 'Post Not Found | Lokesh Ram Chand',
+      description: 'The blog post you are looking for could not be found.',
+      path: `/blog/${slug.value}`,
+      noindex: true,
+    };
+  }));
 
   function scrollToHeading(id: string) {
     lenis.scrollTo(`#${id}`, { offset: -96, duration: 1.5 });
@@ -277,7 +275,6 @@
   watch(
     () => route.params.slug,
     () => {
-      applySeo();
       loadPost();
       lenis.scrollTo(0, { immediate: true });
     },
