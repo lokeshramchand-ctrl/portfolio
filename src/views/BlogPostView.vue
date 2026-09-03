@@ -118,6 +118,7 @@
   const readingProgress = ref(0);
   let tocObserver: IntersectionObserver | null = null;
   const READING_PROGRESS_ID = 'blog-reading-progress';
+  let hasEnteredOnce = false;
 
   const postMeta = computed<BlogPostMeta | undefined>(() => {
     return blogPosts.find(post => post.slug === slug.value);
@@ -225,7 +226,10 @@
   watch(isLoading, async (newVal) => {
     if (!newVal && !error.value) {
       await nextTick();
-      animateBlogPostEnter();
+      if (!hasEnteredOnce) {
+        hasEnteredOnce = true;
+        animateBlogPostEnter();
+      }
       setupTocObserver();
       setupReadingProgress();
     }
