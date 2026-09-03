@@ -105,7 +105,7 @@
   import { relatedPosts } from '@/blog/related';
 
   const route = useRoute();
-  const slug = route.params.slug as string;
+  const slug = computed(() => route.params.slug as string);
 
   const isLoading = ref(true);
   const error = ref<string | null>(null);
@@ -120,7 +120,7 @@
   const READING_PROGRESS_ID = 'blog-reading-progress';
 
   const postMeta = computed<BlogPostMeta | undefined>(() => {
-    return blogPosts.find(post => post.slug === slug);
+    return blogPosts.find(post => post.slug === slug.value);
   });
 
   const related = computed(() => {
@@ -140,34 +140,38 @@
     ),
   });
 
-  if (postMeta.value) {
-    useSeo({
-      title: `${postMeta.value.title} | Lokesh Ram Chand`,
-      description: postMeta.value.excerpt,
-      path: `/blog/${slug}`,
-      image: postMeta.value.image ? absoluteUrl(postMeta.value.image) : undefined,
-      type: 'article',
-      article: {
-        publishedTime: toIsoDate(postMeta.value.date),
-        modifiedTime: toIsoDate(postMeta.value.date),
-        tags: postMeta.value.tags,
-      },
-      jsonLd: [
-        breadcrumbSchema([
-          { name: 'Home', path: '/' },
-          { name: 'Blog', path: '/blog' },
-          { name: postMeta.value.title, path: `/blog/${slug}` },
-        ]),
-      ],
-    });
-  } else {
-    useSeo({
-      title: 'Post Not Found | Lokesh Ram Chand',
-      description: 'The blog post you are looking for could not be found.',
-      path: `/blog/${slug}`,
-      noindex: true,
-    });
+  function applySeo() {
+    if (postMeta.value) {
+      useSeo({
+        title: `${postMeta.value.title} | Lokesh Ram Chand`,
+        description: postMeta.value.excerpt,
+        path: `/blog/${slug.value}`,
+        image: postMeta.value.image ? absoluteUrl(postMeta.value.image) : undefined,
+        type: 'article',
+        article: {
+          publishedTime: toIsoDate(postMeta.value.date),
+          modifiedTime: toIsoDate(postMeta.value.date),
+          tags: postMeta.value.tags,
+        },
+        jsonLd: [
+          breadcrumbSchema([
+            { name: 'Home', path: '/' },
+            { name: 'Blog', path: '/blog' },
+            { name: postMeta.value.title, path: `/blog/${slug.value}` },
+          ]),
+        ],
+      });
+    } else {
+      useSeo({
+        title: 'Post Not Found | Lokesh Ram Chand',
+        description: 'The blog post you are looking for could not be found.',
+        path: `/blog/${slug.value}`,
+        noindex: true,
+      });
+    }
   }
+
+  applySeo();
 
   function scrollToHeading(id: string) {
     lenis.scrollTo(`#${id}`, { offset: -96, duration: 1.5 });
@@ -227,7 +231,13 @@
     }
   });
 
-  onMounted(async () => {
+  async function loadPost() {
+    isLoading.value = true;
+    error.value = null;
+    tocItems.value = [];
+    activeTocId.value = '';
+    postingJsonLd.value = null;
+
     if (!postMeta.value) {
       error.value = "Error 404: Post metadata not found.";
       isLoading.value = false;
@@ -235,8 +245,8 @@
     }
 
     try {
-      const response = await fetch(`${import.meta.env.BASE_URL}blogs/${slug}.md`);
-      
+      const response = await fetch(`${import.meta.env.BASE_URL}blogs/${slug.value}.md`);
+
       if (!response.ok) {
         throw new Error("Markdown file could not be loaded.");
       }
@@ -258,5 +268,16 @@
     } finally {
       isLoading.value = false;
     }
-  });
+  }
+
+  watch(
+    () => route.params.slug,
+    () => {
+      applySeo();
+      loadPost();
+      lenis.scrollTo(0, { immediate: true });
+    },
+  );
+
+  onMounted(loadPost);
 </script>
