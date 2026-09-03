@@ -139,4 +139,4 @@ The fix here doesn't rewrite an algorithm or add a feature. It closes a gap betw
 
 Small fix, two files. But it's the kind of change that matters most at 2am, when someone is trying to recover a production system and needs to actually believe what their tools are telling them.
 
-Thanks to Congqi Xia for the quick review and merge.
+Fix: [birdwatcher#516](https://github.com/milvus-io/birdwatcher/pull/516), closing [#515](https://github.com/milvus-io/birdwatcher/issues/515). Thanks to [Congqi Xia](https://github.com/congqixia "github.com/congqixia") for the quick review and merge.
