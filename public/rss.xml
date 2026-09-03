@@ -6,7 +6,20 @@
     <atom:link href="https://lokeshrc.me/rss.xml" rel="self" type="application/rss+xml" />
     <description>A dedicated software engineer building intelligent, scalable platforms. I combine modern full-stack development with machine learning technologies to architect comprehensive, production-ready solutions.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 24 Aug 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 03 Sep 2026 00:00:00 GMT</lastBuildDate>
+    <item>
+      <title>When Success Doesn&apos;t Mean It Worked</title>
+      <link>https://lokeshrc.me/blog/blog-marshal-fix-draft</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/blog-marshal-fix-draft</guid>
+      <pubDate>Thu, 03 Sep 2026 00:00:00 GMT</pubDate>
+      <description>How a silent protobuf marshal failure in Birdwatcher, Milvus&apos;s diagnostic tool, let repair commands report success while writing corrupted data to etcd, and the fix.</description>
+      <category>Go</category>
+      <category>Milvus</category>
+      <category>etcd</category>
+      <category>Protobuf</category>
+      <category>Debugging</category>
+      <category>Open Source</category>
+    </item>
     <item>
       <title>The Bug That Wasn&apos;t a Bug Yet: Hunting a Dormant API Contract Violation in Meshery</title>
       <link>https://lokeshrc.me/blog/the-bug-that-wasn't-a-bug-yet</link>

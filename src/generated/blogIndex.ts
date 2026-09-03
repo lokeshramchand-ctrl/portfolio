@@ -3,6 +3,20 @@
 
 export const blogPosts = [
   {
+    "slug": "blog-marshal-fix-draft",
+    "title": "When Success Doesn't Mean It Worked",
+    "date": "Sept 3, 2026",
+    "excerpt": "How a silent protobuf marshal failure in Birdwatcher, Milvus's diagnostic tool, let repair commands report success while writing corrupted data to etcd, and the fix.",
+    "tags": [
+      "Go",
+      "Milvus",
+      "etcd",
+      "Protobuf",
+      "Debugging",
+      "Open Source"
+    ]
+  },
+  {
     "slug": "the-bug-that-wasn't-a-bug-yet",
     "title": "The Bug That Wasn't a Bug Yet: Hunting a Dormant API Contract Violation in Meshery",
     "date": "Aug 24, 2026",

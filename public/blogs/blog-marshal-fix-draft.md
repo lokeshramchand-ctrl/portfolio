@@ -1,3 +1,10 @@
+---
+title: "When Success Doesn't Mean It Worked"
+date: "Sept 3, 2026"
+excerpt: "How a silent protobuf marshal failure in Birdwatcher, Milvus's diagnostic tool, let repair commands report success while writing corrupted data to etcd, and the fix."
+tags: ["Go", "Milvus", "etcd", "Protobuf", "Debugging", "Open Source"]
+---
+
 # When "Success" Doesn't Mean It Worked: A Silent Data Corruption Bug in Birdwatcher
 
 Picture a hospital records clerk. Every time a doctor updates a patient's chart, the clerk files a clean copy in the archive, then stamps it "DONE."
