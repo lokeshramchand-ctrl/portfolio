@@ -1,59 +1,11 @@
 <template>
   <div id="slider" class="relative mt-12 w-full lg:mt-16">
-      <div class="col-span-6 overflow-hidden lg:col-span-3">
-        <span
-          id="current-index"
-          class="heading-6 text-flax-smoke-500/85 inline-block text-nowrap uppercase"
-        >
-          ( {{ pad(index + 1) }}<span v-if="people.length > 1">
-            / {{ pad(people.length) }}</span
-          >
-          )
-        </span>
-
-      <div
-        v-if="people.length > 1"
-        role="group"
-        aria-label="Testimonial navigation"
-        class="col-span-6 flex items-center justify-end gap-3 lg:col-span-9"
+    <div class="grid w-full grid-cols-12 items-end">
+      <span
+        class="heading-6 text-flax-smoke-500/85 col-span-full inline-block text-nowrap uppercase lg:col-span-3"
       >
-        <button
-          type="button"
-          aria-label="Previous testimonial"
-          class="group border-flax-smoke-300 text-flax-smoke-400 hover:border-flax-smoke-500 hover:bg-flax-smoke-500 hover:text-flax-smoke-50 flex size-10 items-center justify-center rounded-full border transition-colors duration-500 sm:size-11"
-          @click="clickPrev"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="size-4 transition-transform duration-500 group-hover:-translate-x-0.5"
-          >
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-        </button>
-        <button
-          type="button"
-          aria-label="Next testimonial"
-          class="group border-flax-smoke-300 text-flax-smoke-400 hover:border-flax-smoke-500 hover:bg-flax-smoke-500 hover:text-flax-smoke-50 flex size-10 items-center justify-center rounded-full border transition-colors duration-500 sm:size-11"
-          @click="clickNext"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="size-4 transition-transform duration-500 group-hover:translate-x-0.5"
-          >
-            <polyline points="9 18 15 12 9 6" />
-          </svg>
-        </button>
-      </div>
+        ( {{ pad(index + 1) }} )
+      </span>
     </div>
 
     <div class="mt-10 grid grid-cols-12 lg:mt-14">
@@ -65,7 +17,7 @@
           aria-hidden="true"
           viewBox="0 0 24 24"
           fill="currentColor"
-          class="text-flax-smoke-500 pointer-events-none absolute top-0 left-0 size-20 opacity-0 sm:size-28 lg:size-32"
+          class="text-flax-smoke-500 pointer-events-none absolute -top-4 -left-2 size-24 opacity-0 sm:size-36 lg:-top-6 lg:size-44"
         >
           <path
             d="M9.983 3v7.391c0 5.704-3.731 9.57-8.983 10.609l-.995-2.151c2.432-.917 3.995-3.638 3.995-5.849h-4v-10h9.983zm14.017 0v7.391c0 5.704-3.748 9.571-9 10.609l-.996-2.151c2.433-.917 3.996-3.638 3.996-5.849h-4v-10h10z"
@@ -74,21 +26,21 @@
 
         <blockquote
           id="quote-text"
-          class="heading-3 relative max-w-[34ch] leading-snug font-semibold"
+          class="heading-3 relative z-10 max-w-[34ch] leading-snug font-semibold"
           v-html="computedQuote"
         ></blockquote>
 
         <div
           id="quote-author"
-          class="relative mt-10 flex items-baseline gap-2 text-sm opacity-0"
+          class="border-flax-smoke-300 relative z-10 mt-12 flex flex-wrap items-baseline gap-x-4 gap-y-2 border-t pt-6 opacity-0"
         >
-          <cite class="text-flax-smoke-900 font-medium not-italic">
+          <cite class="heading-5 text-flax-smoke-900 font-title font-semibold not-italic">
             {{ people[index].author }}
           </cite>
-          <span class="text-flax-smoke-400">— {{ people[index].position }}</span>
+          <span class="text-flax-smoke-500 heading-6 font-mono uppercase">
+            — {{ people[index].position }}
+          </span>
         </div>
-
-        <div id="quote-overlay" class="bg-flax-smoke-500 absolute inset-0"></div>
       </div>
     </div>
   </div>
@@ -98,7 +50,6 @@
   import { computed, onMounted, ref } from 'vue';
   import { textSplitterIntoChar } from '@/functions';
   import { animateSplitText, fadeIn } from '@/animations';
-  import gsap from 'gsap';
 
   const pad = (n: number) => n.toString().padStart(2, '0');
 
@@ -106,118 +57,7 @@
     return textSplitterIntoChar(people[index.value].quote);
   });
 
-  const canClick = ref(true);
-
-  const animateTextTransition = (direction: 'up' | 'zero') => {
-    const translateY = direction === 'up' ? '-100%' : '0%';
-    gsap.to('#quote-text .letters', {
-      translateY,
-      duration: 0.5,
-      stagger: 0.001,
-      ease: 'power1.inOut',
-    });
-  };
-
-  const animateQuoteAuthorTransition = (
-    direction: 'left' | 'right',
-    onCompleteFunc?: () => void,
-  ) => {
-    const translateX = direction === 'left' ? '-50%' : '0%';
-    const opacity = direction === 'left' ? 0 : 1;
-    gsap.to('#quote-author', {
-      translateX,
-      opacity,
-      duration: 0.5,
-      ease: 'power1.inOut',
-      onComplete: () => {
-        if (onCompleteFunc) onCompleteFunc();
-      },
-    });
-  };
-
-  const animateCurrentQuoteIndex = (
-    direction: 'up' | 'zero',
-    onCompleteFunc?: () => void,
-  ) => {
-    const translateY = direction === 'up' ? '-100%' : '0%';
-    gsap.to(['#current-index'], {
-      translateY,
-      duration: 0.5,
-      ease: 'power1.inOut',
-      onComplete: () => {
-        if (onCompleteFunc) onCompleteFunc();
-      },
-    });
-  };
-
-  const animateQuoteOverlay = (
-    newIndex: number,
-    onCompleteFunc?: () => void,
-  ) => {
-    gsap.to('#quote-overlay', {
-      translateY: '0%',
-      duration: 0.7,
-      ease: 'power4.inOut',
-      onComplete: () => {
-        index.value = newIndex;
-        if (onCompleteFunc) onCompleteFunc();
-
-        gsap.to('#quote-overlay', {
-          translateY: '-100%',
-          duration: 0.7,
-          ease: 'power4.inOut',
-          onComplete: () => {
-            gsap.set('#quote-overlay', { translateY: '100%' });
-            canClick.value = true;
-          },
-        });
-      },
-    });
-  };
-
-  // Function to trigger the quote change
-  const changeQuote = (newIndex: number) => {
-    animateTextTransition('up');
-    animateQuoteAuthorTransition('left');
-    animateQuoteOverlay(newIndex, () => {
-      setTimeout(() => {
-        animateTextTransition('zero');
-      }, 25);
-      animateCurrentQuoteIndex('zero');
-      animateQuoteAuthorTransition('right');
-    });
-    animateCurrentQuoteIndex('up', () => {
-      gsap.set(['#current-index'], {
-        y: '100%',
-      });
-    });
-  };
-
-  // Event handlers for next and previous clicks
-  const clickNext = () => {
-    if (!canClick.value) return;
-
-    canClick.value = false;
-    let newIndex = (index.value + 1) % people.length;
-    if (newIndex < people.length) changeQuote(newIndex);
-  };
-
-  const clickPrev = () => {
-    if (!canClick.value) return;
-
-    canClick.value = false;
-    const newIndex = (index.value - 1 + people.length) % people.length;
-    changeQuote(newIndex);
-  };
-
   onMounted(() => {
-    gsap.set('#current-index', {
-      translateY: 0,
-    });
-    gsap.set('#quote-overlay', {
-      translateY: '100%',
-    });
-
     fadeIn('#quote-mark', 0.08, 1.2);
     animateSplitText('#quote-text .letters', '#quote-author', 0.7, 0, 0);
   });
