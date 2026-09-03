@@ -3,9 +3,50 @@
 
 export const blogPosts = [
   {
+    "slug": "the-bug-that-wasn't-a-bug-yet",
+    "title": "The Bug That Wasn't a Bug Yet: Hunting a Dormant API Contract Violation in Meshery",
+    "date": "Aug 24, 2026",
+    "excerpt": "How reading a naming-convention doc closely enough led to a 20-site fix for a pagination bug in a CNCF project that hadn't broken anything, yet.",
+    "tags": [
+      "Meshery",
+      "Go",
+      "API Contracts",
+      "Bug Fixing",
+      "Open Source",
+      "Software Engineering"
+    ]
+  },
+  {
+    "slug": "hardening-fastapi-ai-api-preproduction",
+    "title": "Hardening a 15-Phase AI API for Pre-Production",
+    "date": "Aug 22, 2026",
+    "excerpt": "An architectural deep dive and pre-production audit of Velar, detailing how to secure a FastAPI service against concurrency races, missing indexes, root containers, and dependency CVEs.",
+    "tags": [
+      "Machine Learning",
+      "FastAPI",
+      "MongoDB",
+      "Docker",
+      "Security",
+      "Production Readiness"
+    ]
+  },
+  {
+    "slug": "why-i-didnt-just-use-chatgpt-for-transaction-parsing",
+    "title": "Why I Didn't Just Use ChatGPT for Transaction Parsing",
+    "date": "Aug 8, 2026",
+    "excerpt": "Every fintech demo this year routes bank SMS text through a chat completion and calls it categorization. Here's the pipeline I built instead: three cheap, boring, deterministic layers before an LLM ever gets a vote.",
+    "tags": [
+      "Machine Learning",
+      "FastAPI",
+      "MongoDB",
+      "System Architecture",
+      "LLM"
+    ]
+  },
+  {
     "slug": "grounded-rag-pipeline-milvus-ollama-velar",
     "title": "Building a Grounded RAG Pipeline for Financial Data with Milvus and Ollama",
-    "date": "August 20, 2026",
+    "date": "Aug 7, 2026",
     "excerpt": "An architectural deep dive into how Velar builds a privacy-first, grounded RAG pipeline using Milvus, Ollama, and FastAPI without relying on external LLM APIs.",
     "tags": [
       "Machine Learning",
@@ -19,47 +60,9 @@ export const blogPosts = [
     ]
   },
   {
-    "slug": "why-i-didnt-just-use-chatgpt-for-transaction-parsing",
-    "title": "Why I Didn't Just Use ChatGPT for Transaction Parsing",
-    "date": "August 20, 2026",
-    "excerpt": "Every fintech demo this year routes bank SMS text through a chat completion and calls it categorization. Here's the pipeline I built instead: three cheap, boring, deterministic layers before an LLM ever gets a vote.",
-    "tags": [
-      "Machine Learning",
-      "FastAPI",
-      "MongoDB",
-      "System Architecture",
-      "LLM"
-    ]
-  },
-  {
-    "slug": "personal-cloud-self-hosting",
-    "title": "Owning the Stack: Building My Personal Cloud",
-    "date": "July 24, 2026",
-    "excerpt": "A journey into self-hosting and the lessons learned while building a personal cloud infrastructure.",
-    "tags": [
-      "Architecture",
-      "Self-Hosting",
-      "Cloud"
-    ]
-  },
-  {
-    "slug": "hardening-fastapi-ai-api-preproduction",
-    "title": "Hardening a 15-Phase AI API for Pre-Production",
-    "date": "July 12, 2026",
-    "excerpt": "An architectural deep dive and pre-production audit of Velar, detailing how to secure a FastAPI service against concurrency races, missing indexes, root containers, and dependency CVEs.",
-    "tags": [
-      "Machine Learning",
-      "FastAPI",
-      "MongoDB",
-      "Docker",
-      "Security",
-      "Production Readiness"
-    ]
-  },
-  {
     "slug": "designing-trust-state-machine",
     "title": "Designing a Memory State Machine for ML Predictions",
-    "date": "June 12, 2026",
+    "date": "Aug 1, 2026",
     "excerpt": "An architectural deep dive into how Velar tracks merchant trust explicitly using a frequency-based state machine, built with FastAPI and MongoDB.",
     "tags": [
       "Machine Learning",
@@ -72,12 +75,23 @@ export const blogPosts = [
   {
     "slug": "nginx-configuration-maintainable",
     "title": "Building an Nginx Configuration I Could Actually Maintain",
-    "date": "June 12, 2026",
+    "date": "July 22, 2026",
     "excerpt": "A practical guide to creating and maintaining Nginx configurations that are both efficient and easy to manage.",
     "tags": [
       "DevOps",
       "Infrastructure",
       "Engineering"
+    ]
+  },
+  {
+    "slug": "personal-cloud-self-hosting",
+    "title": "Owning the Stack: Building My Personal Cloud",
+    "date": "July 20, 2026",
+    "excerpt": "A journey into self-hosting and the lessons learned while building a personal cloud infrastructure.",
+    "tags": [
+      "Architecture",
+      "Self-Hosting",
+      "Cloud"
     ]
   }
 ] as const;

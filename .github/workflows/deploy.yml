@@ -17,21 +17,24 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20' # Match this to your project's node version
+          cache: 'npm'
 
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Project
         run: npm run build
 
       - name: Copy to Nginx Directory
         run: |
-          # Clear the old files
-          rm -rf /var/www/portfolio/dist/*
-          
-          # Copy the new build files 
-          # (Vue usually outputs to 'dist', React usually outputs to 'build')
-          cp -r dist/* /var/www/portfolio/dist/ 
+          # Build into a fresh staging dir, then swap atomically so Nginx
+          # never serves a half-written directory mid-deploy.
+          rm -rf /var/www/portfolio/dist.new
+          cp -r dist /var/www/portfolio/dist.new
+          rm -rf /var/www/portfolio/dist.old
+          mv /var/www/portfolio/dist /var/www/portfolio/dist.old
+          mv /var/www/portfolio/dist.new /var/www/portfolio/dist
+          rm -rf /var/www/portfolio/dist.old
 
       - name: Send ntfy notification
         if: always()
