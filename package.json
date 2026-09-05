@@ -13,8 +13,10 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.14",
+    "@types/dompurify": "^3.0.5",
     "@unhead/vue": "^3.2.3",
     "@vueuse/core": "^13.0.0",
+    "dompurify": "^3.4.14",
     "gsap": "^3.12.7",
     "lenis": "^1.2.3",
     "marked": "^18.0.5",
