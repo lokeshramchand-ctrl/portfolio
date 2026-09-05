@@ -9,8 +9,8 @@
     <lastBuildDate>Thu, 03 Sep 2026 00:00:00 GMT</lastBuildDate>
     <item>
       <title>When Success Doesn&apos;t Mean It Worked</title>
-      <link>https://lokeshrc.me/blog/blog-marshal-fix-draft</link>
-      <guid isPermaLink="true">https://lokeshrc.me/blog/blog-marshal-fix-draft</guid>
+      <link>https://lokeshrc.me/blog/birdwatcher-merge</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/birdwatcher-merge</guid>
       <pubDate>Thu, 03 Sep 2026 00:00:00 GMT</pubDate>
       <description>How a silent protobuf marshal failure in Birdwatcher, Milvus&apos;s diagnostic tool, let repair commands report success while writing corrupted data to etcd, and the fix.</description>
       <category>Go</category>

@@ -1,4 +1,5 @@
 import { marked } from 'marked';
+import DOMPurify from 'dompurify';
 
 export interface TocItem {
   id: string;
@@ -46,6 +47,7 @@ export function parseMarkdownWithToc(markdown: string): { html: string; toc: Toc
     return `<h${token.depth} id="${id}">${inner}</h${token.depth}>\n`;
   };
 
-  const html = marked.parse(stripFrontmatter(markdown), { renderer }) as string;
+  const rawHtml = marked.parse(stripFrontmatter(markdown), { renderer }) as string;
+  const html = DOMPurify.sanitize(rawHtml);
   return { html, toc };
 }
