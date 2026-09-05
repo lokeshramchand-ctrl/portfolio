@@ -1,6 +1,6 @@
 ---
 title: "Building a Grounded RAG Pipeline for Financial Data with Milvus and Ollama"
-date: "August 7, 2026"
+date: "Aug 7, 2026"
 excerpt: "An architectural deep dive into how Velar builds a privacy-first, grounded RAG pipeline using Milvus, Ollama, and FastAPI without relying on external LLM APIs."
 tags: ["Machine Learning", "FastAPI", "MongoDB", "Milvus", "Ollama", "RAG", "System Architecture", "Privacy"]
 ---

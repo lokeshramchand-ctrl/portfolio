@@ -1,6 +1,6 @@
 ---
 title: "Why I Didn't Just Use ChatGPT for Transaction Parsing"
-date: "August 8, 2026"
+date: "Aug 8, 2026"
 excerpt: "Every fintech demo this year routes bank SMS text through a chat completion and calls it categorization. Here's the pipeline I built instead: three cheap, boring, deterministic layers before an LLM ever gets a vote."
 tags: ["Machine Learning", "FastAPI", "MongoDB", "System Architecture", "LLM"]
 ---

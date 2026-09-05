@@ -1,6 +1,6 @@
 ---
 title: "Designing a Memory State Machine for ML Predictions"
-date: "Augus, 2026"
+date: "Aug 1, 2026"
 excerpt: "An architectural deep dive into how Velar tracks merchant trust explicitly using a frequency-based state machine, built with FastAPI and MongoDB."
 tags: ["Machine Learning", "FastAPI", "MongoDB", "System Architecture", "Engineering"]
 ---

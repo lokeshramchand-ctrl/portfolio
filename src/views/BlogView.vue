@@ -18,7 +18,8 @@
     <div v-if="featured && matchedSlugs.has(featured.slug)" class="w-full max-w-6xl mx-auto z-10 relative mb-16">
       <router-link
         :to="`/blog/${featured.slug}`"
-        class="blog-item-anim group grid gap-8 md:grid-cols-[1.1fr_1fr] items-start pb-16 border-b-4 border-flax-smoke-900"
+        class="blog-item-anim group grid gap-8 items-start pb-16 border-b-4 border-flax-smoke-900"
+        :class="featured.image ? 'md:grid-cols-[1.1fr_1fr]' : 'md:grid-cols-1'"
       >
         <div
           v-if="featured.image"
@@ -31,9 +32,8 @@
             loading="lazy"
           />
         </div>
-        <div v-else class="hidden md:block" />
 
-        <div class="flex flex-col items-start">
+        <div class="flex flex-col items-start" :class="{ 'max-w-3xl': !featured.image }">
           <p class="font-mono text-xs font-bold tracking-[0.2em] text-flax-smoke-500 uppercase mb-4">
             Featured &middot; {{ featured.tags[0] ?? 'Dispatch' }}
           </p>

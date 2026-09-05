@@ -1,3 +1,4 @@
+import { computed, type MaybeRefOrGetter, toValue } from 'vue';
 import { useHead, useSeoMeta } from '@unhead/vue';
 import {
   DEFAULT_DESCRIPTION,
@@ -25,12 +26,20 @@ interface SeoOptions {
   };
 }
 
-export function useSeo(options: SeoOptions) {
-  const title = options.title ?? DEFAULT_TITLE;
-  const description = options.description ?? DEFAULT_DESCRIPTION;
-  const image = options.image ?? DEFAULT_OG_IMAGE;
-  const url = absoluteUrl(options.path);
-  const type = options.type ?? 'website';
+/**
+ * Must be called synchronously during a component's setup() — unhead's
+ * useHead/useSeoMeta read Vue's injection context, which is only available
+ * on the setup call stack. Pass a getter/ref/computed for `options` so this
+ * can be registered once and still update reactively on later navigations
+ * (e.g. an in-place route param change) instead of being re-invoked outside
+ * setup, which would throw "useHead() was called without provide context".
+ */
+export function useSeo(options: MaybeRefOrGetter<SeoOptions>) {
+  const title = computed(() => toValue(options).title ?? DEFAULT_TITLE);
+  const description = computed(() => toValue(options).description ?? DEFAULT_DESCRIPTION);
+  const image = computed(() => toValue(options).image ?? DEFAULT_OG_IMAGE);
+  const url = computed(() => absoluteUrl(toValue(options).path));
+  const type = computed(() => toValue(options).type ?? 'website');
 
   useSeoMeta({
     title,
@@ -47,10 +56,10 @@ export function useSeo(options: SeoOptions) {
     twitterDescription: description,
     twitterImage: image,
     twitterSite: TWITTER_HANDLE,
-    robots: options.noindex ? 'noindex, nofollow' : 'index, follow',
-    articlePublishedTime: options.article?.publishedTime,
-    articleModifiedTime: options.article?.modifiedTime,
-    articleTag: options.article?.tags,
+    robots: computed(() => (toValue(options).noindex ? 'noindex, nofollow' : 'index, follow')),
+    articlePublishedTime: computed(() => toValue(options).article?.publishedTime),
+    articleModifiedTime: computed(() => toValue(options).article?.modifiedTime),
+    articleTag: computed(() => toValue(options).article?.tags),
   });
 
   useHead({
@@ -63,11 +72,13 @@ export function useSeo(options: SeoOptions) {
         href: absoluteUrl('/rss.xml'),
       },
     ],
-    script: (options.jsonLd ?? [])
-      .filter((schema): schema is Record<string, unknown> => Boolean(schema))
-      .map((schema) => ({
-        type: 'application/ld+json',
-        innerHTML: JSON.stringify(schema),
-      })),
+    script: computed(() =>
+      (toValue(options).jsonLd ?? [])
+        .filter((schema): schema is Record<string, unknown> => Boolean(schema))
+        .map((schema) => ({
+          type: 'application/ld+json',
+          innerHTML: JSON.stringify(schema),
+        })),
+    ),
   });
 }
