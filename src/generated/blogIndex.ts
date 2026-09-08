@@ -3,7 +3,7 @@
 
 export const blogPosts = [
   {
-    "slug": "blog-marshal-fix-draft",
+    "slug": "birdwatcher-merge",
     "title": "When Success Doesn't Mean It Worked",
     "date": "Sept 3, 2026",
     "excerpt": "How a silent protobuf marshal failure in Birdwatcher, Milvus's diagnostic tool, let repair commands report success while writing corrupted data to etcd, and the fix.",
