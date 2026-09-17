@@ -1,13 +1,13 @@
 <template>
   <BurgerMenuBtn
     @click="toggleBtnClickAnimation"
-    class="z-9999 scale-0 drop-shadow-lg"
+    class="z-9999 scale-0 drop-shadow-lg max-md:scale-100"
     id="burger"
   />
 
   <div
     @click="toggleBtnClickAnimation"
-    class="fixed inset-0 z-9998 size-full bg-flax-smoke-50 opacity-50 select-none"
+    class="bg-flax-smoke-50 fixed inset-0 z-9998 size-full opacity-50 select-none"
     :class="{ hidden: !isNavbarOpen }"
   ></div>
 
@@ -20,28 +20,32 @@
     <Circles id="circles" class="absolute top-0 right-0 opacity-25" />
     <div class="flex h-full flex-col items-center justify-between">
       <div class="relative z-19 w-full">
-       <ul
-  class="heading-2 text-flax-smoke-50 mt-12 font-bold md:mt-24"
-  id="navLinks"
->
-  <li
-    class="overflow-y-clip"
-    v-for="l in navbarLinks"
-    :key="l.label"
-    :id="l.label"
-  >
-    <a
-      :href="l.url"
-      @click="(e) => handleSectionClick(e, l.url)"
-      class="group my-2 flex h-full w-fit translate-y-full cursor-pointer items-center justify-start leading-none will-change-auto"
-    >
-      <span class="bg-flax-smoke-50 h-4 w-4 scale-0 rounded-full opacity-0 transition-all duration-300 ease-in-out group-hover:scale-100 group-hover:opacity-100"></span>
-      <p class="font-fancy -translate-x-5 transition-all duration-300 ease-in-out group-hover:translate-x-5">
-        {{ l.label }}
-      </p>
-    </a>
-  </li>
-</ul>
+        <ul
+          class="heading-2 text-flax-smoke-50 mt-12 font-bold md:mt-24"
+          id="navLinks"
+        >
+          <li
+            class="overflow-y-clip"
+            v-for="l in navbarLinks"
+            :key="l.label"
+            :id="l.label"
+          >
+            <a
+              :href="l.url"
+              @click="(e) => handleSectionClick(e, l.url)"
+              class="group my-2 flex h-full w-fit translate-y-full cursor-pointer items-center justify-start leading-none will-change-auto"
+            >
+              <span
+                class="bg-flax-smoke-50 h-4 w-4 scale-0 rounded-full opacity-0 transition-all duration-300 ease-in-out group-hover:scale-100 group-hover:opacity-100"
+              ></span>
+              <p
+                class="font-fancy -translate-x-5 transition-all duration-300 ease-in-out group-hover:translate-x-5"
+              >
+                {{ l.label }}
+              </p>
+            </a>
+          </li>
+        </ul>
       </div>
 
       <div class="w-full">
@@ -102,7 +106,7 @@
       </div>
       <div class="flex">
         <ul
-          class="w-full flex-1 gap-1 overflow-y-hidden text-lg font-medium md:flex md:gap-2 md:text-xl lg:gap-4 lg:text-2xl xl:text-3xl"
+          class="hidden w-full flex-1 gap-1 overflow-y-hidden text-lg font-medium md:flex md:gap-2 md:text-xl lg:gap-4 lg:text-2xl xl:text-3xl"
         >
           <Link
             v-for="(l, index) in navLinks"

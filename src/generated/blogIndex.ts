@@ -3,6 +3,19 @@
 
 export const blogPosts = [
   {
+    "slug": "apicurio-xsd-backward-compatibility-bug",
+    "title": "A silent backward-compatibility bug in Apicurio Registry's XSD checker",
+    "date": "Sept 15, 2026",
+    "excerpt": "A code comment said this case was already handled. It wasn't.",
+    "tags": [
+      "Java",
+      "Apicurio Registry",
+      "Open Source",
+      "Schema Compatibility",
+      "Debugging"
+    ]
+  },
+  {
     "slug": "birdwatcher-merge",
     "title": "When Success Doesn't Mean It Worked",
     "date": "Sept 3, 2026",
