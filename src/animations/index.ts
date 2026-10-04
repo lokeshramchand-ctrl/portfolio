@@ -67,6 +67,15 @@ const navbarScale = (selector: string, trigger: string) => {
   // bound to an already-unmounted node first.
   ScrollTrigger.getById('navbar-scale')?.kill();
 
+  // Below md, the desktop nav links are hidden and the burger button is
+  // the only way to open the menu, so it must stay visible from the top
+  // of the page instead of only revealing itself once the user scrolls
+  // past the hero.
+  if (!window.matchMedia('(min-width: 768px)').matches) {
+    gsap.set(selector, { scale: 1 });
+    return;
+  }
+
   gsap.to(selector, {
     scrollTrigger: {
       id: 'navbar-scale',
