@@ -1,0 +1,34 @@
+# Lokesh Ram Chand B
+
+> Software engineer building full-stack products and AI/ML systems (backend architecture, retrieval-augmented generation, production hardening). Based in Hyderabad, India.
+
+This site is an interactive portfolio. The links below point to crawlable, text-first resources for assistants and search engines that don't execute JavaScript.
+
+## Primary
+
+- [Knowledge summary](https://lokeshrc.me/knowledge): Plain-text bio, education, work experience, open-source contributions, projects, and skills.
+- [Portfolio](https://lokeshrc.me/): Full interactive site (home, projects, contact).
+- [Blog](https://lokeshrc.me/blog): Long-form technical writing.
+- [Sitemap](https://lokeshrc.me/sitemap.xml): All indexable URLs.
+
+## Blog posts (raw text)
+
+- [Owning the Stack: Building My Personal Cloud](https://lokeshrc.me/blogs/personal-cloud-self-hosting.md)
+- [Building an Nginx Configuration I Could Actually Maintain](https://lokeshrc.me/blogs/nginx-configuration-maintainable.md)
+- [A silent backward-compatibility bug in Apicurio Registry's XSD checker](https://lokeshrc.me/blogs/apicurio-xsd-backward-compatibility-bug.md)
+- [When Success Doesn't Mean It Worked](https://lokeshrc.me/blogs/birdwatcher-merge.md)
+- [The Bug That Wasn't a Bug Yet](https://lokeshrc.me/blogs/the-bug-that-wasn't-a-bug-yet.md)
+- [Hardening a 15-Phase AI API for Pre-Production](https://lokeshrc.me/blogs/hardening-fastapi-ai-api-preproduction.md)
+- [Why I Didn't Just Use ChatGPT for Transaction Parsing](https://lokeshrc.me/blogs/why-i-didnt-just-use-chatgpt-for-transaction-parsing.md)
+- [Building a Grounded RAG Pipeline for Financial Data with Milvus and Ollama](https://lokeshrc.me/blogs/grounded-rag-pipeline-milvus-ollama-velar.md)
+- [Designing a Memory State Machine for ML Predictions](https://lokeshrc.me/blogs/designing-trust-state-machine.md)
+
+## Projects
+
+- [Velar](https://github.com/lokeshramchand-ctrl/Velar): Solo-built AI financial-intelligence platform (FastAPI, MongoDB, Milvus, Ollama RAG).
+- [MapLayer](https://github.com/lokeshramchand-ctrl/MapLayer): Geospatial visualization and GeoRAG platform for San Diego zoning/hazard data (React, OpenLayers, FastAPI).
+
+## Contact
+
+- GitHub: https://github.com/lokeshramchand-ctrl
+- LinkedIn: https://www.linkedin.com/in/lokeshramchand/

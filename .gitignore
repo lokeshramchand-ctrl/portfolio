@@ -13,6 +13,10 @@ dist-ssr
 *.local
 graphify-out
 
+# Private working notes (own nested git repo) — source material for public/knowledge.md,
+# never published or committed as-is.
+ME/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
