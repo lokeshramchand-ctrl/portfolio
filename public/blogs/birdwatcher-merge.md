@@ -17,15 +17,15 @@ That's the shape of a bug I recently fixed in [Birdwatcher](https://github.com/m
 
 ## The story, for anyone
 
-Milvus stores its operational metadata (things like which segments exist, which indexes are built, which channel a piece of data belongs to) in [etcd](https://etcd.io/), a small, fast key-value store designed for exactly this kind of bookkeeping. Think of etcd as the library's card catalog. The actual books (vectors, embeddings, search indexes) live elsewhere, but the catalog is what tells every part of the system where to look.
+Milvus stores its operational metadata (things like which segments exist, which indexes are built, which channel a piece of data belongs to) in [etcd](https://etcd.io/), a small, fast key-value store built for exactly this kind of bookkeeping. Think of etcd as the library's card catalog. The actual books (vectors, embeddings, search indexes) live elsewhere, but the catalog is what tells every part of the system where to look.
 
-Sometimes that catalog gets damaged. A crash mid-write, a version migration, a rare edge case nobody tested for, and now some entry points to a segment that doesn't exist, or a field is missing where a required one should be. Birdwatcher exists to let an operator go in, find those broken entries, and repair them directly.
+Sometimes that catalog gets damaged: a crash mid-write, a version migration, a rare edge case nobody tested for. Now some entry points to a segment that doesn't exist, or a field is missing where a required one should be. Birdwatcher exists so an operator can go in, find those broken entries, and repair them directly.
 
 Here's where it gets interesting. Repairing an entry in etcd isn't as simple as editing a JSON file. Milvus stores its metadata using [Protocol Buffers](https://protobuf.dev/) (protobuf), a compact binary format that's fast to read and write but not human-editable. So the repair process has three steps: read the broken entry, fix it in memory as a Go struct, then convert that struct back into protobuf bytes before writing it to etcd.
 
-That middle-to-last step, converting the fixed struct into bytes, is where the bug lived. If that conversion failed, the old code printed a warning to the terminal and then wrote the result anyway. The result of a failed conversion isn't nothing. It's a chunk of bytes that looks like data but isn't valid data. The repair command reported success either way. An operator running the repair would see a clean "done," walk away believing the entry was fixed, and the entry now sitting in etcd would be quietly unreadable.
+That last step, converting the fixed struct into bytes, is where the bug lived. If that conversion failed, the old code printed a warning to the terminal and then wrote the result anyway. The result of a failed conversion isn't nothing. It's a chunk of bytes that looks like data but isn't valid data. The repair command reported success either way. An operator running the repair would see a clean "done," walk away believing the entry was fixed, and the entry now sitting in etcd would be quietly unreadable.
 
-Nobody would find out until something downstream tried to read that entry and choked on it, possibly hours or days later, in an unrelated part of the system, far from any log line connecting it back to the repair. That's the failure mode that makes this class of bug expensive: the tool didn't just fail, it failed while telling you it succeeded.
+Nobody would find out until something downstream tried to read that entry and choked on it, possibly hours or days later, in an unrelated part of the system, far from any log line connecting it back to the repair. That's what makes this class of bug expensive: the tool didn't just fail, it failed while telling you it succeeded.
 
 ## The fix
 
@@ -48,7 +48,7 @@ if err != nil {
 return cli.Save(context.Background(), p, string(bs))
 ```
 
-Same shape of bug existed in a sibling function that repairs segment metadata, so I applied the identical fix there. I also added tests for both functions that specifically simulate a marshal failure and assert that the save never happens, so this can't quietly come back in a future refactor.
+The same shape of bug existed in a sibling function that repairs segment metadata, so I applied the identical fix there. I also added tests for both functions that specifically simulate a marshal failure and assert that the save never happens, so this can't quietly come back in a future refactor.
 
 ## Why this matters more than the diff suggests
 
@@ -135,7 +135,7 @@ A second test case in the same file exercises the happy path: a valid index gets
 
 ## Closing thought
 
-The fix here doesn't rewrite an algorithm or add a feature. It closes a gap between what an error handling block looks like and what it does. `if err != nil { log it }` reads like error handling. It isn't, unless something after that block also stops. That's an easy thing to write once, under deadline, in a function that otherwise works fine on the happy path, and it's an easy thing to keep shipping unnoticed for a long time, because the bug only shows up when the unhappy path actually gets hit, which by definition is rare.
+The fix here doesn't rewrite an algorithm or add a feature. It closes a gap between what an error-handling block looks like and what it does. `if err != nil { log it }` reads like error handling. It isn't, unless something after that block also stops. That's an easy thing to write once, under deadline, in a function that otherwise works fine on the happy path, and it's an easy thing to keep shipping unnoticed for a long time, because the bug only shows up when the unhappy path actually gets hit, which by definition is rare.
 
 Small fix, two files. But it's the kind of change that matters most at 2am, when someone is trying to recover a production system and needs to actually believe what their tools are telling them.
 
