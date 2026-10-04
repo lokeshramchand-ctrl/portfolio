@@ -6,7 +6,19 @@
     <atom:link href="https://lokeshrc.me/rss.xml" rel="self" type="application/rss+xml" />
     <description>A dedicated software engineer building intelligent, scalable platforms. I combine modern full-stack development with machine learning technologies to architect comprehensive, production-ready solutions.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 03 Sep 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 15 Sep 2026 00:00:00 GMT</lastBuildDate>
+    <item>
+      <title>A silent backward-compatibility bug in Apicurio Registry&apos;s XSD checker</title>
+      <link>https://lokeshrc.me/blog/apicurio-xsd-backward-compatibility-bug</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/apicurio-xsd-backward-compatibility-bug</guid>
+      <pubDate>Tue, 15 Sep 2026 00:00:00 GMT</pubDate>
+      <description>A code comment said this case was already handled. It wasn&apos;t.</description>
+      <category>Java</category>
+      <category>Apicurio Registry</category>
+      <category>Open Source</category>
+      <category>Schema Compatibility</category>
+      <category>Debugging</category>
+    </item>
     <item>
       <title>When Success Doesn&apos;t Mean It Worked</title>
       <link>https://lokeshrc.me/blog/birdwatcher-merge</link>
