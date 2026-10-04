@@ -23,6 +23,19 @@ This site is an interactive portfolio. The links below point to crawlable, text-
 - [Building a Grounded RAG Pipeline for Financial Data with Milvus and Ollama](https://lokeshrc.me/blogs/grounded-rag-pipeline-milvus-ollama-velar.md)
 - [Designing a Memory State Machine for ML Predictions](https://lokeshrc.me/blogs/designing-trust-state-machine.md)
 
+## Deep-dive resources (raw text)
+
+Extended detail behind the Knowledge summary above — education record, internship case studies, and per-project/per-contribution write-ups.
+
+- [Education — detailed academic record](https://lokeshrc.me/resources/education.md)
+- [Internship — Wellington Water Watchers](https://lokeshrc.me/resources/internship-wellington-water-watchers.md)
+- [Project deep-dive — Velar](https://lokeshrc.me/resources/project-velar.md)
+- [Project deep-dive — MapLayer](https://lokeshrc.me/resources/project-maplayer.md)
+- [OSS contribution — Apicurio Registry PR #9380](https://lokeshrc.me/resources/oss-apicurio-pr9380.md)
+- [OSS contribution — Milvus Birdwatcher PR #516](https://lokeshrc.me/resources/oss-birdwatcher-pr516.md)
+- [OSS contribution — Milvus Birdwatcher PR #521](https://lokeshrc.me/resources/oss-birdwatcher-pr521.md)
+- [OSS contribution — Milvus Birdwatcher PR #542](https://lokeshrc.me/resources/oss-birdwatcher-pr542.md)
+
 ## Projects
 
 - [Velar](https://github.com/lokeshramchand-ctrl/Velar): Solo-built AI financial-intelligence platform (FastAPI, MongoDB, Milvus, Ollama RAG).

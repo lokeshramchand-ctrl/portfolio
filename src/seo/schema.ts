@@ -41,6 +41,44 @@ export function personSchema() {
     image: DEFAULT_OG_IMAGE,
     url: SITE_URL,
     sameAs: [GITHUB_URL, LINKEDIN_URL].filter(Boolean),
+    alumniOf: {
+      '@type': 'CollegeOrUniversity',
+      name: 'Koneru Lakshmaiah Education Foundation (KL University)',
+      address: 'Aziz Nagar, Hyderabad, Telangana, India',
+    },
+    knowsAbout: [
+      'Full-Stack Development',
+      'Artificial Intelligence',
+      'Machine Learning',
+      'Retrieval-Augmented Generation (RAG)',
+      'React',
+      'Vue',
+      'Node.js',
+      'Python',
+      'TypeScript',
+      'FastAPI',
+      'MongoDB',
+      'Vector Search',
+      'Distributed Systems',
+      'Security Engineering',
+    ],
+    hasCredential: [
+      {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'certification',
+        name: 'AWS Certified Cloud Practitioner',
+      },
+      {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'certification',
+        name: 'MongoDB Associate Database Administrator',
+      },
+      {
+        '@type': 'EducationalOccupationalCredential',
+        credentialCategory: 'certification',
+        name: 'Automation Anywhere Certified Advanced RPA Professional',
+      },
+    ],
   };
 }
 

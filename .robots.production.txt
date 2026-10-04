@@ -5,6 +5,7 @@ Allow: /knowledge
 Allow: /knowledge.md
 Allow: /llms.txt
 Allow: /blogs/
+Allow: /resources/
 
 # Sitemap must be a valid, absolute XML file URL
 Sitemap: https://lokeshrc.me/sitemap.xml

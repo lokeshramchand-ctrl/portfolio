@@ -3,6 +3,7 @@
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/knowledge", "destination": "/knowledge.md" },
+    { "source": "/resources/([^/.]+)", "destination": "/resources/$1.md" },
     { "source": "/((?!assets/|blogs/|fonts/|.*\\..*).*)", "destination": "/index.html" }
   ],
   "headers": [
@@ -20,6 +21,10 @@
     },
     {
       "source": "/knowledge.md",
+      "headers": [{ "key": "Content-Type", "value": "text/markdown; charset=utf-8" }]
+    },
+    {
+      "source": "/resources/(.*)",
       "headers": [{ "key": "Content-Type", "value": "text/markdown; charset=utf-8" }]
     },
     {

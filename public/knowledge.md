@@ -10,6 +10,8 @@ Bachelor of Technology (B.Tech) in Computer Science & Engineering, Koneru Lakshm
 
 Coursework concentrates on core computer science (data structures, algorithms, advanced OOP, operating systems, theory of computation, database management systems) plus a Data Engineering & Analytics specialization track (data engineering fundamentals, data exploration, big data technologies, AI-driven data engineering) and three embedded industry certifications completed as part of the curriculum: AWS Certified Cloud Practitioner, MongoDB Associate Database Administrator, and Automation Anywhere Certified Advanced RPA Professional.
 
+Full semester-by-semester record: https://lokeshrc.me/resources/education.md
+
 ## Experience
 
 ### Lead Frontend Engineer — Wellington Water Watchers (Sept 2025 – Jan 2026)
@@ -21,11 +23,15 @@ Sole frontend engineer at a Guelph/Ontario, Canada watershed-protection non-prof
 - Implemented technical SEO (canonical tag automation, JSON-LD structured data for nonprofit/event/article types) and WCAG 2.1 AAA accessibility compliance, growing organic search traffic from 12,500 to 23,100 monthly sessions (+84.8%).
 - Built a real-time petition signature counter and a postal-code-based representative lookup tool that pre-fills advocacy emails, raising petition completion rates from 3.2% to 8.9% (+178.1%).
 
+Full case study: https://lokeshrc.me/resources/internship-wellington-water-watchers.md
+
 ## Open Source Contributions
 
 ### Apicurio Registry — [PR #9380](https://github.com/Apicurio/apicurio-registry/pull/9380) (merged, shipped in v3.3.3)
 
 Found and fixed a schema-compatibility false negative in Apicurio Registry's XSD compatibility checker (Java): an attribute changing from optional to required was not flagged as a breaking BACKWARD-incompatible change. Traced the bug to a forward-compatibility check that reused the same method with swapped arguments and so never caught the case. Added regression tests verified to fail against the pre-fix code.
+
+Full write-up: https://lokeshrc.me/resources/oss-apicurio-pr9380.md
 
 ### Milvus Birdwatcher — [PR #516](https://github.com/milvus-io/birdwatcher/pull/516), [PR #521](https://github.com/milvus-io/birdwatcher/pull/521), [PR #542](https://github.com/milvus-io/birdwatcher/pull/542) (all merged)
 
@@ -34,6 +40,8 @@ Three merged fixes (Go) to Milvus's operator debugging/repair tool:
 - **#516** — Fixed a data-integrity bug where a failed `proto.Marshal` call in the `repair` command still wrote non-decodable bytes to etcd, silently corrupting index metadata.
 - **#521** — Implemented `FileAuditKV.MultiSave`, a decorator that writes a length-prefixed protobuf audit log over etcd/TiKV, and fixed component wiring so every mutating command (repair, remove, set, reset) actually routes through the audit wrapper.
 - **#542** — Replaced a racy `WaitGroup` + shared-error worker pool in the etcd restore pipeline with `errgroup.WithContext`, fixing a data race that let failed batch writes be silently swallowed during restores.
+
+Full write-ups: https://lokeshrc.me/resources/oss-birdwatcher-pr516.md · https://lokeshrc.me/resources/oss-birdwatcher-pr521.md · https://lokeshrc.me/resources/oss-birdwatcher-pr542.md
 
 ## Projects
 
@@ -46,6 +54,7 @@ A backend-first transaction-intelligence platform that turns a Google Pay PDF st
 - Defense-in-depth security: Argon2id password hashing, rotating JWTs with reuse detection, HMAC request signing, DLP redaction of sensitive data from logs, and prompt-injection filtering on LLM input/output.
 - A full CI/CD pipeline (GitHub Actions) running secret scanning, linting, dependency-vulnerability audits, and a 61-test suite against a live database on every push.
 - Repository: https://github.com/lokeshramchand-ctrl/Velar
+- Full deep-dive: https://lokeshrc.me/resources/project-velar.md
 
 ### MapLayer — Geospatial visualization and GeoRAG platform
 
@@ -55,6 +64,7 @@ A browser-based geospatial visualization tool for San Diego parcel and zoning da
 - A tool-calling chat agent that chains address geocoding → parcel lookup → concurrent hazard-zone checks into a single call, with retrieval-augmented generation over a zoning/ADU handbook and California legislative codes.
 - An MCP (Model Context Protocol) server exposing the same search tools over SSE for external agent integrations.
 - Repository: https://github.com/lokeshramchand-ctrl/MapLayer
+- Full deep-dive: https://lokeshrc.me/resources/project-maplayer.md
 
 ## Skills
 
