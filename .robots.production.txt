@@ -1,6 +1,10 @@
 User-agent: *
 Disallow: /private/
 Allow: /
+Allow: /knowledge
+Allow: /knowledge.md
+Allow: /llms.txt
+Allow: /blogs/
 
 # Sitemap must be a valid, absolute XML file URL
 Sitemap: https://lokeshrc.me/sitemap.xml

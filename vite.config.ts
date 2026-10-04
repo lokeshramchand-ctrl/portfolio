@@ -38,9 +38,9 @@ export default defineConfig({
       hostname: 'https://lokeshrc.me/',
       // '/' is auto-discovered from the built index.html; only routes with
       // no corresponding static HTML file need to be listed explicitly.
-      dynamicRoutes: ['/blog', '/intro', ...blogRoutes],
-      changefreq: { '/': 'weekly', '/blog': 'weekly', '/intro': 'monthly', ...Object.fromEntries(blogRoutes.map((r) => [r, 'monthly'])) },
-      priority: { '/': 1.0, '/blog': 0.8, '/intro': 0.7, ...blogPriority },
+      dynamicRoutes: ['/blog', '/intro', '/knowledge', ...blogRoutes],
+      changefreq: { '/': 'weekly', '/blog': 'weekly', '/intro': 'monthly', '/knowledge': 'monthly', ...Object.fromEntries(blogRoutes.map((r) => [r, 'monthly'])) },
+      priority: { '/': 1.0, '/blog': 0.8, '/intro': 0.7, '/knowledge': 0.5, ...blogPriority },
       lastmod: blogLastmod,
       // vite-plugin-robots already owns robots.txt generation from .robots.*.txt;
       // avoid this plugin overwriting it with its own generic default.
