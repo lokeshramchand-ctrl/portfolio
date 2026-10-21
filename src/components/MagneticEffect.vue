@@ -4,8 +4,8 @@
 
 <script setup lang="ts">
   import { useWindowSize } from '@vueuse/core';
-  import { onMounted, onUnmounted, ref, Ref } from 'vue';
-  import { activateMagneto, resetMagneto } from '@/animations';
+  import { onMounted, onUnmounted } from 'vue';
+  import { createMagneto } from '@/animations';
 
   const props = defineProps({
     divId: {
@@ -27,35 +27,29 @@
   });
 
   const { width } = useWindowSize();
-  let magneto: Ref<HTMLElement>;
-  let magnetoTextRef: Ref<HTMLElement>;
+  let magneto: HTMLElement | null = null;
+  let magnetoEffect: ReturnType<typeof createMagneto> | null = null;
 
-  const handleMouseMove = (e: MouseEvent) => {
-    activateMagneto(
-      e,
+  const handleMouseMove = (e: MouseEvent) => magnetoEffect?.move(e);
+  const handleMouseLeave = () => magnetoEffect?.reset();
+
+  onMounted(() => {
+    magneto = document.getElementById(props.divId);
+    const magnetoText = document.getElementById(props.textId);
+    if (!magneto || !magnetoText || width.value <= 700) return;
+
+    magnetoEffect = createMagneto(
       magneto,
-      magnetoTextRef,
+      magnetoText,
       props.magnetoStrengthVal,
       props.magnetoTextStrengthVal,
     );
-  };
-
-  const handleMouseLeave = () => {
-    resetMagneto(magneto, magnetoTextRef);
-  };
-
-  onMounted(() => {
-    magneto = ref(document.getElementById(props.divId) as HTMLElement);
-    magnetoTextRef = ref(document.getElementById(props.textId) as HTMLElement);
-
-    if (width.value > 700) {
-      magneto.value.addEventListener('mousemove', handleMouseMove);
-      magneto.value.addEventListener('mouseleave', handleMouseLeave);
-    }
+    magneto.addEventListener('mousemove', handleMouseMove);
+    magneto.addEventListener('mouseleave', handleMouseLeave);
   });
 
   onUnmounted(() => {
-    magneto.value.removeEventListener('mousemove', handleMouseMove);
-    magnetoTextRef.value.removeEventListener('mouseleave', handleMouseLeave);
+    magneto?.removeEventListener('mousemove', handleMouseMove);
+    magneto?.removeEventListener('mouseleave', handleMouseLeave);
   });
 </script>
