@@ -4,6 +4,8 @@
       id="hero"
       class="sticky top-0 flex min-h-[100svh] w-full flex-col justify-center pt-28 pb-20 sm:pt-[15vh] sm:pb-[5vh]"
     >
+      <!-- Full-bleed past the section's padding-x gutters. -->
+      <ShaderBackground class="inset-y-0 left-1/2 w-screen -translate-x-1/2" />
       <div class="w-full z-10 flex flex-col relative">
         <h1 class="heading-display font-fancy font-bold leading-[0.9] sm:leading-[0.85] tracking-tighter text-flax-smoke-900 uppercase break-words">
           <span class="block">Software</span>
@@ -62,7 +64,7 @@
 
 <script setup lang="ts">
   import { onBeforeMount, onMounted, ref } from 'vue';
-  import { Star } from '../design';
+  import { ShaderBackground, Star } from '../design';
   import { Button } from '@/components/common';
   import { textSplitterIntoChar } from '@/functions';
   import {
