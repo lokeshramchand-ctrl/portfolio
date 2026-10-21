@@ -1,54 +1,38 @@
 ---
 title: "Owning the Stack: Building My Personal Cloud"
 date: "July 20, 2026"
-excerpt: "A journey into self-hosting and the lessons learned while building a personal cloud infrastructure."
+excerpt: "Why I built my own cloud on Proxmox, and what I learned getting a static IP, a reverse proxy, Keycloak and monitoring running at home."
 tags: ["Architecture", "Self-Hosting", "Cloud"]
 ---
 
-When people ask why I decided to build my own cloud, the honest answer is: I got tired of being a passenger.
+When people ask why I built my own cloud, my answer is that I got tired of being a passenger.
 
-## The static IP quest
+## Getting a static IP
 
-Let me be real: getting a static public IP from an ISP in India felt like negotiating with bureaucracy itself. It wasn't impossible, but it definitely wasn't straightforward. Every conversation with support felt like I was asking for something exotic. But that direct connection to the internet was non-negotiable for me. I didn't want to tunnel through proxies or beg third parties for access. I wanted my own slice of the web.
+Getting a static public IP from an ISP in India felt like dealing with bureaucracy. It wasn't impossible, but every support call made it sound like I was asking for something exotic. I wanted a direct connection without tunneling through proxies or depending on third parties, so I kept at it.
 
-## Why I didn't start in a closet
+## Not starting with an old laptop
 
-You know the classic homelab origin story: someone dusts off an ancient laptop they've had for years and uses it as their first server. That wasn't me. I build web and mobile apps for a living, and I'm constantly tinkering with heavy infrastructure. I knew from day one that I'd need real horsepower, the kind that doesn't choke when you're running databases or experimenting with vector embeddings.
+A lot of homelabs start with a dusty laptop. Mine didn't. I build web and mobile apps and I'm always experimenting with heavy infrastructure, so I knew I'd need a machine that wouldn't choke on databases or vector embeddings. I went with a dedicated desktop: an NVIDIA RTX 5060 and 16GB of RAM. It cost more upfront, and I've never regretted it.
 
-So I went straight for a proper setup: an NVIDIA RTX 5060, 16GB of RAM, and a dedicated desktop that actually meant business. It was a bigger upfront investment, but having that kind of computing power sitting right there on my desk changed everything.
+## Proxmox and LXC
 
-## The Proxmox "aha" moment
+Full VMs felt bloated for what I wanted, and a desktop OS wasn't built for this. Proxmox fixed that. I run almost everything as LXC containers, which isolate services without the overhead of a full VM. With tools like Milvus, I notice the difference.
 
-Choosing an operating system sounds simple until you realize it's really about choosing a philosophy. Running traditional virtual machines felt bloated for what I wanted to do, and a regular desktop OS wasn't built for this kind of work at all.
+What sold me was setting hard CPU and memory limits per container. If one experiment goes haywire, the rest keep running.
 
-Then I discovered Proxmox, a platform for running virtual machines and containers, and things clicked. Instead of spinning up heavy VMs for every little project, I went all-in on LXC containers, a lighter way to isolate services without the overhead of a full virtual machine. The performance difference was immediately noticeable. When you're working with resource-hungry tools like Milvus or testing custom APIs, every bit of overhead matters.
+## Making it reachable
 
-What really sold me was the control. With Proxmox, I can set hard boundaries on CPU and memory for each container. One experimental project going haywire doesn't bring down my entire infrastructure. Everything stays stable, predictable, and responsive.
+I registered a domain and set up Nginx as a reverse proxy. There were plenty of broken configs and 2 AM routing errors along the way, but now every service has its own subdomain.
 
-## Making it actually accessible
+`.htpasswd` files felt clunky and didn't scale with how often I build new things, so I deployed Keycloak. I stopped writing login logic for every project. With OpenID Connect I get single sign-on across everything I run, both off-the-shelf tools and my own endpoints. It's basically my own Auth0, except I control it.
 
-Running apps on your own hardware is one thing. Actually reaching them without a security nightmare is a different challenge entirely.
+## Seeing what's going on
 
-I registered my own domain and set up Nginx as a reverse proxy. Fair warning: there were some hilariously broken configurations along the way, routing errors at 2 AM, typos that took way too long to debug. But once I got it working, every service lived on its own isolated subdomain, clean, organized, and professional.
+With lots of containers running, I didn't want to fly blind. Prometheus collects metrics and Grafana shows them: GPU, storage, memory spikes and network traffic. I don't have to guess anymore.
 
-Basic passwords and `.htpasswd` files felt clunky, though, and that approach doesn't scale when you're constantly building new things. So I deployed Keycloak, an open-source identity and access management tool.
+## What changed for me
 
-I didn't want to reinvent the wheel every time I built a new project. Keycloak let me stop writing custom login logic and start using proper, enterprise-grade authentication, basically my own personal Auth0 that I actually control. Wrapped in OpenID Connect, it gave me true single sign-on: one login for everything in my ecosystem, whether it's off-the-shelf tools or my own custom endpoints.
+For years, my job as a developer ended at the commit. I wrote Python backends and Dart apps, handed them to a cloud provider and assumed the rest would work. Running my own hardware ended that. Now I'm responsible for everything from the machine up to the app, and I understand how my code actually gets served.
 
-## Seeing what's actually happening
-
-When you're running multiple containers simultaneously, flying blind isn't an option. I set up Prometheus to gather metrics and built Grafana dashboards to visualize the data in real time.
-
-Now I can actually see what my RTX 5060 is doing. Storage usage, memory spikes, network traffic, it's all there on my dashboard. No more guessing.
-
-## The bridge I didn't know I was missing
-
-For years, my world as a developer ended at the code commit. I'd write Python backends and Dart apps and hand them off to cloud providers, assuming everything would "just work" on the other side. There was a comfort in that separation.
-
-Building this infrastructure changed that in a way I didn't expect. I'm no longer just writing software and hoping for the best; I'm actually responsible for the hardware it runs on. I understand the entire journey now, from the silicon upward.
-
-That's the real value I got out of this. Not just lower costs or more control, but a genuine understanding of what it means to build something that lasts.
-
----
-
-*(I'm planning a deep dive into my Nginx configurations soon, stay tuned.)*
+I wrote a follow-up about how I organized my Nginx configs, if you want the details.
