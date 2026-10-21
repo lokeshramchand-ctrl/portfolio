@@ -20,8 +20,38 @@ const HEALTH_PATH = '/health.txt';
 const HEALTH_CACHE_SECONDS = 15;
 const PROBE_TIMEOUT_MS = 2500;
 
+// Per-IP rate limiting. State is in-memory per isolate (same tradeoff as
+// the health-check cache above — no KV/Durable Object binding needed),
+// so a given IP's budget can reset whenever Cloudflare spins up a fresh
+// isolate. That's fine here: the goal is blunting bursts/scrapers hitting
+// the homelab origin on every request, not perfectly precise accounting.
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const RATE_LIMIT_MAX_REQUESTS = 120; // ~2 req/s sustained per IP
+const RATE_LIMIT_MAX_TRACKED_IPS = 5000; // cap memory if many unique IPs hit in one window
+
 let cachedHealthy = null;
 let cachedAt = 0;
+
+const requestLog = new Map(); // ip -> { count, windowStart }
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const entry = requestLog.get(ip);
+
+  if (!entry || now - entry.windowStart >= RATE_LIMIT_WINDOW_MS) {
+    if (!entry && requestLog.size >= RATE_LIMIT_MAX_TRACKED_IPS) {
+      // Defend against unbounded growth from a flood of distinct IPs —
+      // drop the oldest-inserted entry (Map preserves insertion order).
+      const oldestKey = requestLog.keys().next().value;
+      requestLog.delete(oldestKey);
+    }
+    requestLog.set(ip, { count: 1, windowStart: now });
+    return false;
+  }
+
+  entry.count += 1;
+  return entry.count > RATE_LIMIT_MAX_REQUESTS;
+}
 
 async function probeHomelab() {
   const now = Date.now();
@@ -72,6 +102,14 @@ async function proxyTo(origin, hostHeader, request) {
 
 export default {
   async fetch(request) {
+    const clientIp = request.headers.get('CF-Connecting-IP') || 'unknown';
+    if (isRateLimited(clientIp)) {
+      return new Response('Too Many Requests', {
+        status: 429,
+        headers: { 'Retry-After': String(RATE_LIMIT_WINDOW_MS / 1000) },
+      });
+    }
+
     const healthy = await probeHomelab();
 
     if (healthy) {
