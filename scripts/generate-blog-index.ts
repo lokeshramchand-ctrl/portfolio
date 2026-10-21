@@ -40,6 +40,16 @@ function escapeXml(value: string): string {
     .replace(/'/g, '&apos;');
 }
 
+// Frontmatter dates like "September 15, 2026" carry no timezone, so
+// `new Date(str)` parses them as local midnight — which made the RSS output
+// depend on the build machine's TZ. Re-anchor the calendar date at UTC midnight.
+function toRssDate(value: string | number): string {
+  const local = new Date(value);
+  return new Date(
+    Date.UTC(local.getFullYear(), local.getMonth(), local.getDate()),
+  ).toUTCString();
+}
+
 function buildRss(posts: { slug: string; title: string; date: string; excerpt: string; tags: string[] }[]): string {
   const items = posts
     .map((post) => {
@@ -53,7 +63,7 @@ function buildRss(posts: { slug: string; title: string; date: string; excerpt: s
         `      <title>${escapeXml(post.title)}</title>`,
         `      <link>${link}</link>`,
         `      <guid isPermaLink="true">${link}</guid>`,
-        `      <pubDate>${new Date(post.date).toUTCString()}</pubDate>`,
+        `      <pubDate>${toRssDate(post.date)}</pubDate>`,
         `      <description>${escapeXml(post.excerpt)}</description>`,
         categories,
         '    </item>',
@@ -71,7 +81,7 @@ function buildRss(posts: { slug: string; title: string; date: string; excerpt: s
     <atom:link href="${absoluteUrl('/rss.xml')}" rel="self" type="application/rss+xml" />
     <description>${escapeXml(DEFAULT_DESCRIPTION)}</description>
     <language>en-us</language>
-    <lastBuildDate>${new Date(posts[0]?.date ?? 0).toUTCString()}</lastBuildDate>
+    <lastBuildDate>${toRssDate(posts[0]?.date ?? 0)}</lastBuildDate>
 ${items}
   </channel>
 </rss>
