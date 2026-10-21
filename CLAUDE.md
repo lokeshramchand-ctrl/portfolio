@@ -35,18 +35,24 @@ There is no test suite and no lint script configured in this repo. Formatting is
 A single flat module of GSAP helpers, all operating on CSS selector strings (not refs), registered with `ScrollTrigger` and `MotionPathPlugin`. Conventions to follow when adding new animations:
 - Functions are named `animate*` for composed sequences (e.g. `animateHeroNav`, `animateBlogListEnter`, `animateBlogPostEnter`) and lowercase verbs for primitives (`fadeIn`, `yToZero`, `xToZero`, `resetOpacity`).
 - Entrance animations for a page/section pair a `yReset`/`resetOpacity` (set initial state) with a `scrollTrigger`-driven or timeline-driven reveal.
+- Section animations are registered against selector strings in each component's `onMounted` and nothing unregisters them on route change, so `HomeView.vue` calls `killDetachedAnimations()` in `onUnmounted`: it kills every ScrollTrigger/tween bound *only* to now-detached elements (persistent chrome like Navbar/Footer is untouched). Any new routed view that registers ScrollTriggers or infinite tweens must do the same, or each visit leaks them.
 - Blog animations (`animateBlogListEnter`, `animateBlogPostEnter`) are triggered manually from the view's `onMounted` after `nextTick()` + `ScrollTrigger.refresh()`, since blog content is fetched/rendered after route entry — this pattern (wait for DOM, refresh ScrollTrigger, then animate) should be reused for any new route that renders async content.
 - `src/functions/index.ts` holds non-GSAP helpers used alongside animations: `textSplitterIntoChar` (wraps text in per-letter spans for stagger animations, expects matching CSS in `style.css`/Tailwind for `.letters`), `getAvailableForWorkDate`, and `gotoSection` (nav scroll dispatch, has a special case for `#testimonials-section` which actually scrolls to `#slider`).
 
 ### Component organization (`src/components/`)
 - `common/` — reusable UI (`Button.vue`, `Nav.vue`), barreled via `common/index.ts`.
-- `design/` — visual/decorative pieces (`Cursor`, `Footer`, `LoadingScreen`, `Marquee`, `Slider`, `SamsungError`, `Circles`, icons), barreled via `design/index.ts`.
+- `design/` — visual/decorative pieces (`Cursor`, `Footer`, `LoadingScreen`, `Marquee`, `Slider`, `SamsungError`, `Circles`, `ShaderBackground`, icons), barreled via `design/index.ts`.
 - `sections/` — one component per home-page section (`Hero`, `Services`, `Works`, `aboutMe`, `People`, `Contact`), barreled via `sections/index.ts`.
 - Top-level `components/index.ts` barrels smaller shared pieces (`Link`, `MagneticEffect`, `MyEnName`, `BurgerMenuBtn`, `ServicesCard`).
 
 New components should be added to the relevant subfolder's `index.ts` barrel and imported via `@/components/...` (the `@` alias maps to `src/`, configured in both `vite.config.ts` and `tsconfig.json`).
 
-`MagneticEffect.vue` pairs with `activateMagneto`/`resetMagneto` in `src/animations/index.ts` for the magnetic-hover button/link effect used around the site (e.g. contact button, social links).
+`MagneticEffect.vue` pairs with `createMagneto` in `src/animations/index.ts` for the magnetic-hover button/link effect used around the site (e.g. contact button, social links). `createMagneto` builds its `gsap.quickTo` setters once per element — never create `quickTo`s inside a mousemove handler.
+
+Third-party animation components must be destroyed explicitly on unmount if they don't do it themselves: `vue3-lottie` (3.3.1) never destroys its lottie-web instance, so `Contact.vue` calls the ref's `destroy()` in `onBeforeUnmount`.
+
+### WebGL (`src/webgl/`)
+`createShaderRenderer` (`src/webgl/index.ts`) is a dependency-free WebGL1 fullscreen-shader runner that owns the GPU lifecycle: pauses its rAF loop when off-screen (IntersectionObserver) or the tab is hidden, renders one still frame under `prefers-reduced-motion`, halves its render resolution if frames get slow, survives context loss/restore, and releases the context on `destroy()`. It returns `null` when WebGL is unavailable. GLSL lives in `src/webgl/shaders.ts`. `design/ShaderBackground.vue` wraps it (with a CSS-gradient fallback) and is used as the Hero background; reuse it rather than creating raw canvases.
 
 ### Blog system
 The blog is file-based, not a CMS, but frontmatter — not `src/data.ts` — is the source of truth for post metadata:
@@ -61,7 +67,8 @@ The blog is file-based, not a CMS, but frontmatter — not `src/data.ts` — is 
 Tailwind CSS 4 is configured via the `@tailwindcss/vite` plugin (no `tailwind.config.js` — theme lives in `src/style.css` under `@theme`). Key custom tokens defined there:
 - Color scale `flax-smoke-50..950` — despite the naming, this is currently a dark-mode-first palette (50 = pure black background, 900/950 = white text, 500/600 = amber accent). Use these tokens (`text-flax-smoke-900`, `bg-flax-smoke-50`, etc.) rather than raw Tailwind grays/ambers for anything visual.
 - Fluid heading sizes as custom properties (`--heading-1` through `--heading-display`, plus `--heading-body`), exposed as utility classes like `heading-3`, `heading-display`.
-- Two custom font families: `font-title` (CabinetGrotesk, loaded via `@font-face`) and `font-fancy` (Bricolage Grotesque, loaded via Google Fonts `@import`).
+- Two custom font families: `font-title` (CabinetGrotesk, loaded via `@font-face`) and `font-fancy` (Bricolage Grotesque + JetBrains Mono, loaded via the non-blocking preload `<link>` in `index.html`).
+- Keep `@import 'tailwindcss';` as the first rule in `style.css` and never put anything in an `@layer` above it: cascade layers are ordered by first appearance, so an earlier `@layer utilities { … }` makes utilities the *lowest* layer and Tailwind's preflight then overrides every utility class site-wide.
 
 ### Deployment
 `.github/workflows/vue.yml` builds and deploys to GitHub Pages on every push using `xRealNeon/VuePagesAction`. `vite-plugin-sitemap` and `vite-plugin-robots` generate `sitemap.xml`/`robots.txt` at build time (hostname `https://lokeshrc.me/`); robots behavior differs between `.robots.development.txt` and `.robots.production.txt`.
