@@ -1,20 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap')
-layer(base);
-
-@layer utilities {
-  @font-face {
-    font-family: 'title';
-    src: url('./assets/fonts/CabinetGrotesk-Variable.woff2') format('woff2');
-    font-style: normal;
-  }
-}
+/* Bricolage Grotesque + JetBrains Mono are loaded via the non-blocking
+   preload+stylesheet-swap link in index.html instead of an @import here —
+   a CSS @import of an external URL blocks CSS parsing until it resolves. */
 
 @import 'tailwindcss';
+
+/* Must come after the tailwindcss import and outside any @layer: cascade
+   layers are ordered by first appearance, so wrapping this in
+   `@layer utilities` ahead of the import made utilities the lowest layer
+   and let preflight (base) override every utility class. */
+@font-face {
+  font-family: 'title';
+  src: url('./assets/fonts/CabinetGrotesk-Variable.woff2') format('woff2');
+  font-style: normal;
+  font-display: swap;
+}
 
 @theme {
   /* Font families */
   --font-title: 'title';
-  --font-body: 'body';
+  /* No 'body' @font-face exists; links fell back to the UA serif. */
+  --font-body: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
 
   /* Colors: "Absolute Void & Amber" (Dark Mode) */
   --color-flax-smoke-50: #000000; /* Pure, absolute black background */
