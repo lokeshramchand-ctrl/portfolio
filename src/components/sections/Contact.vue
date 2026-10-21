@@ -9,6 +9,8 @@
       <video
         class="absolute bottom-0 left-0 size-full rounded-lg object-cover object-bottom brightness-50"
         :src="contact"
+        :poster="contactPoster"
+        preload="metadata"
         autoplay
         muted
         loop
@@ -82,7 +84,7 @@
   import { earthLottie } from '@/assets/videos';
   import { Button } from '../common';
   import Link from '../Link.vue';
-  import { contact } from '@/assets/videos';
+  import { contact, contactPoster } from '@/assets/videos';
   import { defineAsyncComponent, onBeforeMount, onMounted, ref } from 'vue';
   import { getAvailableForWorkDate, textSplitterIntoChar } from '@/functions';
   import { animateSplitText } from '@/animations';
