@@ -1,58 +1,159 @@
 <template>
-  <section
-    class="padding-x flex min-h-svh flex-col justify-center gap-10 py-32 sm:py-40"
-  >
-    <div class="mx-auto flex w-full max-w-3xl flex-col gap-8">
-      <p
-        class="intro-anim font-mono text-sm font-bold tracking-[0.2em] text-flax-smoke-400 uppercase opacity-0"
+  <section class="padding-x relative h-svh overflow-hidden py-3 sm:py-5">
+    <ShaderBackground class="inset-0" />
+
+    <div
+      class="relative z-10 mx-auto grid h-full w-full max-w-7xl grid-cols-2 grid-rows-[auto_minmax(0,1fr)_auto_auto_auto] gap-2 sm:gap-3 lg:grid-cols-4 lg:grid-rows-3 lg:gap-4"
+    >
+      <!-- Name + tagline -->
+      <div
+        class="intro-anim bento col-span-2 flex flex-col justify-between gap-3 lg:row-span-2"
       >
-        [ Hi there ]
-      </p>
+        <p class="bento-label">[ Hi there ]</p>
+        <div class="flex flex-col gap-3 lg:gap-6">
+          <h1
+            class="font-fancy text-flax-smoke-900 text-[clamp(2rem,min(6vw,8svh),5.5rem)] leading-[0.95] font-bold tracking-tight uppercase"
+          >
+            I'm Lokesh Ram Chand.
+          </h1>
+          <p
+            class="text-flax-smoke-700 line-clamp-3 max-w-[55ch] text-sm leading-snug font-medium text-balance sm:text-base lg:line-clamp-4 2xl:text-lg"
+          >
+            {{ heroText }}
+          </p>
+        </div>
+      </div>
 
-      <h1
-        class="intro-anim heading-1-alt font-fancy leading-[0.95] font-bold tracking-tight text-flax-smoke-900 uppercase opacity-0"
+      <!-- Photo -->
+      <div class="intro-anim bento relative p-0! lg:row-span-2">
+        <img
+          :src="profile"
+          alt="Portrait of Lokesh Ram Chand"
+          class="absolute inset-0 size-full object-cover grayscale transition duration-700 hover:grayscale-0"
+        />
+      </div>
+
+      <!-- Location + local time -->
+      <div class="intro-anim bento flex flex-col justify-between gap-2">
+        <p class="bento-label">Based in</p>
+        <div>
+          <p
+            class="font-title! text-flax-smoke-900 text-lg font-bold sm:text-2xl"
+          >
+            {{ locationCountry }}
+          </p>
+          <p
+            class="text-flax-smoke-500 font-mono text-[10px] tracking-widest sm:text-xs"
+          >
+            {{ locationPlace }}
+          </p>
+          <p class="text-flax-smoke-700 mt-1 font-mono text-xs sm:text-sm">
+            {{ localTime }} IST
+          </p>
+        </div>
+      </div>
+
+      <!-- Links (moved after work below lg) -->
+      <div
+        class="intro-anim bento flex flex-col justify-between gap-2 max-lg:order-1"
       >
-        I'm Lokesh Ram Chand.
-      </h1>
+        <p class="bento-label">Elsewhere</p>
+        <ul
+          class="flex flex-col gap-1 font-mono text-xs font-bold tracking-widest uppercase sm:text-sm"
+        >
+          <li v-for="link in links" :key="link.label">
+            <a
+              :href="link.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-flax-smoke-900 hover:text-flax-smoke-500 transition-colors"
+            >
+              {{ link.label }} ↗
+            </a>
+          </li>
+        </ul>
+      </div>
 
-      <p
-        class="intro-anim font-mono text-sm tracking-widest text-flax-smoke-500 uppercase opacity-0"
+      <!-- Focus areas -->
+      <div
+        class="intro-anim bento col-span-2 flex flex-col justify-between gap-2"
       >
-        {{ locationCountry }} — {{ locationPlace }}
-      </p>
+        <p class="bento-label">Focus</p>
+        <ul
+          class="text-flax-smoke-700 flex flex-col gap-1 font-mono text-xs sm:text-sm"
+        >
+          <li v-for="point in bioPoints" :key="point.title">
+            <span class="text-flax-smoke-500">*</span>
+            <strong class="text-flax-smoke-900 font-bold">{{
+              point.title
+            }}</strong>
+            <span class="max-xl:hidden"> — {{ point.body }}</span>
+          </li>
+        </ul>
+      </div>
 
-      <p
-        class="intro-anim heading-6 max-w-[55ch] text-balance leading-snug font-medium text-flax-smoke-700 opacity-0"
+      <!-- Selected work -->
+      <div
+        class="intro-anim bento col-span-2 flex flex-col justify-between gap-2 lg:col-span-1"
       >
-        {{ heroText }}
-      </p>
+        <p class="bento-label">Selected work</p>
+        <ul class="divide-flax-smoke-200 flex flex-col divide-y">
+          <li v-for="work in selectedWork" :key="work.name">
+            <a
+              :href="work.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group flex items-baseline justify-between gap-3 py-1.5"
+            >
+              <span
+                class="font-title! text-flax-smoke-900 group-hover:text-flax-smoke-500 text-lg font-bold uppercase transition-colors sm:text-xl"
+              >
+                {{ work.name }}
+              </span>
+              <span
+                class="text-flax-smoke-700 font-mono text-[10px] tracking-widest uppercase"
+              >
+                {{ work.year }}
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
 
-      <div class="intro-anim w-full border-t-2 border-flax-smoke-200 opacity-0"></div>
-
-      <ul class="flex flex-col gap-4 font-mono text-sm text-flax-smoke-600 sm:text-base">
-        <li v-for="point in bioPoints" :key="point.title" class="intro-anim opacity-0">
-          <span class="text-flax-smoke-500">*</span>
-          <strong class="font-bold text-flax-smoke-900">{{ point.title }}</strong>
-          — {{ point.body }}
-        </li>
-      </ul>
-
+      <!-- Enter site -->
       <router-link
         to="/"
-        class="intro-anim group inline-flex w-fit items-center gap-3 self-start rounded-full border-2 border-flax-smoke-800 px-6 py-3 font-mono text-sm font-bold tracking-[0.15em] text-flax-smoke-900 uppercase opacity-0 transition-colors duration-500 hover:bg-flax-smoke-900 hover:text-flax-smoke-50"
+        class="intro-anim bento group flex flex-col justify-between gap-2 max-lg:order-1"
       >
-        Read more
-        <span class="transition-transform duration-500 group-hover:translate-x-1">→</span>
+        <p class="bento-label">Portfolio</p>
+        <p
+          class="font-title! text-flax-smoke-900 group-hover:text-flax-smoke-500 flex items-center justify-between text-xl font-bold uppercase transition-colors sm:text-3xl"
+        >
+          Enter
+          <span
+            class="transition-transform duration-500 group-hover:translate-x-2"
+            >→</span
+          >
+        </p>
       </router-link>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-  import { onMounted, nextTick } from 'vue';
+  import { computed, onMounted, nextTick } from 'vue';
   import ScrollTrigger from 'gsap/ScrollTrigger';
   import { lenis, raf } from '@/main';
-  import { heroText, locationCountry, locationPlace } from '@/data';
+  import { useNow } from '@vueuse/core';
+  import {
+    heroText,
+    locationCountry,
+    locationPlace,
+    socialLinks,
+    resourceLinks,
+  } from '@/data';
+  import { profile } from '@/assets/images';
+  import { ShaderBackground } from '@/components/design';
   import { animateIntroEnter } from '@/animations';
   import { appBooted } from '@/state';
   import { useSeo } from '@/seo/useSeo';
@@ -80,6 +181,37 @@
     },
   ];
 
+  // ponytail: duplicated from Works.vue's selectedWorksProps (that list also carries video imports); move both to data.ts if it grows.
+  const selectedWork = [
+    {
+      name: 'Velar',
+      category: 'AI Finance System',
+      year: '2024',
+      url: 'https://github.com/lokeshramchand-ctrl/Velar',
+    },
+    {
+      name: 'MapLayer',
+      category: 'GeoRAG Platform',
+      year: '2025',
+      url: 'https://github.com/lokeshramchand-ctrl/MapLayer',
+    },
+  ];
+
+  // GitHub appears in both lists.
+  const links = [
+    ...socialLinks,
+    ...resourceLinks.filter((l) => l.label !== 'GitHub'),
+  ];
+
+  const now = useNow({ interval: 30_000 });
+  const localTime = computed(() =>
+    now.value.toLocaleTimeString('en-GB', {
+      timeZone: 'Asia/Kolkata',
+      hour: '2-digit',
+      minute: '2-digit',
+    }),
+  );
+
   onMounted(async () => {
     document.body.classList.remove('stop-scrolling');
     requestAnimationFrame(raf);
@@ -95,3 +227,15 @@
     animateIntroEnter();
   });
 </script>
+
+<style scoped>
+  @reference '../style.css';
+
+  .bento {
+    @apply border-flax-smoke-200 bg-flax-smoke-100 bg-flax-smoke-100/60! min-h-0 overflow-hidden rounded-2xl border p-4 opacity-0 backdrop-blur-md sm:rounded-3xl sm:p-6;
+  }
+
+  .bento-label {
+    @apply text-flax-smoke-400 font-mono text-[10px] font-bold tracking-[0.2em] uppercase opacity-60 sm:text-xs;
+  }
+</style>

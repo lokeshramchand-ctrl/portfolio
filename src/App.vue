@@ -32,7 +32,7 @@
     <router-view />
   </div>
 
-  <Footer />
+  <Footer v-if="$route.path !== '/intro'" />
 </template>
 
 <script setup lang="ts">
