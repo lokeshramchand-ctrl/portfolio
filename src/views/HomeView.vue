@@ -52,6 +52,9 @@
 
     await nextTick();
     ScrollTrigger.refresh();
+    // Lenis caches the scroll limit; without this it's still the previous
+    // route's (shorter) height and the scroll stops short of the section.
+    lenis.resize();
     lenis.start();
     lenis.scrollTo(target, { duration: 3 });
   });
