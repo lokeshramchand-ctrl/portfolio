@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import sitemap from 'vite-plugin-sitemap';
 import { robots } from 'vite-plugin-robots';
 import tailwindcss from '@tailwindcss/vite';
+import { copyFileSync } from 'node:fs';
 import { blogPosts } from './src/generated/blogIndex';
 
 const blogRoutes = blogPosts.map((post) => `/blog/${post.slug}`);
@@ -53,6 +54,15 @@ export default defineConfig({
   },
   plugins: [
     tailwindcss(),
+    {
+      // Vercel serves dist/404.html with a real 404 status for unmatched URLs
+      // (vercel.json only rewrites known routes to index.html); the SPA shell
+      // then renders NotFoundView.
+      name: 'spa-404-html',
+      closeBundle() {
+        copyFileSync('dist/index.html', 'dist/404.html');
+      },
+    },
     vue(),
     robots(),
     sitemap({

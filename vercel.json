@@ -4,7 +4,7 @@
   "rewrites": [
     { "source": "/knowledge", "destination": "/knowledge.md" },
     { "source": "/resources/([^/.]+)", "destination": "/resources/$1.md" },
-    { "source": "/((?!assets/|blogs/|fonts/|.*\\..*).*)", "destination": "/index.html" }
+    { "source": "/(intro|blog|blog/[^/.]+|privacy|terms)", "destination": "/index.html" }
   ],
   "headers": [
     {
