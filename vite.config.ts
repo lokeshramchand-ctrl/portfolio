@@ -3,6 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import sitemap from 'vite-plugin-sitemap';
 import { robots } from 'vite-plugin-robots';
 import tailwindcss from '@tailwindcss/vite';
+import { copyFileSync } from 'node:fs';
 import { blogPosts } from './src/generated/blogIndex';
 
 const blogRoutes = blogPosts.map((post) => `/blog/${post.slug}`);
@@ -53,15 +54,24 @@ export default defineConfig({
   },
   plugins: [
     tailwindcss(),
+    {
+      // Vercel serves dist/404.html with a real 404 status for unmatched URLs
+      // (vercel.json only rewrites known routes to index.html); the SPA shell
+      // then renders NotFoundView.
+      name: 'spa-404-html',
+      closeBundle() {
+        copyFileSync('dist/index.html', 'dist/404.html');
+      },
+    },
     vue(),
     robots(),
     sitemap({
       hostname: 'https://lokeshrc.me/',
       // '/' is auto-discovered from the built index.html; only routes with
       // no corresponding static HTML file need to be listed explicitly.
-      dynamicRoutes: ['/blog', '/intro', '/knowledge', ...blogRoutes, ...resourceRoutes],
-      changefreq: { '/': 'weekly', '/blog': 'weekly', '/intro': 'monthly', '/knowledge': 'monthly', ...Object.fromEntries(blogRoutes.map((r) => [r, 'monthly'])), ...resourceChangefreq },
-      priority: { '/': 1.0, '/blog': 0.8, '/intro': 0.7, '/knowledge': 0.5, ...blogPriority, ...resourcePriority },
+      dynamicRoutes: ['/blog', '/intro', '/privacy', '/terms', '/knowledge', ...blogRoutes, ...resourceRoutes],
+      changefreq: { '/': 'weekly', '/blog': 'weekly', '/intro': 'monthly', '/privacy': 'yearly', '/terms': 'yearly', '/knowledge': 'monthly', ...Object.fromEntries(blogRoutes.map((r) => [r, 'monthly'])), ...resourceChangefreq },
+      priority: { '/': 1.0, '/blog': 0.8, '/intro': 0.7, '/privacy': 0.2, '/terms': 0.2, '/knowledge': 0.5, ...blogPriority, ...resourcePriority },
       lastmod: blogLastmod,
       // vite-plugin-robots already owns robots.txt generation from .robots.*.txt;
       // avoid this plugin overwriting it with its own generic default.

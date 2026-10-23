@@ -1,11 +1,11 @@
 <template>
   <section
     id="marquee-section"
-    class="text-flax-smoke-200 relative mb-50 h-fit w-full overflow-clip leading-none will-change-auto"
+    class="relative mb-50 h-fit w-full overflow-clip leading-none will-change-auto"
   >
     <div
       id="marquee-1"
-      class="flex h-fit translate-y-0 whitespace-nowrap will-change-transform"
+      class="text-flax-smoke-800/90 flex h-fit translate-y-0 whitespace-nowrap will-change-transform"
       role="marquee"
     >
       <h4
@@ -32,7 +32,7 @@
     </div>
     <div
       id="marquee-2"
-      class="absolute bottom-0 z-50 flex h-fit translate-y-full whitespace-nowrap will-change-transform"
+      class="text-flax-smoke-500 absolute bottom-0 z-50 flex h-fit translate-y-full whitespace-nowrap will-change-transform"
       role="marquee"
     >
       <h4
@@ -62,10 +62,10 @@
 
 <script setup lang="ts">
   import gsap from 'gsap';
-  import { ScrollToPlugin, ScrollTrigger } from 'gsap/all';
+  import ScrollTrigger from 'gsap/ScrollTrigger';
   import { onMounted } from 'vue';
 
-  gsap.registerPlugin(ScrollToPlugin, ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger);
 
   const createMarquee = (
     selector: string,

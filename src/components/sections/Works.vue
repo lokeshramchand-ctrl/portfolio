@@ -73,6 +73,7 @@
                   :src="work.videoSrc"
                   muted
                   :autoplay="false"
+                  preload="metadata"
                   type="video/webm"
                   class="size-[80%] rounded-md object-contain blur transition-all duration-500 ease-in-out"
                 ></video>

@@ -6,13 +6,84 @@
     <atom:link href="https://lokeshrc.me/rss.xml" rel="self" type="application/rss+xml" />
     <description>A dedicated software engineer building intelligent, scalable platforms. I combine modern full-stack development with machine learning technologies to architect comprehensive, production-ready solutions.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 15 Sep 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 21 Oct 2026 00:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Setting Up an Open Source Repo So Contributors Know What to Do</title>
+      <link>https://lokeshrc.me/blog/accesscraft-community-health-files</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/accesscraft-community-health-files</guid>
+      <pubDate>Wed, 21 Oct 2026 00:00:00 GMT</pubDate>
+      <description>My PR to accesscraft adds issue forms, contribution policies and CI automation. None of it is code, and all of it decides whether people can contribute.</description>
+      <category>GitHub Actions</category>
+      <category>Open Source</category>
+      <category>CI/CD</category>
+      <category>Community</category>
+    </item>
+    <item>
+      <title>Teaching a Link Checker That Not Every GitHub URL Is a Repo</title>
+      <link>https://lokeshrc.me/blog/cncf-dot-project-github-link-checker</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/cncf-dot-project-github-link-checker</guid>
+      <pubDate>Tue, 20 Oct 2026 00:00:00 GMT</pubDate>
+      <description>cncf/automation&apos;s link checker marked valid GitHub pages like /sponsors and /topics as broken. I made it double-check against github.com before reporting a 404.</description>
+      <category>Go</category>
+      <category>CNCF</category>
+      <category>Testing</category>
+      <category>Open Source</category>
+    </item>
+    <item>
+      <title>A Secret-Redaction Fix That Redacted the Secret Out of Existence</title>
+      <link>https://lokeshrc.me/blog/cncf-kubevirt-runner-empty-jitconfig</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/cncf-kubevirt-runner-empty-jitconfig</guid>
+      <pubDate>Tue, 20 Oct 2026 00:00:00 GMT</pubDate>
+      <description>The KubeVirt cloud runner in cncf/automation hid its JIT config so well that the runner never received it. I made it substitute the value again and still keep it out of the logs.</description>
+      <category>Go</category>
+      <category>CNCF</category>
+      <category>KubeVirt</category>
+      <category>CI/CD</category>
+      <category>Security</category>
+      <category>Open Source</category>
+    </item>
+    <item>
+      <title>One Flag Was Printing a Runner Secret Into CI Logs</title>
+      <link>https://lokeshrc.me/blog/cncf-oci-runner-bash-x-jit-leak</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/cncf-oci-runner-bash-x-jit-leak</guid>
+      <pubDate>Sun, 18 Oct 2026 00:00:00 GMT</pubDate>
+      <description>The OCI cloud runner in cncf/automation ran its start script with bash -x, which traced the GitHub Actions JIT config into the logs. Removing one flag fixed it.</description>
+      <category>Go</category>
+      <category>CNCF</category>
+      <category>CI/CD</category>
+      <category>Security</category>
+      <category>Open Source</category>
+    </item>
+    <item>
+      <title>When a Profiling Archive Includes Nodes It Never Reached</title>
+      <link>https://lokeshrc.me/blog/birdwatcher-pprof-zero-byte-archives</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/birdwatcher-pprof-zero-byte-archives</guid>
+      <pubDate>Mon, 28 Sep 2026 00:00:00 GMT</pubDate>
+      <description>Birdwatcher&apos;s pprof command archived 0-byte entries for unreachable Milvus nodes and printed the same success message for them. Here&apos;s my fix.</description>
+      <category>Go</category>
+      <category>Milvus</category>
+      <category>Observability</category>
+      <category>Open Source</category>
+      <category>Debugging</category>
+    </item>
+    <item>
+      <title>A Typo That Hid a Whole Command, and the Crash Behind It</title>
+      <link>https://lokeshrc.me/blog/birdwatcher-verify-segment-typo</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/birdwatcher-verify-segment-typo</guid>
+      <pubDate>Mon, 21 Sep 2026 00:00:00 GMT</pubDate>
+      <description>Birdwatcher&apos;s verify-segment command was fully written but never registered, because its method was named VerifySegmentCommnad. Fixing the typo exposed a startup panic.</description>
+      <category>Go</category>
+      <category>Milvus</category>
+      <category>Reflection</category>
+      <category>Open Source</category>
+      <category>Debugging</category>
+    </item>
     <item>
       <title>A silent backward-compatibility bug in Apicurio Registry&apos;s XSD checker</title>
       <link>https://lokeshrc.me/blog/apicurio-xsd-backward-compatibility-bug</link>
       <guid isPermaLink="true">https://lokeshrc.me/blog/apicurio-xsd-backward-compatibility-bug</guid>
       <pubDate>Tue, 15 Sep 2026 00:00:00 GMT</pubDate>
-      <description>A code comment said this case was already handled. It wasn&apos;t.</description>
+      <description>A code comment said this case was already handled. It wasn&apos;t, and I only found out because a sibling method handled the same case properly.</description>
       <category>Java</category>
       <category>Apicurio Registry</category>
       <category>Open Source</category>
@@ -20,11 +91,46 @@
       <category>Debugging</category>
     </item>
     <item>
+      <title>Three Goroutines, One Error Variable, and a Restore That Lied</title>
+      <link>https://lokeshrc.me/blog/birdwatcher-load-backup-error-race</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/birdwatcher-load-backup-error-race</guid>
+      <pubDate>Thu, 10 Sep 2026 00:00:00 GMT</pubDate>
+      <description>Birdwatcher&apos;s load-backup could report success while dropping keys, because worker goroutines raced on a shared err. I replaced the pattern with errgroup.</description>
+      <category>Go</category>
+      <category>Milvus</category>
+      <category>etcd</category>
+      <category>Concurrency</category>
+      <category>Open Source</category>
+    </item>
+    <item>
+      <title>Why 5.0 Wasn&apos;t an Integer in Apicurio&apos;s Prompt Templates</title>
+      <link>https://lokeshrc.me/blog/apicurio-integer-default-decimal-literal</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/apicurio-integer-default-decimal-literal</guid>
+      <pubDate>Sun, 06 Sep 2026 00:00:00 GMT</pubDate>
+      <description>An integer prompt-template variable with a default of 5.0 failed its own type check in Apicurio Registry, because Jackson reads every decimal literal as a Double.</description>
+      <category>Java</category>
+      <category>Apicurio Registry</category>
+      <category>Jackson</category>
+      <category>Open Source</category>
+      <category>Debugging</category>
+    </item>
+    <item>
+      <title>Auditing My Own Portfolio Like Someone Else&apos;s Codebase</title>
+      <link>https://lokeshrc.me/blog/portfolio-security-production-audit</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/portfolio-security-production-audit</guid>
+      <pubDate>Sat, 05 Sep 2026 00:00:00 GMT</pubDate>
+      <description>I ran a security and production audit on this site. It found an XSS hole in the blog, two vulnerable dependencies, a dead permalink and missing security headers.</description>
+      <category>Security</category>
+      <category>Vue</category>
+      <category>Web Performance</category>
+      <category>Open Source</category>
+    </item>
+    <item>
       <title>When Success Doesn&apos;t Mean It Worked</title>
       <link>https://lokeshrc.me/blog/birdwatcher-merge</link>
       <guid isPermaLink="true">https://lokeshrc.me/blog/birdwatcher-merge</guid>
       <pubDate>Thu, 03 Sep 2026 00:00:00 GMT</pubDate>
-      <description>How a silent protobuf marshal failure in Birdwatcher, Milvus&apos;s diagnostic tool, let repair commands report success while writing corrupted data to etcd, and the fix.</description>
+      <description>A repair command in Birdwatcher, Milvus&apos;s diagnostic tool, could report success while writing corrupted protobuf bytes to etcd. Here&apos;s how I found and fixed it.</description>
       <category>Go</category>
       <category>Milvus</category>
       <category>etcd</category>
@@ -33,11 +139,24 @@
       <category>Open Source</category>
     </item>
     <item>
+      <title>One Kubeconfig, Unlimited Goroutines: Bounding Meshery&apos;s Context Registration</title>
+      <link>https://lokeshrc.me/blog/meshery-bounded-k8s-context-registration</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/meshery-bounded-k8s-context-registration</guid>
+      <pubDate>Tue, 25 Aug 2026 00:00:00 GMT</pubDate>
+      <description>Meshery spawned one unbounded goroutine per Kubernetes context in an uploaded kubeconfig. I capped it with a semaphore so one request can&apos;t exhaust the server.</description>
+      <category>Go</category>
+      <category>Meshery</category>
+      <category>Kubernetes</category>
+      <category>Concurrency</category>
+      <category>Security</category>
+      <category>Open Source</category>
+    </item>
+    <item>
       <title>The Bug That Wasn&apos;t a Bug Yet: Hunting a Dormant API Contract Violation in Meshery</title>
       <link>https://lokeshrc.me/blog/the-bug-that-wasn't-a-bug-yet</link>
       <guid isPermaLink="true">https://lokeshrc.me/blog/the-bug-that-wasn't-a-bug-yet</guid>
       <pubDate>Mon, 24 Aug 2026 00:00:00 GMT</pubDate>
-      <description>How reading a naming-convention doc closely enough led to a 20-site fix for a pagination bug in a CNCF project that hadn&apos;t broken anything, yet.</description>
+      <description>I read Meshery&apos;s naming-convention doc closely and found 20 handlers that would break pagination the day the frontend moved to generated clients.</description>
       <category>Meshery</category>
       <category>Go</category>
       <category>API Contracts</category>
@@ -46,11 +165,35 @@
       <category>Software Engineering</category>
     </item>
     <item>
+      <title>The Stub That Made Birdwatcher&apos;s Restore Write Nothing</title>
+      <link>https://lokeshrc.me/blog/birdwatcher-multisave-not-implemented</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/birdwatcher-multisave-not-implemented</guid>
+      <pubDate>Sun, 23 Aug 2026 00:00:00 GMT</pubDate>
+      <description>FileAuditKV.MultiSave in Birdwatcher always returned &apos;not implemented&apos;. That broke one repair command outright and made restore silently write zero keys.</description>
+      <category>Go</category>
+      <category>Milvus</category>
+      <category>etcd</category>
+      <category>Open Source</category>
+      <category>Debugging</category>
+    </item>
+    <item>
+      <title>A Validator That Crashed Instead of Saying No</title>
+      <link>https://lokeshrc.me/blog/pymilvus-binary-vector-typeerror</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/pymilvus-binary-vector-typeerror</guid>
+      <pubDate>Sun, 23 Aug 2026 00:00:00 GMT</pubDate>
+      <description>pymilvus&apos;s binary-vector check raised a raw TypeError on None values instead of returning False. Swapping two lines fixed it.</description>
+      <category>Python</category>
+      <category>Milvus</category>
+      <category>pymilvus</category>
+      <category>Validation</category>
+      <category>Open Source</category>
+    </item>
+    <item>
       <title>Hardening a 15-Phase AI API for Pre-Production</title>
       <link>https://lokeshrc.me/blog/hardening-fastapi-ai-api-preproduction</link>
       <guid isPermaLink="true">https://lokeshrc.me/blog/hardening-fastapi-ai-api-preproduction</guid>
       <pubDate>Sat, 22 Aug 2026 00:00:00 GMT</pubDate>
-      <description>An architectural deep dive and pre-production audit of Velar, detailing how to secure a FastAPI service against concurrency races, missing indexes, root containers, and dependency CVEs.</description>
+      <description>What my pre-production audit of Velar found: zero indexes, a root container, a concurrency race, and two security bumps that broke things.</description>
       <category>Machine Learning</category>
       <category>FastAPI</category>
       <category>MongoDB</category>
@@ -59,11 +202,35 @@
       <category>Production Readiness</category>
     </item>
     <item>
+      <title>Deleting One Environment Shouldn&apos;t Delete a Shared API Key</title>
+      <link>https://lokeshrc.me/blog/nango-customer-key-cleanup-trigger</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/nango-customer-key-cleanup-trigger</guid>
+      <pubDate>Sun, 09 Aug 2026 00:00:00 GMT</pubDate>
+      <description>A Postgres trigger in Nango hard-deleted an API key whenever any of its environments was removed, even if the key still belonged to others. I made it relation-aware.</description>
+      <category>PostgreSQL</category>
+      <category>TypeScript</category>
+      <category>Nango</category>
+      <category>Databases</category>
+      <category>Open Source</category>
+    </item>
+    <item>
+      <title>A Flaky Test That Was Really a Same-Millisecond Bug</title>
+      <link>https://lokeshrc.me/blog/roster-hitl-migration-seq-not-clock</link>
+      <guid isPermaLink="true">https://lokeshrc.me/blog/roster-hitl-migration-seq-not-clock</guid>
+      <pubDate>Sun, 09 Aug 2026 00:00:00 GMT</pubDate>
+      <description>roster&apos;s v1 to v2 HITL migration refused valid history whenever two events landed in the same millisecond. The ledger already had a sequence number that fixed it.</description>
+      <category>TypeScript</category>
+      <category>Node.js</category>
+      <category>Testing</category>
+      <category>Open Source</category>
+      <category>Debugging</category>
+    </item>
+    <item>
       <title>Why I Didn&apos;t Just Use ChatGPT for Transaction Parsing</title>
       <link>https://lokeshrc.me/blog/why-i-didnt-just-use-chatgpt-for-transaction-parsing</link>
       <guid isPermaLink="true">https://lokeshrc.me/blog/why-i-didnt-just-use-chatgpt-for-transaction-parsing</guid>
       <pubDate>Sat, 08 Aug 2026 00:00:00 GMT</pubDate>
-      <description>Every fintech demo this year routes bank SMS text through a chat completion and calls it categorization. Here&apos;s the pipeline I built instead: three cheap, boring, deterministic layers before an LLM ever gets a vote.</description>
+      <description>I put three cheap, deterministic layers in front of the LLM in Velar, and gave the pipeline permission to say &apos;I don&apos;t know.&apos;</description>
       <category>Machine Learning</category>
       <category>FastAPI</category>
       <category>MongoDB</category>
@@ -75,7 +242,7 @@
       <link>https://lokeshrc.me/blog/grounded-rag-pipeline-milvus-ollama-velar</link>
       <guid isPermaLink="true">https://lokeshrc.me/blog/grounded-rag-pipeline-milvus-ollama-velar</guid>
       <pubDate>Fri, 07 Aug 2026 00:00:00 GMT</pubDate>
-      <description>An architectural deep dive into how Velar builds a privacy-first, grounded RAG pipeline using Milvus, Ollama, and FastAPI without relying on external LLM APIs.</description>
+      <description>How I kept Velar&apos;s explanations local and grounded: Ollama for embeddings and generation, Milvus for lookup, and an early return when there&apos;s nothing to ground on.</description>
       <category>Machine Learning</category>
       <category>FastAPI</category>
       <category>MongoDB</category>
@@ -90,7 +257,7 @@
       <link>https://lokeshrc.me/blog/designing-trust-state-machine</link>
       <guid isPermaLink="true">https://lokeshrc.me/blog/designing-trust-state-machine</guid>
       <pubDate>Sat, 01 Aug 2026 00:00:00 GMT</pubDate>
-      <description>An architectural deep dive into how Velar tracks merchant trust explicitly using a frequency-based state machine, built with FastAPI and MongoDB.</description>
+      <description>How I made merchant trust an explicit state in Velar, the race condition I almost shipped, and the decay question I still haven&apos;t answered.</description>
       <category>Machine Learning</category>
       <category>FastAPI</category>
       <category>MongoDB</category>
@@ -102,7 +269,7 @@
       <link>https://lokeshrc.me/blog/nginx-configuration-maintainable</link>
       <guid isPermaLink="true">https://lokeshrc.me/blog/nginx-configuration-maintainable</guid>
       <pubDate>Wed, 22 Jul 2026 00:00:00 GMT</pubDate>
-      <description>A practical guide to creating and maintaining Nginx configurations that are both efficient and easy to manage.</description>
+      <description>How my reverse proxy config went from one fragile file to something I can change without fear, and the reload mistake I kept making.</description>
       <category>DevOps</category>
       <category>Infrastructure</category>
       <category>Engineering</category>
@@ -112,7 +279,7 @@
       <link>https://lokeshrc.me/blog/personal-cloud-self-hosting</link>
       <guid isPermaLink="true">https://lokeshrc.me/blog/personal-cloud-self-hosting</guid>
       <pubDate>Mon, 20 Jul 2026 00:00:00 GMT</pubDate>
-      <description>A journey into self-hosting and the lessons learned while building a personal cloud infrastructure.</description>
+      <description>Why I built my own cloud on Proxmox, and what I learned getting a static IP, a reverse proxy, Keycloak and monitoring running at home.</description>
       <category>Architecture</category>
       <category>Self-Hosting</category>
       <category>Cloud</category>

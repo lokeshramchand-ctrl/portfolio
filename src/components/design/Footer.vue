@@ -95,7 +95,14 @@
   const footerSections = [
     { title: 'Menu', links: navbarLinks },
     { title: 'Socials', links: socialLinks },
-    { title: 'Resources', links: resourceLinks },
+    {
+      title: 'Resources',
+      links: [
+        ...resourceLinks,
+        { label: 'Privacy', url: '/privacy' },
+        { label: 'Terms', url: '/terms' },
+      ],
+    },
   ];
 
   const myLocalTime = ref('');

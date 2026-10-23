@@ -6,6 +6,7 @@ import Marquee from './Marquee.vue';
 import Slider from './Slider.vue';
 import Footer from './Footer.vue';
 import Cursor from './Cursor.vue';
+import ShaderBackground from './ShaderBackground.vue';
 
 export {
   Circles,
@@ -16,4 +17,5 @@ export {
   Slider,
   Footer,
   Cursor,
+  ShaderBackground,
 };

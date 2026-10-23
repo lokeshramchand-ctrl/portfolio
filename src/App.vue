@@ -20,30 +20,19 @@
         <feBlend mode="screen" />
       </filter>
       <rect ref="noise" class="size-full" filter="url(#noise)" opacity="0.15" />
-      <filter id="noise">
-        <feTurbulence
-          type="fractalNoise"
-          base-frequency="0.8"
-          numOctaves="1"
-          stitchTiles="stitch"
-        />
-        <feBlend mode="screen" />
-      </filter>
-      <rect
-        ref="noise"
-        class="size-full"
-        filter="url(#noise)"
-        opacity="-0.88"
-      />
     </svg>
   </div>
 
   <Cursor />
   <Navbar @isLocked="LockeScroll" />
 
-  <router-view />
+  <!-- Routes are lazy chunks: reserve a viewport of height so Footer
+       doesn't paint at the top and then get shoved down (layout shift). -->
+  <div class="min-h-svh">
+    <router-view />
+  </div>
 
-  <Footer />
+  <Footer v-if="$route.path !== '/intro'" />
 </template>
 
 <script setup lang="ts">

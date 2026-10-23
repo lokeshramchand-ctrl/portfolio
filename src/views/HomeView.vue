@@ -25,9 +25,10 @@
     Contact,
   } from '@/components/sections';
   import { Marquee } from '@/components/design';
-  import { nextTick, onMounted } from 'vue';
+  import { nextTick, onMounted, onUnmounted } from 'vue';
   import ScrollTrigger from 'gsap/ScrollTrigger';
   import { lenis } from '@/main';
+  import { killDetachedAnimations } from '@/animations';
   import { pendingSection } from '@/state';
   import { useSeo } from '@/seo/useSeo';
   import { profilePageSchema, websiteSchema } from '@/seo/schema';
@@ -51,7 +52,12 @@
 
     await nextTick();
     ScrollTrigger.refresh();
+    // Lenis caches the scroll limit; without this it's still the previous
+    // route's (shorter) height and the scroll stops short of the section.
+    lenis.resize();
     lenis.start();
     lenis.scrollTo(target, { duration: 3 });
   });
+
+  onUnmounted(killDetachedAnimations);
 </script>

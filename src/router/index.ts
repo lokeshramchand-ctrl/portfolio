@@ -23,6 +23,18 @@ const routes = [
     props: true,
   },
   {
+    path: '/privacy',
+    name: 'Privacy',
+    component: () => import('@/views/LegalView.vue'),
+    props: { kind: 'privacy' },
+  },
+  {
+    path: '/terms',
+    name: 'Terms',
+    component: () => import('@/views/LegalView.vue'),
+    props: { kind: 'terms' },
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: () => import('@/views/NotFoundView.vue'),

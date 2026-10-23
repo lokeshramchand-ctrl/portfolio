@@ -1,7 +1,7 @@
 import gsap from 'gsap';
 import MotionPathHelper from 'gsap/MotionPathPlugin';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-import { Ref } from 'vue';
+import type { Ref } from 'vue';
 import { lenis } from '@/main';
 import { appBooted } from '@/state';
 
@@ -139,78 +139,41 @@ const resetOpacity = (id: string, opacity: number = 0) => {
 };
 
 // ! Magneto effects
-const activateMagneto = (
-  event: MouseEvent,
-  magneto: Ref<HTMLElement>,
-  magnetoText: Ref<HTMLElement>,
-  magnetoStrengthVal: number,
-  magnetoTextStrengthVal: number,
+// quickTo setters are built once per element pair and reused for every
+// mousemove — creating them per event allocated four tweens per pixel
+// of pointer travel.
+const createMagneto = (
+  magneto: HTMLElement,
+  magnetoText: HTMLElement,
+  magnetoStrength: number,
+  magnetoTextStrength: number,
 ) => {
-  const xDivTo = gsap.quickTo(magneto.value, 'x', {
-    duration: 1,
-    ease: 'elastic.out(1, 0.3)',
-  });
-  const xTextTo = gsap.quickTo(magnetoText.value, 'x', {
-    duration: 1,
-    ease: 'elastic.out(1, 0.3)',
-  });
+  const config = { duration: 1, ease: 'elastic.out(1, 0.3)' };
+  const xDivTo = gsap.quickTo(magneto, 'x', config);
+  const yDivTo = gsap.quickTo(magneto, 'y', config);
+  const xTextTo = gsap.quickTo(magnetoText, 'x', config);
+  const yTextTo = gsap.quickTo(magnetoText, 'y', config);
 
-  const yTextTo = gsap.quickTo(magnetoText.value, 'y', {
-    duration: 1,
-    ease: 'elastic.out(1, 0.3)',
-  });
-  const yDivTo = gsap.quickTo(magneto.value, 'y', {
-    duration: 1,
-    ease: 'elastic.out(1, 0.3)',
-  });
+  const move = (event: MouseEvent) => {
+    const { clientX, clientY } = event;
+    const { width, height, left, top } = magneto.getBoundingClientRect();
+    const newX = ((clientX - left) / width - 0.5) * magnetoStrength;
+    const newY = ((clientY - top) / height - 0.5) * magnetoTextStrength;
 
-  const { clientX, clientY } = event;
-  const { width, height, left, top } = magneto.value.getBoundingClientRect();
+    xDivTo(newX);
+    yDivTo(newY);
+    xTextTo(newX);
+    yTextTo(newY);
+  };
 
-  const magnetoStrength = magnetoStrengthVal;
-  const magnetoTextStrength = magnetoTextStrengthVal;
-  const newX = ((clientX - left) / width - 0.5) * magnetoStrength;
-  const newY = ((clientY - top) / height - 0.5) * magnetoTextStrength;
-  // const newX = clientX - (left + width / 2);
-  // const newY = clientY - (top + height / 2);
+  const reset = () => {
+    xDivTo(0);
+    yDivTo(0);
+    xTextTo(0);
+    yTextTo(0);
+  };
 
-  // move the magneto
-  xDivTo(newX);
-  yDivTo(newY);
-
-  // move the text
-  xTextTo(newX);
-  yTextTo(newY);
-};
-
-const resetMagneto = (
-  magneto: Ref<HTMLElement>,
-  magnetoText: Ref<HTMLElement>,
-) => {
-  const xDivTo = gsap.quickTo(magneto.value, 'x', {
-    duration: 1,
-    ease: 'elastic.out(1, 0.3)',
-  });
-  const xTextTo = gsap.quickTo(magnetoText.value, 'x', {
-    duration: 1,
-    ease: 'elastic.out(1, 0.3)',
-  });
-
-  const yTextTo = gsap.quickTo(magnetoText.value, 'y', {
-    duration: 1,
-    ease: 'elastic.out(1, 0.3)',
-  });
-  const yDivTo = gsap.quickTo(magneto.value, 'y', {
-    duration: 1,
-    ease: 'elastic.out(1, 0.3)',
-  });
-
-  xDivTo(0);
-  yDivTo(0);
-
-  // move the text
-  xTextTo(0);
-  yTextTo(0);
+  return { move, reset };
 };
 
 // ! Nav animation
@@ -264,13 +227,17 @@ const animateLoadingPath = (
   const tl = gsap.timeline({});
   tl.to('#loading-screen', {
     delay: 3,
-    bottom: '100%',
+    // Transform instead of animating `bottom`: same motion, but no
+    // per-frame layout (each `bottom` frame registered as a layout shift).
+    yPercent: -100,
     duration: 1,
     ease: 'power2.inOut',
     onStart: () => {
       setTimeout(() => {
         animateHeroNav();
-        animateHeroEntrance();
+        // Boot can land on any route (e.g. a deep link to /blog); Hero
+        // reveals itself on a later mount via appBooted instead.
+        if (document.getElementById('hero')) animateHeroEntrance();
         appBooted.value = true;
         samsungErrorModal(isSamsung);
         document.body.classList.remove('stop-scrolling');
@@ -333,36 +300,11 @@ const animateLoadingText = (id: string) => {
 };
 
 // ! Hero
-// Chrome that lives outside Hero.vue (Navbar, legacy selectors) and
-// therefore only ever needs revealing once, at true app boot.
+// Chrome that lives outside Hero.vue (the Navbar) and therefore only
+// ever needs revealing once, at true app boot.
 const animateHeroNav = () => {
   gsap.to('header', {
     y: 0,
-    duration: 1.5,
-    ease: 'power4.inOut',
-  });
-
-  gsap.to('#svg-my-en-name g path', {
-    y: 0,
-    delay: 0.2,
-    duration: 1.5,
-    ease: 'power4.inOut',
-    stagger: 0.01,
-  });
-
-  gsap.to('.overlay', {
-    y: '100%',
-    delay: 0.2,
-    duration: 1.5,
-    ease: 'power4.inOut',
-    onComplete: () => {
-      gsap.set('.overlay', { display: 'none' });
-    },
-  });
-
-  gsap.to('#profile-img', {
-    scale: 1,
-    delay: 0.4,
     duration: 1.5,
     ease: 'power4.inOut',
   });
@@ -382,7 +324,7 @@ const animateHeroEntrance = (starDelay: number = 0.2, restDelay: number = 0.4) =
     ease: 'power4.inOut',
   });
 
-  gsap.to(['#down-arrow', '#contact-btn', '#available-for-work'], {
+  gsap.to(['#down-arrow', '#contact-btn'], {
     x: 0,
     y: 0,
     delay: restDelay,
@@ -498,14 +440,34 @@ const animateBlogPostEnter = () => {
     );
 };
 
+// Section animations are registered against selector strings from each
+// component's onMounted, so nothing tears them down when a routed view
+// unmounts — repeated visits would pile up ScrollTriggers and infinite
+// tweens (e.g. the marquee loop) bound to detached nodes. Call this from
+// a view's onUnmounted (its DOM is already removed by then): it kills
+// only what is bound exclusively to detached elements, so persistent
+// chrome like the Navbar/Footer and any in-flight menu tweens survive.
+const killDetachedAnimations = () => {
+  const isDetached = (t: unknown) =>
+    t instanceof Element && !t.isConnected;
+
+  ScrollTrigger.getAll().forEach((st) => {
+    if (isDetached(st.trigger)) st.kill();
+  });
+
+  gsap.globalTimeline.getChildren(true, true, false).forEach((tween) => {
+    const targets = tween.targets();
+    if (targets.length && targets.every(isDetached)) tween.kill();
+  });
+};
 
 export {
+  killDetachedAnimations,
   displayNone,
   xToZero,
   fadeIn,
   navbarScale,
-  activateMagneto,
-  resetMagneto,
+  createMagneto,
   animateNavbarEnter,
   animateNavbarLeave,
   animateLoadingPath,

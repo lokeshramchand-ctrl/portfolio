@@ -1,118 +1,55 @@
 ---
 title: "Why I Didn't Just Use ChatGPT for Transaction Parsing"
 date: "Aug 8, 2026"
-excerpt: "Every fintech demo this year routes bank SMS text through a chat completion and calls it categorization. Here's the pipeline I built instead: three cheap, boring, deterministic layers before an LLM ever gets a vote."
+excerpt: "I put three cheap, deterministic layers in front of the LLM in Velar, and gave the pipeline permission to say 'I don't know.'"
 tags: ["Machine Learning", "FastAPI", "MongoDB", "System Architecture", "LLM"]
 ---
 
-Every fintech demo this year routes bank SMS text through a chat completion and calls it categorization. It works, right up until the model confidently invents a merchant that doesn't exist. Here's the pipeline I built instead: three cheap, boring, deterministic layers before an LLM ever gets a vote, with a final wall that's allowed to simply say "I don't know."
+Pointing a chat model at `"UPI/DR/SWIGGY BANGALORE/4471829301"` and getting back `{"merchant": "Swiggy", "category": "Food Delivery"}` looks great in a demo. Then you give it a regional kirana store or a terminal ID with no vendor name, and it guesses in the same confident tone it uses when it's right.
 
-**System:** Velar, transaction intelligence service
-**Stack:** FastAPI · MongoDB · Milvus
-**Reading time:** 7 min
+When I started Velar I set myself a rule: the LLM is the most expensive and least predictable thing I have, so it goes last. Anything I can resolve deterministically, I resolve deterministically.
 
----
+## Layer one: rules
 
-The three layers cost, in order: a regex scan, a database lookup, and a threshold check. No inference until step four, and even then it's a gate, not a generator.
+A compiled regex table over a merchant alias file. No database, no network. A hit returns at a fixed 0.95:
 
-The pitch for using an LLM to categorize bank transactions is a good one on paper. Point a chat model at `"UPI/DR/SWIGGY BANGALORE/4471829301"`, get back `{"merchant": "Swiggy", "category": "Food Delivery"}`, done. No regex to maintain, no merchant database to seed, no schema to version. Then you feed it a narration it hasn't seen, a regional kirana store, a truncated bank transfer reference, a card-machine terminal ID with no vendor name attached at all, and it doesn't fail loudly. It guesses. And the guess comes back with exactly the same tone of confidence as the correct answer, which is the part that should worry you.
-
-Velar, the service I've been building, turns noisy UPI references, bank SMS, and point-of-sale narrations into merchant identity and spend category. Early on I set a rule for myself: the LLM is the most expensive, least predictable component I have, so it goes last, not first. Anything that can be resolved deterministically gets resolved deterministically, full stop. What's left over goes to inference, and what's left over after that is allowed to just say "I don't know."
-
-## Layer one: rules, because most transactions don't need a model
-
-The first pass is a compiled regex table over a merchant alias file: no database round-trip, no network call, sub-millisecond per transaction. If the narration contains a known alias, Velar returns it at a fixed 0.95 confidence and moves on:
-
-**`engines/rule_engine.py`**
 ```python
-def categorize(self, text: str) -> dict:
-    for pattern, data in self.compiled_rules.items():
-        if pattern.search(text):
-            return {
-                "merchant": data["merchant"],
-                "category": data["category"],
-                "confidence": 0.95  # deterministic match
-            }
-    # no rule fired — surface what we actually know
-    return {
-        "merchant": text.strip() or "Unknown",
-        "category": "Uncategorized", 
-        "confidence": 0.0
-    }
+for pattern, data in self.compiled_rules.items():
+    if pattern.search(text):
+        return {"merchant": data["merchant"], "category": data["category"], "confidence": 0.95}
+return {"merchant": text.strip() or "Unknown", "category": "Uncategorized", "confidence": 0.0}
 ```
 
-This is the layer most architecture posts skip because it's unglamorous, but it's also the one doing most of the work in production. A huge fraction of real transaction volume is repeat merchants: the same five food delivery apps, the same two ride-hailing brands, the same utility billers, over and over. Paying an inference cost for those is paying rent on a problem you already solved once.
+A lot of real volume is repeat merchants: the same food delivery apps, ride-hailing brands and utility billers. Paying for inference on those means solving the same problem over and over.
 
-## Layer two: cleaning the noise before matching it
+## Layer two: clean, then match
 
-What doesn't hit a rule goes to the merchant resolver, which exists because Indian UPI narrations are mostly noise: `UPI/CR/` prefixes, 12-digit reference numbers, bank handles like `@okaxis`. The resolver strips that first, then tries an exact alias match against MongoDB, then a prefix match on individual words, skipping anything under four characters so it doesn't false-positive on "LTD" or "PVT":
+UPI narrations are mostly noise: `UPI/CR/` prefixes, 12-digit reference numbers, handles like `@okaxis`. The resolver strips that out, tries an exact alias match in MongoDB (0.99), then a word-prefix match (0.75), skipping words under four characters so "LTD" and "PVT" don't match everything. The score depends on how the match happened, because an exact hit and a prefix guess aren't the same claim.
 
-**`services/merchant_resolver.py`**
-```python
-exact_match = await db.merchants.find_one({"aliases": cleaned_text})
-if exact_match:
-    return ResolutionResult(..., confidence=0.99, resolution_method="exact_alias")
+## Layer three: the confidence wall
 
-for word in cleaned_text.split():
-    if len(word) < 4:
-        continue  # skip short words like LTD, PVT, INC
-    match = await db.merchants.find_one({"aliases": {"$regex": f"^{word}"}})
-    if match:
-        return ResolutionResult(..., confidence=0.75, resolution_method="substring")
-```
-
-Notice the confidence isn't just one number tuned by hand. It moves with how the match happened. An exact alias hit and a prefix guess are not the same claim about the world, and collapsing them into one score would throw away exactly the information a downstream system needs to avoid being overconfident.
-
-## The confidence wall
-
-Everything upstream produces a category and a number. The wall's only job is deciding whether that number is trustworthy enough to leave the building. The threshold itself is unglamorous, a flat 0.5, but the part worth stealing is the guard clause: a prediction in a category the system doesn't recognize gets rejected before the threshold check even runs, because a category the system has never heard of is a stronger signal of a broken upstream model than a merely low score is.
-
-**`engines/confidence_engine.py`**
 ```python
 if predicted_category not in self.valid_categories:
-    return ConfidenceEvaluation(
-        final_category=UNKNOWN, 
-        confidence=0.0,
-        is_hallucination_risk=True
-    )
-
-if calibrated_conf < self.threshold:  # default 0.5
-    return ConfidenceEvaluation(
-        final_category=UNKNOWN, 
-        confidence=calibrated_conf,
-        is_hallucination_risk=True
-    )
+    return ConfidenceEvaluation(final_category=UNKNOWN, confidence=0.0, is_hallucination_risk=True)
+if calibrated_conf < self.threshold:  # 0.5
+    return ConfidenceEvaluation(final_category=UNKNOWN, confidence=calibrated_conf, is_hallucination_risk=True)
 ```
 
-> **Unknown is a valid, honest answer.**
+The category check runs before the threshold. If the model returns a category the system has never heard of, that's a stronger sign something upstream is broken than a low score is.
 
-That line is the actual thesis of the whole pipeline, and I'd argue it cuts against how most ML-adjacent products get built. Product pressure almost always pushes toward "always return something," because an empty state reads as a bug to a product manager even when it's the only truthful output on offer. Every layer here is allowed to fail into Unknown instead of dressing up a guess as a category. That's a real cost, not a free lunch: some spend genuinely stays uncategorized that a more confident, and more wrong, system would have happily labeled.
+Unknown is a valid answer here. Product pressure usually pushes toward always returning something, but every layer in Velar is allowed to fail into Unknown. The cost is that some spend stays uncategorized that a more confident (and more wrong) system would have labeled.
 
-| Stage | Match type | Confidence |
-| :--- | :--- | :--- |
-| Rule engine | compiled regex on alias table | 0.95 |
-| Resolver | exact alias in MongoDB | 0.99 |
-| Resolver | word-prefix match | 0.75 |
-| Resolver | no match | 0.00 |
-| Confidence wall | below 0.5, or invalid category | → Unknown |
+## Where the LLM does show up
 
-## Where the LLM actually shows up
+`/v1/explain` turns a resolved transaction and its retrieved context into an explanation. Even there, if the Milvus search comes back empty, the context builder writes `NO_CONTEXT_AVAILABLE` and the generator returns before calling the model.
 
-There is still an LLM in this system, for the record. It just does the one job that actually needs judgment instead of lookup: `/v1/explain`, which turns a resolved transaction and its retrieved context into a natural-language explanation. And even there, the "don't guess" rule holds. If the Milvus vector search comes back empty, the context builder doesn't shrug and pass a thin prompt to the model anyway. It writes the literal string `NO_CONTEXT_AVAILABLE` into the context, and the generator reads that and stops: no call to the language model happens. The model never gets the chance to fill a gap with something that merely sounds right, because it never gets asked.
+## What's not done yet
 
-## What this pipeline is honest about not doing
+- There's no task queue. The `/v1/pipelines/*` batch jobs only run when a person or script triggers them.
+- Active learning stops at the queue. Corrections get marked "processing" and nothing picks them up.
+- `calibrate_probability()` just clamps the value to 0 through 1 and returns it.
+- The three layers are separate endpoints, not one composed call yet.
 
-This isn't finished. I don't think the best argument for this architecture is that it's complete, it's that where it's incomplete, it fails in ways I can predict. Better to list the rough edges myself than have a reader, or worse, an incident, find them for me.
+## What I'd change
 
-### Known limitations
-
-*   **No task queue exists anywhere in this service.** Batch jobs under `/v1/pipelines/*` are triggered manually, by a person or a script, not a scheduler. There's no background job system, no cron, no worker fleet. Comments in the code (`routers/observability.py`) still describe a future background task that was never built.
-*   **Active learning stops at the queue.** `feedback/retraining_queue.py` flips a correction's status to "processing" and then does nothing further; there's no executor on the other end. Wiring one up isn't a config change, it needs an actual async worker, because the trainer it would call is a long-running synchronous job that would otherwise block the whole service.
-*   **Confidence calibration is currently an identity function.** `calibrate_probability()` just clamps the input to the 0 to 1 range and returns it. The statistical calibration the docstring promises for a later phase doesn't exist yet; today, "confidence" is whatever the upstream layer says it is, unadjusted.
-*   **The three layers aren't chained server-side yet.** Rules, resolution, and the confidence wall are each their own endpoint (`/v1/categorize`, `/v1/resolve`, `/v1/confidence/evaluate`) rather than one composed call. The conceptual pipeline in this post is real; the single request that runs all of it in one round trip isn't, yet.
-
-## So what?
-
-The lesson I keep relearning building this thing: reliability here was mostly a sequencing problem, not a modeling problem. Nearly every "the LLM hallucinated" postmortem I've read, on this project or someone else's, turns out on closer inspection to be inference doing a lookup's job. Put the cheap, boring, auditable stuff first and the model only ever sees what's genuinely left over. That's a better use of it, and it gives the model a lot less room to embarrass you.
-
-Given a do-over, I'd build the confidence wall before the rule engine, not after. It's the cheapest piece in the whole system and the one every other layer ultimately has to answer to, and building it last meant bolting a threshold contract onto code that was never written to expose one cleanly. I'd also stop letting `calibrate_probability()` get away with being a pass-through for this long; right now it just clamps a number to 0 through 1 and calls it a day. An uncalibrated confidence score is just a plain number wearing a probability's clothes, and a wall is only as honest as the thing it's checking against.
+Reliability turned out to be mostly a sequencing problem. Most "the LLM hallucinated" stories I've read come down to inference doing a lookup's job. If I started over, I'd build the confidence wall first, since every other layer has to answer to it, and I'd stop letting the calibration function be a pass-through. A confidence score that was never calibrated is just a number that looks like a probability.

@@ -3,102 +3,51 @@ title: "Hardening a 15-Phase AI API for Pre-Production"
 date: "Aug 22, 2026"
 category: "Engineering"
 tags: ["Machine Learning", "FastAPI", "MongoDB", "Docker", "Security", "Production Readiness"]
-excerpt: "An architectural deep dive and pre-production audit of Velar, detailing how to secure a FastAPI service against concurrency races, missing indexes, root containers, and dependency CVEs."
+excerpt: "What my pre-production audit of Velar found: zero indexes, a root container, a concurrency race, and two security bumps that broke things."
 ---
 
-Getting a FastAPI service to return the right category for a transaction is the interesting part. Getting it to survive a 2MB request body, a dead Mongo connection, a root-user container, and a dependency with a security flaw from last quarter is the part that decides whether it ever sees real traffic. This is the audit that closed that gap, and it found more than one bug it also had to un-find.
+Getting Velar to return the right category was the fun part. Getting it ready for real traffic was a different job. Before this audit it had no indexes on any collection, logged raw transaction payloads by default, ran as root in a single-stage Docker image, and had a real race in its merchant profile updates.
 
-**System:** Velar, pre-production audit
-**Stack:** FastAPI · MongoDB · Docker · GitHub Actions
-**Reading time:** 8 min
+I had one rule for the whole pass: make the change, run the full suite, then check the behavior by hand where no test covered it. For Docker that meant building the image and running it against a real database. That rule caught two breakages I wouldn't have seen otherwise.
 
-A prototype has to work once, on your machine, while you're watching it. A production service has to survive requests it wasn't tested against, dependencies it doesn't control, and traffic that isn't trying to be nice to it. Velar had thirteen phases of machine learning pipeline behind it and none of that. No indexes on any collection. A logging config that wrote raw transaction payloads to disk by default. A single-stage Docker image running as root. A genuine concurrency race in the one piece of state every merchant profile depends on.
+## The race, briefly
 
-What follows is what the pre-production audit actually found and fixed, verified against a real MongoDB and a real container build rather than assumed correct because the diff looked reasonable. That distinction turned out to matter twice, in ways I didn't expect going in.
+`process_encounter` used to read a profile, bump its frequency in Python and write it back. That loses updates and can double-insert new merchants. I replaced it with one atomic `find_one_and_update` with `upsert=True`. I wrote that up in its own post.
 
-## The rule for the whole audit: verify, don't assume
+## Zero indexes
 
-Every finding below got the same treatment: make the change, then run the full test suite, then confirm the specific behavior by hand where a test didn't already cover it. For the Docker changes that meant actually building the image and running it against a real database, not trusting that a multi-stage Dockerfile that looks right behaves right. That discipline is the actual subject of this post more than any individual fix is, so it gets a section of its own near the end, where it earns it.
-
-## The concurrency race, briefly
-
-One finding gets its own full post: `memory_manager.process_encounter` used to read a profile, increment its frequency count in Python, and write it back, which loses updates under concurrent traffic against the same merchant and can double-insert a brand-new one. This is a known class of bug (CWE-362, a race condition), and it's rated High severity here specifically because it can silently corrupt the trust-state data the whole memory system is built on.
-
-The fix is a single atomic `find_one_and_update` with `upsert=True`, backed by a unique index. I walked through the mechanics of that fix in a separate post, so I won't repeat it here. What's worth adding is that the index half of that fix belongs to a much bigger gap this audit found.
-
-## Zero indexes, confirmed by grep
-
-Before this pass, no collection in the database had a single index on it. Not one. That's not a guess, it was confirmed by searching the codebase for `create_index` calls and finding none, which meant every query, including the profile lookup that runs on every single `/memory/update` call, was a full collection scan: MongoDB reading every document in the collection just to find the one it needed. `ensure_indexes()` now runs once at startup and creates every index the app's actual query patterns need:
+I grepped for `create_index` and found nothing, so every profile lookup was a full collection scan. `ensure_indexes()` now runs at startup:
 
 ```python
-# database/mongo.py
 await cls.merchant_profiles.create_index("canonical_name", unique=True, background=True)
-await cls.behavior_patterns.create_index("merchant_name", unique=True, background=True)
 await cls.transactions.create_index([("user_id", 1), ("timestamp", -1)], background=True)
-await cls.users.create_index("email", unique=True, background=True)
-await cls.refresh_tokens.create_index("token_hash", unique=True, background=True)
 await cls.refresh_tokens.create_index("expires_at", expireAfterSeconds=0, background=True)
 ```
 
-Two of these are doing more than speeding up a query. The unique index on `canonical_name` is the actual backstop behind the concurrency fix above: the atomic upsert closes the race in the application, and the unique index closes it at the database, which is the layer that should have been enforcing it all along. And the TTL index on `refresh_tokens.expires_at`, with `expireAfterSeconds=0`, tells MongoDB to delete expired tokens on its own schedule. No cleanup job, no cron entry, nothing to forget to run.
+The unique index on `canonical_name` backs up the race fix at the database level. The TTL index lets MongoDB delete expired refresh tokens itself, so there's no cleanup job to forget. If index creation fails, I log a warning instead of crashing. A slow service is easier to recover from than one that won't start.
 
-The whole block is wrapped in a `try/except` that logs a warning instead of crashing startup if index creation fails, on the theory that a service running slow because an index didn't get created is a recoverable Tuesday, and a service that won't start at all because it lacked permission to create an index is a much worse Tuesday.
+## Not running as root
 
-## A Docker image that doesn't run as root
+I split the Dockerfile into a builder stage and a runtime stage, added a `velar` system user with no home directory, and added a `HEALTHCHECK` against `/live`. I checked with `id` that the process really runs as `uid=999`. I picked `/live` because it doesn't touch Mongo, Milvus or Ollama, so a dependency outage won't make Docker restart-loop a container that a restart can't fix. I kept `python:3.12-slim` instead of Alpine because scikit-learn, numpy and umap-learn are painful on Alpine's C library.
 
-The original image was single-stage, ran as root, and had no health check beyond whatever the orchestrator assumed. All three got fixed at once, because they're related decisions, not separate ones:
+## Two security bumps that broke things
 
-```dockerfile
-# Dockerfile
-FROM python:3.12-slim AS builder
-RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+`pip-audit` found fourteen known vulnerabilities in three packages. Bumping the pins was the easy part.
 
-FROM python:3.12-slim AS runtime
-RUN groupadd --system velar && useradd --system --gid velar --no-create-home velar
-COPY --from=builder /install /usr/local
-COPY --chown=velar:velar . .
-USER velar
+- `fastapi` 0.115.6 to 0.140.13 pulled in a newer Starlette and broke `prometheus-fastapi-instrumentator`'s route lookup. Thirteen of fifteen tests failed, which is the only reason it didn't ship.
+- `setuptools` 83.0.0 removed `pkg_resources`, which pymilvus below 2.6 imports at load time. Tests didn't catch this one. It only showed up when I built and ran the image.
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
-    CMD python -c "...urllib.request.urlopen('http://localhost:8000/live'...)"
-```
+## The rest
 
-The builder stage is the only place that ever sees `build-essential` or pip's cache; the runtime stage copies the finished packages out of `/install` and never installs a compiler of its own. The `velar` user has no home directory and no login shell, and running `id` inside the container confirms the process actually runs as `uid=999`, not root. The health check hits `/live` specifically rather than the older `/health`, because `/live` never touches Mongo, Milvus, or Ollama. A dependency outage shouldn't also convince Docker the process itself is broken and restart-loop a container that restarting can't fix.
+The API key check now uses a constant-time comparison. Free-text fields have length limits, a body-size middleware handles requests with or without `Content-Length`, and rate limits match cost: 20 per minute for `/v1/explain`, 5 per minute for clustering.
 
-One deliberate non-change: the base image stayed `python:3.12-slim` instead of moving to the smaller Alpine Linux. Alpine's C library has real compatibility friction with the scientific-Python packages (`scikit-learn`, `numpy`, `umap-learn`) the clustering endpoint genuinely needs at runtime. That's a tradeoff made on purpose, not a missed optimization I forgot to revisit.
+## What I left open on purpose
 
-## The two regressions the version bumps caused
+- Every caller with `VELAR_API_KEY` has the same access. Scoping keys per caller is a feature, not a patch.
+- The Trivy image scan in CI doesn't block builds yet. Someone has to triage its first findings.
+- The CPU and memory limits are guesses until I have real load data.
+- A MongoDB credential is in git history. Deleting it from the file doesn't help. It has to be rotated on the server.
 
-Running a vulnerability scanner (`pip-audit`) found fourteen known security issues across three packages. Bumping version pins to fix them is the easy ninety percent of this kind of work. The other ten percent is what actually happened here: two of those bumps broke something, and neither failure was visible by reading the diff.
+## What I'd do differently
 
-| Package | Before | After | What broke |
-| :--- | :--- | :--- | :--- |
-| `fastapi` | 0.115.6 | 0.140.13 | Pulled in a newer starlette that broke prometheus-fastapi-instrumentator's internal route lookup |
-| `setuptools` | implicit | 83.0.0 | Removed pkg_resources, which pymilvus <2.6 imports at load time |
-
-The `fastapi` bump was needed to pull in a patched version of Starlette, the library FastAPI is built on, closing seven vulnerabilities that only existed transitively since Starlette was never pinned directly. It also broke `prometheus-fastapi-instrumentator`, a metrics library whose route-name lookup reached into an internal Starlette object that no longer existed in the same shape. Thirteen of fifteen tests failed the moment that combination landed, which is the only reason it didn't ship.
-
-The `setuptools` bump, needed for its own security fix, quietly removed `pkg_resources` from the package entirely, and `pymilvus`'s import chain still depended on it. That one didn't show up in the test suite at all. It only surfaced when the Docker image was actually built and run, because the isolated install step used in the multi-stage build doesn't pull in `setuptools` the same way a normal install does.
-
-Neither of those would have been caught by reading the changelog for the fix. Both were caught because "bump the version" wasn't treated as the finish line.
-
-## Securing the endpoints nobody blogs about
-
-The API-key check now uses a constant-time comparison instead of a plain `!=`, closing a timing side-channel (an attacker measuring tiny differences in response time to guess the key byte by byte) that a prior review had flagged but never fixed. Every free-text field (`CategorizeRequest.text`, `ExplainRequest.transaction_text`, and the rest) got explicit length limits, so a multi-megabyte payload now gets rejected before it's even parsed instead of being handed to a regex engine. A new body-size middleware backs that up at the transport level, catching both an oversized declared `Content-Length` and a streamed body with no `Content-Length` header to check in the first place. And the batch endpoints got rate limits scaled to what they actually cost: 20 requests a minute for `/v1/explain`, which triggers both an embedding call and an LLM generation call, down to 5 a minute for the clustering pipeline, the single most CPU-intensive thing this service does.
-
-## What's still not fixed, on purpose
-
-**Named in the audit, not hidden by it**
-
-*   Every caller with `VELAR_API_KEY` has identical access to everything. There's no per-caller scoping. Fixing that is a real feature, multi-tenant key management, not a hardening patch, and it's on the roadmap rather than in this pass.
-*   The container image scan in CI (using Trivy) is non-blocking on purpose. This is the first time this image has ever been scanned. Findings need a human to triage them before the build is allowed to hard-fail on a severity nobody's looked at yet.
-*   Docker resource limits are starting defaults, not measured ones. `cpus: "2.0"` and `memory: 2g` are reasonable guesses in the absence of real production load to tune against.
-*   A MongoDB credential exists in this repo's git history, committed before this audit and already removed from the current file. Removing it from the working tree doesn't undo the exposure. That credential has to be rotated on the actual database server; no amount of git history rewriting from inside this repo fixes it on its own.
-
-## So what
-
-Going in, I expected the value of this audit to be the list: indexes added, headers added, a root user removed. It turned out to be the verification loop around that list. A security fix that isn't re-tested against the actual system it's patching is just a version number changed on faith, and twice during this pass that faith would have shipped a broken metrics endpoint or a container that couldn't import its own vector database client.
-
-If I did this again, I'd stand up the CI pipeline before starting the fixes instead of after. It ended up added as one of the last items in this pass, which meant every verification step up to that point was a manual re-run of the test suite and a manual Docker build, done by hand, by me, after each change. That worked, but it worked because I happened to remember to do it every time. A pipeline doesn't need to remember anything. It just runs.
-
----
+I expected the checklist to be the valuable part. It turned out to be the verification loop. Next time I'd set up CI before starting the fixes instead of near the end. Re-running everything by hand worked only because I remembered to do it every time.

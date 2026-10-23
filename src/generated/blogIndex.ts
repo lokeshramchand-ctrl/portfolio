@@ -3,10 +3,87 @@
 
 export const blogPosts = [
   {
+    "slug": "accesscraft-community-health-files",
+    "title": "Setting Up an Open Source Repo So Contributors Know What to Do",
+    "date": "Oct 21, 2026",
+    "excerpt": "My PR to accesscraft adds issue forms, contribution policies and CI automation. None of it is code, and all of it decides whether people can contribute.",
+    "tags": [
+      "GitHub Actions",
+      "Open Source",
+      "CI/CD",
+      "Community"
+    ]
+  },
+  {
+    "slug": "cncf-dot-project-github-link-checker",
+    "title": "Teaching a Link Checker That Not Every GitHub URL Is a Repo",
+    "date": "Oct 20, 2026",
+    "excerpt": "cncf/automation's link checker marked valid GitHub pages like /sponsors and /topics as broken. I made it double-check against github.com before reporting a 404.",
+    "tags": [
+      "Go",
+      "CNCF",
+      "Testing",
+      "Open Source"
+    ]
+  },
+  {
+    "slug": "cncf-kubevirt-runner-empty-jitconfig",
+    "title": "A Secret-Redaction Fix That Redacted the Secret Out of Existence",
+    "date": "Oct 20, 2026",
+    "excerpt": "The KubeVirt cloud runner in cncf/automation hid its JIT config so well that the runner never received it. I made it substitute the value again and still keep it out of the logs.",
+    "tags": [
+      "Go",
+      "CNCF",
+      "KubeVirt",
+      "CI/CD",
+      "Security",
+      "Open Source"
+    ]
+  },
+  {
+    "slug": "cncf-oci-runner-bash-x-jit-leak",
+    "title": "One Flag Was Printing a Runner Secret Into CI Logs",
+    "date": "Oct 18, 2026",
+    "excerpt": "The OCI cloud runner in cncf/automation ran its start script with bash -x, which traced the GitHub Actions JIT config into the logs. Removing one flag fixed it.",
+    "tags": [
+      "Go",
+      "CNCF",
+      "CI/CD",
+      "Security",
+      "Open Source"
+    ]
+  },
+  {
+    "slug": "birdwatcher-pprof-zero-byte-archives",
+    "title": "When a Profiling Archive Includes Nodes It Never Reached",
+    "date": "Sept 28, 2026",
+    "excerpt": "Birdwatcher's pprof command archived 0-byte entries for unreachable Milvus nodes and printed the same success message for them. Here's my fix.",
+    "tags": [
+      "Go",
+      "Milvus",
+      "Observability",
+      "Open Source",
+      "Debugging"
+    ]
+  },
+  {
+    "slug": "birdwatcher-verify-segment-typo",
+    "title": "A Typo That Hid a Whole Command, and the Crash Behind It",
+    "date": "Sept 21, 2026",
+    "excerpt": "Birdwatcher's verify-segment command was fully written but never registered, because its method was named VerifySegmentCommnad. Fixing the typo exposed a startup panic.",
+    "tags": [
+      "Go",
+      "Milvus",
+      "Reflection",
+      "Open Source",
+      "Debugging"
+    ]
+  },
+  {
     "slug": "apicurio-xsd-backward-compatibility-bug",
     "title": "A silent backward-compatibility bug in Apicurio Registry's XSD checker",
     "date": "Sept 15, 2026",
-    "excerpt": "A code comment said this case was already handled. It wasn't.",
+    "excerpt": "A code comment said this case was already handled. It wasn't, and I only found out because a sibling method handled the same case properly.",
     "tags": [
       "Java",
       "Apicurio Registry",
@@ -16,10 +93,48 @@ export const blogPosts = [
     ]
   },
   {
+    "slug": "birdwatcher-load-backup-error-race",
+    "title": "Three Goroutines, One Error Variable, and a Restore That Lied",
+    "date": "Sept 10, 2026",
+    "excerpt": "Birdwatcher's load-backup could report success while dropping keys, because worker goroutines raced on a shared err. I replaced the pattern with errgroup.",
+    "tags": [
+      "Go",
+      "Milvus",
+      "etcd",
+      "Concurrency",
+      "Open Source"
+    ]
+  },
+  {
+    "slug": "apicurio-integer-default-decimal-literal",
+    "title": "Why 5.0 Wasn't an Integer in Apicurio's Prompt Templates",
+    "date": "Sept 6, 2026",
+    "excerpt": "An integer prompt-template variable with a default of 5.0 failed its own type check in Apicurio Registry, because Jackson reads every decimal literal as a Double.",
+    "tags": [
+      "Java",
+      "Apicurio Registry",
+      "Jackson",
+      "Open Source",
+      "Debugging"
+    ]
+  },
+  {
+    "slug": "portfolio-security-production-audit",
+    "title": "Auditing My Own Portfolio Like Someone Else's Codebase",
+    "date": "Sept 5, 2026",
+    "excerpt": "I ran a security and production audit on this site. It found an XSS hole in the blog, two vulnerable dependencies, a dead permalink and missing security headers.",
+    "tags": [
+      "Security",
+      "Vue",
+      "Web Performance",
+      "Open Source"
+    ]
+  },
+  {
     "slug": "birdwatcher-merge",
     "title": "When Success Doesn't Mean It Worked",
     "date": "Sept 3, 2026",
-    "excerpt": "How a silent protobuf marshal failure in Birdwatcher, Milvus's diagnostic tool, let repair commands report success while writing corrupted data to etcd, and the fix.",
+    "excerpt": "A repair command in Birdwatcher, Milvus's diagnostic tool, could report success while writing corrupted protobuf bytes to etcd. Here's how I found and fixed it.",
     "tags": [
       "Go",
       "Milvus",
@@ -30,10 +145,24 @@ export const blogPosts = [
     ]
   },
   {
+    "slug": "meshery-bounded-k8s-context-registration",
+    "title": "One Kubeconfig, Unlimited Goroutines: Bounding Meshery's Context Registration",
+    "date": "Aug 25, 2026",
+    "excerpt": "Meshery spawned one unbounded goroutine per Kubernetes context in an uploaded kubeconfig. I capped it with a semaphore so one request can't exhaust the server.",
+    "tags": [
+      "Go",
+      "Meshery",
+      "Kubernetes",
+      "Concurrency",
+      "Security",
+      "Open Source"
+    ]
+  },
+  {
     "slug": "the-bug-that-wasn't-a-bug-yet",
     "title": "The Bug That Wasn't a Bug Yet: Hunting a Dormant API Contract Violation in Meshery",
     "date": "Aug 24, 2026",
-    "excerpt": "How reading a naming-convention doc closely enough led to a 20-site fix for a pagination bug in a CNCF project that hadn't broken anything, yet.",
+    "excerpt": "I read Meshery's naming-convention doc closely and found 20 handlers that would break pagination the day the frontend moved to generated clients.",
     "tags": [
       "Meshery",
       "Go",
@@ -44,10 +173,36 @@ export const blogPosts = [
     ]
   },
   {
+    "slug": "birdwatcher-multisave-not-implemented",
+    "title": "The Stub That Made Birdwatcher's Restore Write Nothing",
+    "date": "Aug 23, 2026",
+    "excerpt": "FileAuditKV.MultiSave in Birdwatcher always returned 'not implemented'. That broke one repair command outright and made restore silently write zero keys.",
+    "tags": [
+      "Go",
+      "Milvus",
+      "etcd",
+      "Open Source",
+      "Debugging"
+    ]
+  },
+  {
+    "slug": "pymilvus-binary-vector-typeerror",
+    "title": "A Validator That Crashed Instead of Saying No",
+    "date": "Aug 23, 2026",
+    "excerpt": "pymilvus's binary-vector check raised a raw TypeError on None values instead of returning False. Swapping two lines fixed it.",
+    "tags": [
+      "Python",
+      "Milvus",
+      "pymilvus",
+      "Validation",
+      "Open Source"
+    ]
+  },
+  {
     "slug": "hardening-fastapi-ai-api-preproduction",
     "title": "Hardening a 15-Phase AI API for Pre-Production",
     "date": "Aug 22, 2026",
-    "excerpt": "An architectural deep dive and pre-production audit of Velar, detailing how to secure a FastAPI service against concurrency races, missing indexes, root containers, and dependency CVEs.",
+    "excerpt": "What my pre-production audit of Velar found: zero indexes, a root container, a concurrency race, and two security bumps that broke things.",
     "tags": [
       "Machine Learning",
       "FastAPI",
@@ -58,10 +213,36 @@ export const blogPosts = [
     ]
   },
   {
+    "slug": "nango-customer-key-cleanup-trigger",
+    "title": "Deleting One Environment Shouldn't Delete a Shared API Key",
+    "date": "Aug 9, 2026",
+    "excerpt": "A Postgres trigger in Nango hard-deleted an API key whenever any of its environments was removed, even if the key still belonged to others. I made it relation-aware.",
+    "tags": [
+      "PostgreSQL",
+      "TypeScript",
+      "Nango",
+      "Databases",
+      "Open Source"
+    ]
+  },
+  {
+    "slug": "roster-hitl-migration-seq-not-clock",
+    "title": "A Flaky Test That Was Really a Same-Millisecond Bug",
+    "date": "Aug 9, 2026",
+    "excerpt": "roster's v1 to v2 HITL migration refused valid history whenever two events landed in the same millisecond. The ledger already had a sequence number that fixed it.",
+    "tags": [
+      "TypeScript",
+      "Node.js",
+      "Testing",
+      "Open Source",
+      "Debugging"
+    ]
+  },
+  {
     "slug": "why-i-didnt-just-use-chatgpt-for-transaction-parsing",
     "title": "Why I Didn't Just Use ChatGPT for Transaction Parsing",
     "date": "Aug 8, 2026",
-    "excerpt": "Every fintech demo this year routes bank SMS text through a chat completion and calls it categorization. Here's the pipeline I built instead: three cheap, boring, deterministic layers before an LLM ever gets a vote.",
+    "excerpt": "I put three cheap, deterministic layers in front of the LLM in Velar, and gave the pipeline permission to say 'I don't know.'",
     "tags": [
       "Machine Learning",
       "FastAPI",
@@ -74,7 +255,7 @@ export const blogPosts = [
     "slug": "grounded-rag-pipeline-milvus-ollama-velar",
     "title": "Building a Grounded RAG Pipeline for Financial Data with Milvus and Ollama",
     "date": "Aug 7, 2026",
-    "excerpt": "An architectural deep dive into how Velar builds a privacy-first, grounded RAG pipeline using Milvus, Ollama, and FastAPI without relying on external LLM APIs.",
+    "excerpt": "How I kept Velar's explanations local and grounded: Ollama for embeddings and generation, Milvus for lookup, and an early return when there's nothing to ground on.",
     "tags": [
       "Machine Learning",
       "FastAPI",
@@ -90,7 +271,7 @@ export const blogPosts = [
     "slug": "designing-trust-state-machine",
     "title": "Designing a Memory State Machine for ML Predictions",
     "date": "Aug 1, 2026",
-    "excerpt": "An architectural deep dive into how Velar tracks merchant trust explicitly using a frequency-based state machine, built with FastAPI and MongoDB.",
+    "excerpt": "How I made merchant trust an explicit state in Velar, the race condition I almost shipped, and the decay question I still haven't answered.",
     "tags": [
       "Machine Learning",
       "FastAPI",
@@ -103,7 +284,7 @@ export const blogPosts = [
     "slug": "nginx-configuration-maintainable",
     "title": "Building an Nginx Configuration I Could Actually Maintain",
     "date": "July 22, 2026",
-    "excerpt": "A practical guide to creating and maintaining Nginx configurations that are both efficient and easy to manage.",
+    "excerpt": "How my reverse proxy config went from one fragile file to something I can change without fear, and the reload mistake I kept making.",
     "tags": [
       "DevOps",
       "Infrastructure",
@@ -114,7 +295,7 @@ export const blogPosts = [
     "slug": "personal-cloud-self-hosting",
     "title": "Owning the Stack: Building My Personal Cloud",
     "date": "July 20, 2026",
-    "excerpt": "A journey into self-hosting and the lessons learned while building a personal cloud infrastructure.",
+    "excerpt": "Why I built my own cloud on Proxmox, and what I learned getting a static IP, a reverse proxy, Keycloak and monitoring running at home.",
     "tags": [
       "Architecture",
       "Self-Hosting",
